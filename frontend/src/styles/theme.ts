@@ -73,6 +73,9 @@ const color = {
   neutral: css`
     color: #ffffff;
   `,
+  neutralBlue: css`
+    color: #1e90ff;
+  `,
   systemDefault: css`
     color: #007aff;
   `,
@@ -82,6 +85,12 @@ const color = {
   backgroundPrimary: css`
     background-color: #2a2d31;
   `,
+  backgroundSecondary: css`
+    background-color: #18191c;
+  `,
+  backgroundSoftBlue: css`
+  background-color: #5865F2;
+`,
 };
 
 const flex = {
@@ -101,7 +110,7 @@ const flex = {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
   `,
 };
 
