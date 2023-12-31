@@ -5,11 +5,16 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/login";
 import { ThemeProvider } from "styled-components";
 import theme from "./styles/theme";
+import RegistgerPage from "./pages/register";
 
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegistgerPage/>,
   },
 ]);
 

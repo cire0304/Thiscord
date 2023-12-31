@@ -112,6 +112,12 @@ const flex = {
     justify-content: center;
     align-items: flex-start;
   `,
+   columnStartCenter: css`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+ `,
 };
 
 const position = {
