@@ -1,18 +1,45 @@
 package com.example.thiscode.security.model;
 
+import com.example.thiscode.core.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 import java.util.Map;
 
-public interface ProviderUser {
+public class ProviderUser {
 
-    Long getId();
-    String getNickname();
-    String getPassword();
-    String getEmail();
-    String getUsercode();
-    List<? extends GrantedAuthority> getAuthorities();
-    Map<String, Object> getAttributes();
+    private User user;
+
+    public ProviderUser(User user) {
+        this.user = user;
+    }
+
+    public Long getId() {
+        return user.getId();
+    }
+
+    public String getNickname() {
+        return user.getNickname();
+    }
+
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    public String getEmail() {
+        return user.getEmail();
+    }
+
+    public String getUsercode() {
+        return user.getUserCode();
+    }
+
+    public List<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
 
 }

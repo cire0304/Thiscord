@@ -2,7 +2,6 @@ package com.example.thiscode.security.oauth;
 
 import com.example.thiscode.core.repository.UserRepository;
 import com.example.thiscode.core.user.entity.User;
-import com.example.thiscode.security.model.GoogleUser;
 import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.model.ProviderUser;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +44,7 @@ public class OAuth2UserService implements org.springframework.security.oauth2.cl
 
         log.debug("User Login : {}", user);
 
-        ProviderUser providerUser = new GoogleUser(user);
+        ProviderUser providerUser = new ProviderUser(user);
         return new PrincipalUser(providerUser);
     }
 
