@@ -1,5 +1,6 @@
 package com.example.thiscode.security.jwt;
 
+import com.example.thiscode.security.common.CommonAuthenticationToken;
 import com.example.thiscode.security.model.PrincipalUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
@@ -41,7 +42,7 @@ public class JwtTokenProvider {
     }
 
     public String createToken(PrincipalUser principalUser) {
-        CustomJwtSubject customJwtSubject = new CustomJwtSubject(principalUser);
+        JwtSubject customJwtSubject = new JwtSubject(principalUser);
         Claims claims = Jwts.claims().setSubject(customJwtSubject.getUserId().toString());
         claims.put(SUBJECT, customJwtSubject);
 
@@ -82,13 +83,16 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-        return new JwtAuthenticationToken(claims);
+        Object subject = claims.get(SUBJECT);
+        JwtSubject customJwtSubject = objectMapper.convertValue(subject, JwtSubject.class);
+
+        return new CommonAuthenticationToken(customJwtSubject);
     }
 
-    public CustomJwtSubject getCustomJwtSubject(String token) {
+    public JwtSubject getCustomJwtSubject(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         Object subject = claims.get(SUBJECT);
-        return objectMapper.convertValue(subject, CustomJwtSubject.class);
+        return objectMapper.convertValue(subject, JwtSubject.class);
     }
 
 }
