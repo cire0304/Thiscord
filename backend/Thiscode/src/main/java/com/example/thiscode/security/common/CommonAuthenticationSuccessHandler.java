@@ -1,4 +1,4 @@
-package com.example.thiscode.security.handler;
+package com.example.thiscode.security.common;
 
 import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.jwt.JwtTokenProvider;
@@ -17,7 +17,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class CommonAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtTokenProvider jwtTokenProvider;
     private final String TOKEN = "TOKEN";
     private final String REDIRECT_URL = "http://localhost:3000/workplace";

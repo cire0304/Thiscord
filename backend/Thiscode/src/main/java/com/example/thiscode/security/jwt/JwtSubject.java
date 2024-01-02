@@ -10,14 +10,14 @@ import java.io.Serializable;
 @ToString
 @Getter
 @NoArgsConstructor
-public class CustomJwtSubject implements Serializable {
+public class JwtSubject implements Serializable {
 
     private Long userId;
     private String userCode;
     private String nickname;
     private String email;
 
-    public CustomJwtSubject(PrincipalUser principalUser) {
+    public JwtSubject(PrincipalUser principalUser) {
         this.userId = principalUser.getId();
         this.userCode = principalUser.getUserCode();
         this.nickname = principalUser.getNickname();

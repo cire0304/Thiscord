@@ -1,4 +1,4 @@
-package com.example.thiscode.security.etc;
+package com.example.thiscode.security.common;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class CommonAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     // TODO: 나중에 환경 변수값으로 빼내기
     private final String REDIRECT_URL = "http://localhost:3000/login";
