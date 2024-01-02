@@ -2,15 +2,12 @@ package com.example.thiscode.security.jwt;
 
 import com.example.thiscode.core.repository.UserRepository;
 import com.example.thiscode.core.user.entity.User;
-import com.example.thiscode.security.authentication.model.GoogleUser;
-import com.example.thiscode.security.authentication.model.PrincipalUser;
-import com.example.thiscode.security.authentication.model.ProviderUser;
-import io.jsonwebtoken.Claims;
+import com.example.thiscode.security.model.GoogleUser;
+import com.example.thiscode.security.model.PrincipalUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.Authentication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

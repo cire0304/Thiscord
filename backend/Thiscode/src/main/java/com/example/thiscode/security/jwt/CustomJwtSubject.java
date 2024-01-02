@@ -1,6 +1,6 @@
 package com.example.thiscode.security.jwt;
 
-import com.example.thiscode.security.authentication.model.PrincipalUser;
+import com.example.thiscode.security.model.PrincipalUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

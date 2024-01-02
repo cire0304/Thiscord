@@ -1,4 +1,4 @@
-package com.example.thiscode.security.authentication.model;
+package com.example.thiscode.security.model;
 
 import com.example.thiscode.core.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;

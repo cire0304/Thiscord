@@ -1,6 +1,6 @@
-package com.example.thiscode.security.authentication.handler;
+package com.example.thiscode.security.handler;
 
-import com.example.thiscode.security.authentication.model.PrincipalUser;
+import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.jwt.JwtTokenProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -17,7 +17,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtTokenProvider jwtTokenProvider;
     private final String TOKEN = "TOKEN";
     private final String REDIRECT_URL = "http://localhost:3000/workplace";

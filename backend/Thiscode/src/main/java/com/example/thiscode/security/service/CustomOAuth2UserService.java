@@ -1,10 +1,10 @@
-package com.example.thiscode.security.authentication.service;
+package com.example.thiscode.security.service;
 
 import com.example.thiscode.core.repository.UserRepository;
 import com.example.thiscode.core.user.entity.User;
-import com.example.thiscode.security.authentication.model.GoogleUser;
-import com.example.thiscode.security.authentication.model.PrincipalUser;
-import com.example.thiscode.security.authentication.model.ProviderUser;
+import com.example.thiscode.security.model.GoogleUser;
+import com.example.thiscode.security.model.PrincipalUser;
+import com.example.thiscode.security.model.ProviderUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;

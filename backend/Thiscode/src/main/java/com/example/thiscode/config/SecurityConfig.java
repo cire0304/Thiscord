@@ -1,6 +1,6 @@
 package com.example.thiscode.config;
 
-import com.example.thiscode.security.authentication.handler.OAuth2AuthenticationSuccessHandler;
+import com.example.thiscode.security.handler.CustomAuthenticationSuccessHandler;
 import com.example.thiscode.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @Configuration
 public class SecurityConfig {
 
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final CustomAuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
