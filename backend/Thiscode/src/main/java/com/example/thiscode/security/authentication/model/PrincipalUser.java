@@ -14,7 +14,11 @@ public class PrincipalUser implements UserDetails, OAuth2User {
         this.providerUser = providerUser;
     }
 
-    public String getUsercode() {
+    public Long getId() {
+        return providerUser.getId();
+    }
+
+    public String getUserCode() {
         return providerUser.getUsercode();
     }
 

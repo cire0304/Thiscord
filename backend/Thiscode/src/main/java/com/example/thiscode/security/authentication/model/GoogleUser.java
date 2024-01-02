@@ -1,49 +1,42 @@
 package com.example.thiscode.security.authentication.model;
 
+import com.example.thiscode.core.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.List;
 import java.util.Map;
 
 public class GoogleUser implements ProviderUser {
 
-    private OAuth2User oAuth2User;
-    private String usercode;
-    private String email;
+   private User user;
 
-
-    // TODO: 인자 다시 생각
-    // TODO: user 엔티티 개발후에 수정해야함
-    public GoogleUser(OAuth2User oAuth2User, String email, String usercode) {
-        this.oAuth2User = oAuth2User;
-        this.usercode = usercode;
-        this.email = email;
+    public GoogleUser(User user) {
+        this.user = user;
     }
 
     @Override
-    public String getId() {
-        return "";
+    public Long getId() {
+        return user.getId();
     }
 
     @Override
     public String getNickname() {
-        return "nickname";
+        return user.getNickname();
     }
 
     @Override
     public String getPassword() {
-        return "";
+        return user.getPassword();
     }
 
     @Override
     public String getEmail() {
-        return "email";
+        return user.getEmail();
     }
 
     @Override
     public String getUsercode() {
-        return "usercode";
+        return user.getUserCode();
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface ProviderUser {
 
-    String getId();
+    Long getId();
     String getNickname();
     String getPassword();
     String getEmail();
