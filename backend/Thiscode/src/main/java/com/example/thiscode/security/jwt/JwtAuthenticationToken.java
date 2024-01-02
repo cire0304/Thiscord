@@ -14,10 +14,10 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private Object credentials;
 
-    public JwtAuthenticationToken(Object principal, Object credentials) {
+    public JwtAuthenticationToken(Object principal) {
         super(List.of(new SimpleGrantedAuthority("ROLE_USER")));
         this.principal = principal;
-        this.credentials = credentials;
+        this.credentials = null;
         super.setAuthenticated(true);
     }
 

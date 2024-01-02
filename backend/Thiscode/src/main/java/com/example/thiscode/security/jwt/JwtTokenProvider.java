@@ -1,6 +1,7 @@
 package com.example.thiscode.security.jwt;
 
 import com.example.thiscode.security.authentication.model.PrincipalUser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,11 +12,9 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Collection;
 import java.util.Date;
 
 @Slf4j
@@ -23,7 +22,11 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     private final String TOKEN = "TOKEN";
+    private final String SUBJECT = "SUBJECT";
+
 
     // 2주 * 100
     private long tokenTime = 100 * 14 * 24 * 60 * 60 * 1000L;
@@ -37,31 +40,10 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // TODO: 인자는 다시 생각해보자
-    public String createToken(String userId, String nickname, String usercode, String email, Collection<? extends GrantedAuthority> authorities) {
-        Claims claims = Jwts.claims().setSubject(userId);
-        claims.put("usercode", usercode);
-        claims.put("nickname", nickname);
-        claims.put("email", email);
-        claims.put("authorities", authorities);
-
-        Date now =new Date();
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenTime))
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
-    }
-
     public String createToken(PrincipalUser principalUser) {
-        // TODO: subject는 userId로 변경
-        // TODO: 아래의 인자는 나중에 다시 변경해야함
-        Claims claims = Jwts.claims().setSubject(principalUser.getUsername());
-        claims.put("usercode", principalUser.getUsername());
-        claims.put("nickname", principalUser.getNickname());
-        claims.put("email", principalUser.getEmail());
-        claims.put("authorities", principalUser.getAuthorities());
+        CustomJwtSubject customJwtSubject = new CustomJwtSubject(principalUser);
+        Claims claims = Jwts.claims().setSubject(customJwtSubject.getUserId().toString());
+        claims.put(SUBJECT, customJwtSubject);
 
         Date now =new Date();
         return Jwts.builder()
@@ -98,11 +80,15 @@ public class JwtTokenProvider {
         return null;
     }
 
-    // TODO: JwtAuthenticationToken.principal에 넣을 객체를 만들어야함(nickname, usercode, email)
-    // TODO: 권한은 생각하지 말자
     public Authentication getAuthentication(String token) {
-        Claims body = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-        String userId = body.getSubject();
-        return new JwtAuthenticationToken(userId, token);
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return new JwtAuthenticationToken(claims);
     }
+
+    public CustomJwtSubject getCustomJwtSubject(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        Object subject = claims.get(SUBJECT);
+        return objectMapper.convertValue(subject, CustomJwtSubject.class);
+    }
+
 }
