@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
@@ -33,6 +35,8 @@ public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHa
         } else if (exception instanceof UsernameNotFoundException) {
             errorMessage = errorMessage + " UsernameNotFoundException";
         }
+
+        log.debug("error message : {}", errorMessage);
 
         objectMapper.writeValue(response.getWriter(), errorMessage);
     }

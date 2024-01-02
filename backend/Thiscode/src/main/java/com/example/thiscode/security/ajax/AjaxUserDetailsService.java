@@ -22,6 +22,9 @@ public class AjaxUserDetailsService implements UserDetailsService {
          User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("잘못된 사용자 입니다."));
 
+        log.debug("User Login : {}", user);
+
+        ProviderUser providerUser = new ProviderUser(user);
         return new PrincipalUser(providerUser);
     }
 
