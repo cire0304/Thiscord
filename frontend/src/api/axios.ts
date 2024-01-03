@@ -13,6 +13,11 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error.response === undefined) {
+      console.log("요청에 실패했습니다.");
+      console.log(error);
+      return error;
+    }
     console.log(error.response);
     return error.response;
   }
