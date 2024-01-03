@@ -1,7 +1,7 @@
-package com.example.thiscode.security.common;
+package com.example.thiscode.security.ajax;
 
-import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.jwt.JwtTokenProvider;
+import com.example.thiscode.security.model.PrincipalUser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,10 +17,9 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class CommonAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtTokenProvider jwtTokenProvider;
     private final String TOKEN = "TOKEN";
-    private final String REDIRECT_URL = "http://localhost:3000/workplace";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -29,7 +28,7 @@ public class CommonAuthenticationSuccessHandler implements AuthenticationSuccess
         String token = jwtTokenProvider.createToken((PrincipalUser) authentication.getPrincipal());
         Cookie tokenCookie = createTokenCookie(token);
         response.addCookie(tokenCookie);
-        response.sendRedirect(REDIRECT_URL);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
 

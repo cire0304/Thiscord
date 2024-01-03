@@ -1,6 +1,7 @@
 package com.example.thiscode.security.ajax;
 
 import com.example.thiscode.security.common.CommonAuthenticationToken;
+import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.model.ProviderUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,7 +21,7 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
         String email = authentication.getName();
         String password = (String) authentication.getCredentials();
 
-        ProviderUser providerUser = (ProviderUser) ajaxUserDetailsService.loadUserByUsername(email);
+        PrincipalUser providerUser = (PrincipalUser) ajaxUserDetailsService.loadUserByUsername(email);
 
         if (!providerUser.getPassword().equals(password)) {
             throw new BadCredentialsException("Password is not correct");
