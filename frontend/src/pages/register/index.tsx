@@ -1,20 +1,89 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import * as S from "./styles";
-import { ThemeProvider } from "styled-components";
+
 import theme from "../../styles/theme";
 import Span from "../../components/span";
 import { Input } from "../../components/input";
 import { useNavigate } from "react-router-dom";
 
-import { GOOGLE_LOGIN_URL } from "../../constants/constants";
 import Button from "../../components/button";
+import UserRequest from "../../api/user";
+import Utils from "../../utils/string";
 
-const RegistgerPage = () => {
-  const emailRef = useRef(null);
-  const navigate = useNavigate();
+const RegisterPage = () => {
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const nicknameRef = useRef<HTMLInputElement>(null);
+
+  const [warnEmail, setWarnEmail] = useState("이메일 경고 문구");
+  const [warnPassword, setWarnPassword] = useState("비밀번호 경고 문구");
+  const [warnNickname, setWarnNickname] = useState("닉네임 경고 문구");
 
   const [isValidEmail, setValidEmail] = useState(true);
   const [isValidPassword, setValidPassword] = useState(true);
+  const [isValidNickname, setValidNickname] = useState(true);
+
+  const navigate = useNavigate();
+
+  const isEmailFormat = (email: string) => {
+    const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    return emailRegex.test(email);
+  };
+
+  const registerHandler = async () => {
+    if (
+      emailRef.current === null ||
+      passwordRef.current === null ||
+      nicknameRef.current === null
+    ) {
+      return;
+    }
+
+    setValidEmail(true);
+    setValidPassword(true);
+    setValidNickname(true);
+
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+    const nickname = nicknameRef.current.value;
+
+    if (email === "") {
+      setWarnEmail("이메일을 입력해주세요.");
+      setValidEmail(false);
+      return;
+    }
+
+    if (Utils.isEmailFormat(email) === false) {
+      setWarnEmail("이메일 형식이 올바르지 않습니다.");
+      setValidEmail(false);
+      return;
+    }
+
+    if (password === "") {
+      setWarnPassword("비밀번호를 입력해주세요.");
+      setValidPassword(false);
+      return;
+    }
+
+    if (nickname === "") {
+      setWarnNickname("닉네임을 입력해주세요.");
+      setValidNickname(false);
+      return;
+    }
+
+      const res = await UserRequest.registerUser({ email, password, nickname });
+
+    if (res.status === 200) {
+      navigate("/login");
+    } else if (res.status === 409) {
+      setWarnEmail("이미 존재하는 이메일입니다.");
+      setValidEmail(false);
+    } else if (res.status === 400) {
+      alert("클라이언트 오류");
+    } else {
+      alert("서버 오류");
+    }
+  };
 
   return (
     <S.Container>
@@ -31,19 +100,19 @@ const RegistgerPage = () => {
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
             visable={isValidEmail}
           >
-            잘못된 이메일 형식입니다.
+            {warnEmail}
           </Span>
         </S.InputWrapper>
         <S.InputWrapper>
           <Span styles={[theme.fontFormat.subhead, theme.color.neutral]}>
             비밀번호
           </Span>
-          <Input placeholder="12345678" ref={emailRef}></Input>
+          <Input placeholder="12345678" ref={passwordRef}></Input>
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
-            visable={isValidEmail}
+            visable={isValidPassword}
           >
-            패스워드는 8자 이상이어야 합니다. 
+            {warnPassword}
           </Span>
         </S.InputWrapper>
 
@@ -51,22 +120,28 @@ const RegistgerPage = () => {
           <Span styles={[theme.fontFormat.subhead, theme.color.neutral]}>
             닉네임
           </Span>
-          <Input placeholder="your nickname" ref={emailRef}></Input>
+          <Input placeholder="your nickname" ref={nicknameRef}></Input>
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
-            visable={isValidEmail}
+            visable={isValidNickname}
           >
-            닉네임은 공백일 수 없어요
+            {warnNickname}
           </Span>
         </S.InputWrapper>
 
         <S.ButtonWrapper>
-          <Button styles={[theme.color.backgroundSoftBlue, theme.color.neutral]} onClick={() => {}}>로그인</Button>
+          <Button
+            styles={[theme.color.backgroundSoftBlue, theme.color.neutral]}
+            onClick={() => {
+              registerHandler();
+            }}
+          >
+           회원 가입
+          </Button>
         </S.ButtonWrapper>
-     
       </S.Modal>
     </S.Container>
   );
 };
 
-export default RegistgerPage;
+export default RegisterPage;
