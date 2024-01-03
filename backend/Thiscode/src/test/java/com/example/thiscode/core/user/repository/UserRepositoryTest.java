@@ -1,6 +1,7 @@
-package com.example.thiscode.core.repository;
+package com.example.thiscode.core.user.repository;
 
 import com.example.thiscode.core.user.entity.User;
+import com.example.thiscode.core.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

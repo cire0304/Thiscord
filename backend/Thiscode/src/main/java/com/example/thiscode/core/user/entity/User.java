@@ -1,6 +1,6 @@
 package com.example.thiscode.core.user.entity;
 
-import com.example.thiscode.common.BaseEntity;
+import com.example.thiscode.core.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
