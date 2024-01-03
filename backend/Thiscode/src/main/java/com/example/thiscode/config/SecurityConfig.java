@@ -18,6 +18,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -46,6 +50,20 @@ public class SecurityConfig {
     }
 
     @Bean
+    UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://localhost:3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
+
+    @Bean
     SecurityFilterChain oAuth2securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeRequests(authorize -> authorize
@@ -62,6 +80,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(commonAuthenticationEntryPoint)
                 )
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(config -> config.configurationSource(corsConfigurationSource()))
                 .addFilterAfter(jwtAuthenticationFilter, LogoutFilter.class)
                 .addFilterAfter(ajaxAuthenticationProcessingFilter(), LogoutFilter.class)
                 .build();
