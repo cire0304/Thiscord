@@ -73,6 +73,10 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            return null;
+        }
+
         for (Cookie cookie : request.getCookies()) {
             if (cookie.getName().equals(TOKEN)) {
                 return cookie.getValue();

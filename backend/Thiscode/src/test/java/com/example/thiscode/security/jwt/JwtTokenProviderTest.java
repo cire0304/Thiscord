@@ -1,13 +1,14 @@
 package com.example.thiscode.security.jwt;
 
-import com.example.thiscode.core.repository.UserRepository;
+import com.example.thiscode.core.user.repository.UserRepository;
 import com.example.thiscode.core.user.entity.User;
-import com.example.thiscode.security.model.GoogleUser;
 import com.example.thiscode.security.model.PrincipalUser;
+import com.example.thiscode.security.model.ProviderUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,23 +20,24 @@ class JwtTokenProviderTest {
     @Autowired
     private UserRepository userRepository;
 
-    @DisplayName("token으로 부터 CustomJwtSubject 객체를 생성한다.")
+    @DisplayName("token으로 부터 JwtSubject 객체를 생성한다.")
     @Test
     public void  PrincipalUser() {
         //given
         User user = userRepository.save(new User("email", "password", "nickname", "userCode"));
-        GoogleUser googleUser = new GoogleUser(user);
-        PrincipalUser principalUser = new PrincipalUser(googleUser);
+        ProviderUser providerUser = new ProviderUser(user);
+        PrincipalUser principalUser = new PrincipalUser(providerUser);
         String token = jwtTokenProvider.createToken(principalUser);
 
         //when
-        CustomJwtSubject customJwtSubject = jwtTokenProvider.getCustomJwtSubject(token);
+        Authentication authentication =  jwtTokenProvider.getAuthentication(token);
+        JwtSubject principal = (JwtSubject) authentication.getPrincipal();
 
         //then
-        assertThat(customJwtSubject.getUserId()).isEqualTo(user.getId());
-        assertThat(customJwtSubject.getUserCode()).isEqualTo(user.getUserCode());
-        assertThat(customJwtSubject.getNickname()).isEqualTo(user.getNickname());
-        assertThat(customJwtSubject.getEmail()).isEqualTo(user.getEmail());
+        assertThat(principal.getUserId()).isEqualTo(user.getId());
+        assertThat(principal.getUserCode()).isEqualTo(user.getUserCode());
+        assertThat(principal.getNickname()).isEqualTo(user.getNickname());
+        assertThat(principal.getEmail()).isEqualTo(user.getEmail());
      }
 
 
