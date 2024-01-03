@@ -43,7 +43,7 @@ public class JwtTokenProvider {
 
     public String createToken(PrincipalUser principalUser) {
         JwtSubject customJwtSubject = new JwtSubject(principalUser);
-        Claims claims = Jwts.claims().setSubject(customJwtSubject.getUserId().toString());
+        Claims claims = Jwts.claims().setSubject("JWT Token");
         claims.put(SUBJECT, customJwtSubject);
 
         Date now =new Date();
