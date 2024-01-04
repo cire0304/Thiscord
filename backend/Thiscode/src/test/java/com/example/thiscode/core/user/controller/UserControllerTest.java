@@ -3,6 +3,7 @@ package com.example.thiscode.core.user.controller;
 
 import com.example.thiscode.SecurityTest;
 import com.example.thiscode.core.user.controller.request.SignUpRequest;
+import com.example.thiscode.core.user.controller.request.UpdateRequest;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.repository.UserRepository;
 import com.example.thiscode.core.user.service.UserService;
@@ -27,8 +28,7 @@ import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = {UserController.class})
@@ -131,6 +131,30 @@ class UserControllerTest extends SecurityTest {
                 .andExpect(jsonPath("$.nickname").value(userDetailInfoDto.getNickname()))
                 .andExpect(jsonPath("$.introduction").value(userDetailInfoDto.getIntroduction()))
                 .andExpect(jsonPath("$.createdAt").value(userDetailInfoDto.getCreatedAt().toString()));
+    }
+
+    @DisplayName("자신의 정보를 수정한다.")
+    @Test
+    public void updateUser() throws Exception {
+        //given
+        String email = "email";
+        String password = "password";
+        String nickname = "nickname";
+        String introduction = "introduction";
+
+        User user = new User(email, password, nickname, introduction);
+        ProviderUser providerUser = new ProviderUser(user);
+        PrincipalUser principalUser = new PrincipalUser(providerUser);
+        String token = jwtTokenProvider.createToken(principalUser);
+        Cookie tokenCookie = new Cookie("TOKEN", token);
+
+        //when then
+        mockMvc.perform(patch("/users/me")
+                        .cookie(tokenCookie)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new UpdateRequest("updateNickname", "updateIntroduction"))))
+                .andExpect(status().isOk())
+                .andExpect(content().string("success"));
     }
 
 }

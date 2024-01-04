@@ -34,5 +34,11 @@ public class UserService {
         return userMapper.toUserDetailInfoDto(user);
     }
 
+    @Transactional
+    public void updateUser(Long userId, String nickname, String introduction) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
+        user.updateNicknameAndIntroduction(nickname, introduction);
+    }
 
 }

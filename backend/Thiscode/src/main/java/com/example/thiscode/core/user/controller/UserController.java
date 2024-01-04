@@ -1,6 +1,7 @@
 package com.example.thiscode.core.user.controller;
 
 import com.example.thiscode.core.user.controller.request.SignUpRequest;
+import com.example.thiscode.core.user.controller.request.UpdateRequest;
 import com.example.thiscode.core.user.service.UserService;
 import com.example.thiscode.core.user.service.dto.UserDetailInfoDto;
 import com.example.thiscode.security.jwt.JwtSubject;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -36,6 +38,13 @@ public class UserController {
     @GetMapping("/users/me/detail")
     public ResponseEntity<UserDetailInfoDto> getUserDetailInfo(@AuthenticationPrincipal JwtSubject subject) {
         return ResponseEntity.ok(userService.getUserDetailInfo(subject.getUserId()));
+    }
+
+    @PatchMapping("/users/me")
+    public ResponseEntity<String> updateUser(@AuthenticationPrincipal JwtSubject subject,
+                                             @RequestBody @Valid UpdateRequest request) {
+        userService.updateUser(subject.getUserId(), request.getNickname(), request.getIntroduction());
+        return ResponseEntity.ok("success");
     }
 
 }
