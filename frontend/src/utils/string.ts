@@ -4,8 +4,13 @@ const isEmailFormat = (email: string) => {
   return emailRegex.test(email);
 };
 
+const isEmpty = (str: string) => {
+  return !str || 0 === str.length;
+}
+
 const Utils = {
     isEmailFormat,
+    isEmpty
 }
 
 export default Utils;

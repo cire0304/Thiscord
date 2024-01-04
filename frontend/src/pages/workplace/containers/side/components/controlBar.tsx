@@ -43,7 +43,7 @@ const ControlBar = ({
   setIsProfileModalActive,
 }: {
   nickname: string;
-  userCode: number;
+  userCode: string;
   setIsProfileModalActive: Dispatch<SetStateAction<boolean>>;
 }) => {
   const userInfoWrapperRef = useRef<HTMLDivElement>(null);

@@ -9,9 +9,7 @@ import ProfileModal from './modals/profile/profileModal'
 
 
 const WorkplacePage = () => {
-
   const [isProfileModalActive, setIsProfileModalActive] = React.useState<boolean>(false)
-
 
   return (
     <S.Container>
@@ -26,9 +24,8 @@ const WorkplacePage = () => {
         <Active></Active>
       </S.Body>
 
-
       {
-        isProfileModalActive && <ProfileModal setIsProfileModalActive={setIsProfileModalActive}/>
+        isProfileModalActive && <ProfileModal setIsProfileModalActive={setIsProfileModalActive} isProfileModalActive={isProfileModalActive} />
       }
 
     </S.Container>

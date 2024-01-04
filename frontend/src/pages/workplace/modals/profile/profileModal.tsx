@@ -1,7 +1,9 @@
-import React, { useRef, Dispatch, SetStateAction } from "react";
+import React, { useRef, Dispatch, SetStateAction, useEffect } from "react";
 import { styled } from "styled-components";
 import Span from "../../../../components/span";
 import theme from "../../../../styles/theme";
+import UserRequest from "../../../../api/user";
+import Utils from "../../../../utils/string";
 
 const Modal = styled.div`
   width: 100vw;
@@ -28,7 +30,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items : center;
+  align-items: center;
   background-color: #242428;
 
   animation: fadein 0.3s;
@@ -42,7 +44,6 @@ const Container = styled.div`
       transform: translate(-50%, -50%) scale(1);
     }
   }
-  
 `;
 
 const Header = styled.div`
@@ -52,7 +53,7 @@ const Header = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items : center;
+  align-items: center;
 
   ${({ theme }) => theme.color.backgroundTertiary};
 `;
@@ -70,7 +71,7 @@ const Wraper = styled.div`
 
   flex-direction: column;
   justify-content: center;
-  align-items : flex-start;
+  align-items: flex-start;
   gap: 10px;
 
   border-radius: 10px;
@@ -84,27 +85,61 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items : flex-start;
+  align-items: flex-start;
   border-radius: 10px;
-  
+
   border-bottom: 1px solid #3a3a3d;
   ${({ theme }) => theme.color.backgroundSecondary};
   text-align: left;
-` 
+`;
 
 const Introduction = styled(Content)`
   border-bottom: none;
 `;
 
-const ProfileModal = ({setIsProfileModalActive} : {setIsProfileModalActive: Dispatch<SetStateAction<boolean>>}) => {
+interface ProfileModalProps {
+  isProfileModalActive: boolean;
+  setIsProfileModalActive: Dispatch<SetStateAction<boolean>>;
+}
 
+interface UserDetailInfo {
+  nickname: string;
+  email: string;
+  introduction: string;
+  createdAt: string;
+  userCode: string;
+}
+
+const ProfileModal = ({
+  isProfileModalActive,
+  setIsProfileModalActive,
+}: ProfileModalProps) => {
+  const loding = "로딩중...";
   const backgroundRef = useRef<HTMLDivElement>(null);
+  const [userDetailInfo, setUserDetailInfo] = React.useState<UserDetailInfo>({
+    nickname: "",
+    email: "",
+    introduction: "",
+    createdAt: "",
+    userCode: "",
+  });
+
   const onCancle = (e: React.MouseEvent<HTMLDivElement>) => {
     if (backgroundRef.current === e.target) {
       setIsProfileModalActive(false);
+    }
   };
 
-  };
+  useEffect(() => {
+    const getUserDetailInfo = async () => {
+      const res = await UserRequest.getUserDetailInfo();
+      setUserDetailInfo(res.data);
+    };
+    if (isProfileModalActive) {
+      getUserDetailInfo();
+    }
+  }, [isProfileModalActive]);
+  
 
   return (
     <Modal onClick={(e) => onCancle(e)} ref={backgroundRef}>
@@ -118,20 +153,42 @@ const ProfileModal = ({setIsProfileModalActive} : {setIsProfileModalActive: Disp
         <Body>
           <Wraper>
             <Content>
-              <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>닉네임</Span>
-              <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>시레</Span>
+              <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>
+                닉네임
+              </Span>
+              <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>
+                {Utils.isEmpty(userDetailInfo.nickname)
+                  ? loding
+                  : userDetailInfo.nickname}
+              </Span>
             </Content>
             <Content>
-              <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>초대코드</Span>
-              <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>시레#1234</Span>
+              <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>
+                초대코드
+              </Span>
+              <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>
+                {Utils.isEmpty(userDetailInfo.userCode)
+                  ? loding
+                  : userDetailInfo.userCode}
+              </Span>
             </Content>
             <Content>
-              <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>이메일</Span>
-              <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>dltpwns0@gmail.com</Span>
+              <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>
+                이메일
+              </Span>
+              <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>
+                {Utils.isEmpty(userDetailInfo.email)
+                  ? loding
+                  : userDetailInfo.email}
+              </Span>
             </Content>
             <Introduction>
-              <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>자기소개</Span>
-              <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>프론트 쉽지 않네프론트 쉽지 않네프론트 쉽지 않네프론트 쉽지 않네프론트 쉽지 않네프론트 쉽지 않네프론트 프론트 쉽지 않네</Span>
+              <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>
+                자기소개
+              </Span>
+              <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>
+                {userDetailInfo.introduction}
+              </Span>
             </Introduction>
           </Wraper>
         </Body>
