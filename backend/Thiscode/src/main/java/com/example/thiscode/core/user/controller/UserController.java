@@ -2,6 +2,7 @@ package com.example.thiscode.core.user.controller;
 
 import com.example.thiscode.core.user.controller.request.SignUpRequest;
 import com.example.thiscode.core.user.service.UserService;
+import com.example.thiscode.core.user.service.dto.UserDetailInfoDto;
 import com.example.thiscode.security.jwt.JwtSubject;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,11 @@ public class UserController {
     @GetMapping("/users/me")
     public ResponseEntity<JwtSubject> getUserInfo(@AuthenticationPrincipal JwtSubject subject) {
         return ResponseEntity.ok(subject);
+    }
+
+    @GetMapping("/users/me/detail")
+    public ResponseEntity<UserDetailInfoDto> getUserDetailInfo(@AuthenticationPrincipal JwtSubject subject) {
+        return ResponseEntity.ok(userService.getUserDetailInfo(subject.getUserId()));
     }
 
 }

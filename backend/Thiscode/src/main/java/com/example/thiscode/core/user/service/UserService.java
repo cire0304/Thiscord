@@ -2,6 +2,9 @@ package com.example.thiscode.core.user.service;
 
 import com.example.thiscode.core.user.repository.UserRepository;
 import com.example.thiscode.core.user.entity.User;
+import com.example.thiscode.core.user.service.dto.UserDetailInfoDto;
+import com.example.thiscode.core.user.service.dto.UserMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Transactional
     public void singUp(String email, String password, String nickname) {
@@ -21,6 +25,13 @@ public class UserService {
 
         User user = new User(email, password, nickname, "introduction");
         userRepository.save(user);
+    }
+
+    @Transactional
+    public UserDetailInfoDto getUserDetailInfo(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
+        return userMapper.toUserDetailInfoDto(user);
     }
 
 

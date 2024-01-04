@@ -6,6 +6,7 @@ import com.example.thiscode.core.user.controller.request.SignUpRequest;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.repository.UserRepository;
 import com.example.thiscode.core.user.service.UserService;
+import com.example.thiscode.core.user.service.dto.UserDetailInfoDto;
 import com.example.thiscode.security.jwt.JwtSubject;
 import com.example.thiscode.security.jwt.JwtTokenProvider;
 import com.example.thiscode.security.model.PrincipalUser;
@@ -17,16 +18,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import java.time.LocalDateTime;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = {UserController.class})
+@MockBean(JpaMetamodelMappingContext.class)
 class UserControllerTest extends SecurityTest {
 
     @Autowired
@@ -94,6 +100,37 @@ class UserControllerTest extends SecurityTest {
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(new JwtSubject(principalUser))));
+    }
+
+    @DisplayName("자신의 자세한 정보를 조회한다.")
+    @Test
+    public void getUserDetailInfo() throws Exception {
+        //given
+        Long userId = 1L;
+        String email = "email";
+        String password = "password";
+        String nickname = "nickname";
+        String introduction = "introduction";
+        LocalDateTime now = LocalDateTime.now();
+
+        User user = new User(email, password, nickname, introduction);
+        ProviderUser providerUser = new ProviderUser(user);
+        PrincipalUser principalUser = new PrincipalUser(providerUser);
+        String token = jwtTokenProvider.createToken(principalUser);
+        Cookie tokenCookie = new Cookie("TOKEN", token);
+
+        UserDetailInfoDto userDetailInfoDto = new UserDetailInfoDto(userId, email, password, nickname, introduction, now);
+        given(userService.getUserDetailInfo(any())).willReturn(userDetailInfoDto);
+
+        //when then
+        mockMvc.perform(get("/users/me/detail")
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(userDetailInfoDto.getId()))
+                .andExpect(jsonPath("$.email").value(userDetailInfoDto.getEmail()))
+                .andExpect(jsonPath("$.nickname").value(userDetailInfoDto.getNickname()))
+                .andExpect(jsonPath("$.introduction").value(userDetailInfoDto.getIntroduction()))
+                .andExpect(jsonPath("$.createdAt").value(userDetailInfoDto.getCreatedAt().toString()));
     }
 
 }
