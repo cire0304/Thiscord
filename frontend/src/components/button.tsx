@@ -8,7 +8,10 @@ const ButtonElement = styled.button<ButtonElementProps>`
   border-radius: 5px;
   ${({ theme }) => theme.flex.columnCenterCenter}
   ${({ styles }) => styles}
-
+  
+  cursor: pointer;
+  transition: 0.2s;
+  
   &:hover{
     ${({ theme }) => theme.color.primary}
   }

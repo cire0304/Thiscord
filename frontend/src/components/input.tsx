@@ -10,4 +10,5 @@ export const Input = styled.input`
     flex-grow: 1;
 
   border: none;
+  border-radius: 4px;
 `;

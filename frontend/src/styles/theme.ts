@@ -88,9 +88,12 @@ const color = {
   backgroundSecondary: css`
     background-color: #18191c;
   `,
+  backgroundTertiary: css`
+    background-color: #303338;
+  `,
   backgroundSoftBlue: css`
-  background-color: #5865F2;
-`,
+    background-color: #5865f2;
+  `,
 };
 
 const flex = {
@@ -98,6 +101,12 @@ const flex = {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
+  `,
+  rowStartCenter: css`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
     align-items: center;
   `,
   columnCenterCenter: css`
@@ -112,12 +121,12 @@ const flex = {
     justify-content: center;
     align-items: flex-start;
   `,
-   columnStartCenter: css`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
- `,
+  columnStartCenter: css`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  `,
 };
 
 const position = {
