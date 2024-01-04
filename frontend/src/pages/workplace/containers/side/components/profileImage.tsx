@@ -3,7 +3,6 @@ import { styled } from "styled-components";
 
 const Container = styled.img`
   width: 30px;
-  margin-right: 10px;
   border-radius: 50%;
 `;
 

@@ -16,6 +16,8 @@ const Container = styled.div`
 const InfoWrapper = styled.div`
   ${({ theme }) => theme.flex.columnCenterStart};
   flex-grow: 1;
+  padding-left: 5px;
+  margin-left: 5px;
 `;
 
 const GroupRoom = ({
@@ -29,8 +31,10 @@ const GroupRoom = ({
     <Container>
       <ProfileImage src={Profile} />
       <InfoWrapper>
-      <Span styles={[theme.color.secondary]}>{nickname}님의 그룹</Span>
-      <Span styles={[theme.color.secondary, theme.fontFormat.footnote ]}>맴버 {userCount}명</Span>
+        <Span styles={[theme.color.secondary]}>{nickname}님의 그룹</Span>
+        <Span styles={[theme.color.secondary, theme.fontFormat.footnote]}>
+          맴버 {userCount}명
+        </Span>
       </InfoWrapper>
     </Container>
   );

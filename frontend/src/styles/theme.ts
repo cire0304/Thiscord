@@ -9,7 +9,7 @@ const fontFormat = {
   title1: css`
     font-size: 28px;
     line-height: 34px;
-    font-weight: 400;
+    font-weight: 700;
   `,
   title2: css`
     font-size: 22px;
@@ -19,7 +19,7 @@ const fontFormat = {
   title3: css`
     font-size: 20px;
     line-height: 25px;
-    font-weight: 400;
+    font-weight: 700;
   `,
   headline: css`
     font-size: 17px;

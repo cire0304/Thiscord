@@ -5,9 +5,14 @@ import Nav from './containers/nav'
 import Side from './containers/side'
 import Main from './containers/main'
 import Active from './containers/active'
+import ProfileModal from './modals/profile/profileModal'
 
 
 const WorkplacePage = () => {
+
+  const [isProfileModalActive, setIsProfileModalActive] = React.useState<boolean>(false)
+
+
   return (
     <S.Container>
       <S.Header>
@@ -16,10 +21,16 @@ const WorkplacePage = () => {
       </S.Header>
 
       <S.Body>
-        <Side></Side>
+        <Side setIsProfileModalActive={setIsProfileModalActive}></Side>
         <Main></Main>
         <Active></Active>
       </S.Body>
+
+
+      {
+        isProfileModalActive && <ProfileModal setIsProfileModalActive={setIsProfileModalActive}/>
+      }
+
     </S.Container>
   )
 }

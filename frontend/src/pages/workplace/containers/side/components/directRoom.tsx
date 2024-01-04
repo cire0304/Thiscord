@@ -16,6 +16,8 @@ const Container = styled.div`
 const InfoWrapper = styled.div`
   ${({ theme }) => theme.flex.columnCenterStart};
   flex-grow: 1;
+  padding-left: 5px;
+  margin-left: 5px;
 `;
 
 const DirectRoom = ({ nickname }: { nickname: string }) => {
