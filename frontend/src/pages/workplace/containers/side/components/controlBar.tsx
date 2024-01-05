@@ -12,6 +12,7 @@ import theme from "../../../../../styles/theme";
 import ProfileImage from "./profileImage";
 
 const Container = styled.div`
+  max-width: 250px;
   width: 100%;
   height: 50px;
   padding: 5px 10px;
@@ -22,6 +23,7 @@ const Container = styled.div`
 
 const UserInfoWrapper = styled.div`
   ${({ theme }) => theme.flex.columnCenterStart};
+  max-width: 100px;
   flex-grow: 1;
   padding-left: 5px;
   margin-left: 5px;
@@ -32,6 +34,13 @@ const UserInfoWrapper = styled.div`
   }
 `;
 
+const UserNickname = styled(Span)`
+  width: 100%;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow:hidden;
+`
 const ControleWrapper = styled.div`
   gap: 10px;
   ${({ theme }) => theme.flex.rowCenterCenter};
@@ -58,10 +67,10 @@ const ControlBar = ({
         onClick={(e) => clickHandler(e)}
         ref={userInfoWrapperRef}
       >
-        <Span styles={[theme.color.neutral]}>{nickname}</Span>
-        <Span styles={[theme.color.secondary, theme.fontFormat.footnote]}>
-          {nickname}#{userCode}
-        </Span>
+        <UserNickname styles={[theme.color.neutral]}>{nickname}</UserNickname>
+        <UserNickname styles={[theme.color.secondary, theme.fontFormat.footnote]}>
+          {nickname}#{userCode}asdasdasd
+        </UserNickname>
       </UserInfoWrapper>
       <ControleWrapper>
         <MuteMike></MuteMike>
