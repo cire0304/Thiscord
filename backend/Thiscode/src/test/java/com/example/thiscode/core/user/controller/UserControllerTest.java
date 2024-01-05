@@ -1,7 +1,7 @@
 package com.example.thiscode.core.user.controller;
 
 
-import com.example.thiscode.SecurityTest;
+import com.example.thiscode.CustomTestSupport;
 import com.example.thiscode.core.user.controller.request.SignUpRequest;
 import com.example.thiscode.core.user.controller.request.UpdateRequest;
 import com.example.thiscode.core.user.entity.User;
@@ -17,9 +17,7 @@ import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -28,12 +26,14 @@ import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = {UserController.class})
-@MockBean(JpaMetamodelMappingContext.class)
-class UserControllerTest extends SecurityTest {
+class UserControllerTest extends CustomTestSupport {
 
     @Autowired
     private MockMvc mockMvc;
@@ -60,7 +60,14 @@ class UserControllerTest extends SecurityTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("success"));
+                .andExpect(content().string("success"))
+                .andDo(
+                        document("sign-up",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );
+
     }
 
     @DisplayName("회원가입할 때, 이메일, 비밀번호, 닉네임 중 하나라도 빈 값이면 에러를 반환한다.")
@@ -77,7 +84,13 @@ class UserControllerTest extends SecurityTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestWithoutEmail)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("이메일은 필수입니다."));
+                .andExpect(content().string("이메일은 필수입니다."))
+                .andDo(
+                        document("sign-up-error",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );
     }
 
     @DisplayName("자신의 정보를 조회한다.")
@@ -99,7 +112,13 @@ class UserControllerTest extends SecurityTest {
         mockMvc.perform(get("/users/me")
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(new JwtSubject(principalUser))));
+                .andExpect(content().string(objectMapper.writeValueAsString(new JwtSubject(principalUser))))
+                .andDo(
+                        document("get-user-info",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );;
     }
 
     @DisplayName("자신의 자세한 정보를 조회한다.")
@@ -129,7 +148,14 @@ class UserControllerTest extends SecurityTest {
                 .andExpect(jsonPath("$.id").value(userDetailInfoDto.getId()))
                 .andExpect(jsonPath("$.email").value(userDetailInfoDto.getEmail()))
                 .andExpect(jsonPath("$.nickname").value(userDetailInfoDto.getNickname()))
-                .andExpect(jsonPath("$.introduction").value(userDetailInfoDto.getIntroduction()));
+                .andExpect(jsonPath("$.introduction").value(userDetailInfoDto.getIntroduction()))
+                .andDo(
+                        document("get-user-detail-info",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );
+
     }
 
     @DisplayName("자신의 정보를 수정한다.")
@@ -153,7 +179,13 @@ class UserControllerTest extends SecurityTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new UpdateRequest("updateNickname", "updateIntroduction"))))
                 .andExpect(status().isOk())
-                .andExpect(content().string("success"));
+                .andExpect(content().string("success"))
+                .andDo(
+                        document("update-user",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );
     }
 
 }
