@@ -1,4 +1,4 @@
-import React, { useRef, Dispatch, SetStateAction, useEffect } from "react";
+import React, { useRef, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import Span from "../../../../components/span";
 import theme from "../../../../styles/theme";
@@ -95,6 +95,28 @@ const Content = styled.div`
 
 const Introduction = styled(Content)`
   border-bottom: none;
+  align-items: stretch;
+  height: 150px;
+`;
+
+
+const Input = styled.input`
+  ${({ theme }) => theme.fontFormat.headline};
+  ${({ theme }) => theme.color.neutral};
+  ${({ theme }) => theme.color.backgroundPrimary};
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+`;
+
+const Textarea = styled.textarea`
+  ${({ theme }) => theme.fontFormat.headline};
+  ${({ theme }) => theme.color.neutral};
+  ${({ theme }) => theme.color.backgroundPrimary};
+  height: 100%;
+  border: none;
+  border-radius: 5px;
+  resize: none;
 `;
 
 interface ProfileModalProps {
@@ -116,13 +138,16 @@ const ProfileModal = ({
 }: ProfileModalProps) => {
   const loding = "로딩중...";
   const backgroundRef = useRef<HTMLDivElement>(null);
-  const [userDetailInfo, setUserDetailInfo] = React.useState<UserDetailInfo>({
+  const [userDetailInfo, setUserDetailInfo] = useState<UserDetailInfo>({
     nickname: "",
     email: "",
     introduction: "",
     createdAt: "",
     userCode: "",
   });
+
+  const nicknameInputRef = useRef<HTMLInputElement>(null);
+  const intoductionTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const onCancle = (e: React.MouseEvent<HTMLDivElement>) => {
     if (backgroundRef.current === e.target) {
@@ -139,7 +164,30 @@ const ProfileModal = ({
       getUserDetailInfo();
     }
   }, [isProfileModalActive]);
-  
+
+  const updateUserDetailInfo = async () => {
+    if (
+      nicknameInputRef.current === null ||
+      intoductionTextAreaRef.current === null
+    )
+      return;
+    const nickname = nicknameInputRef.current.value;
+    const introduction = intoductionTextAreaRef.current.value;
+    const res = await UserRequest.updateUserInfo(
+      nickname,
+      introduction,
+    );
+    setUserDetailInfo({...userDetailInfo, nickname, introduction });
+  };
+
+  const handlerChangeUserDetailInfo = (
+    e: React.FocusEvent<HTMLInputElement> | React.FocusEvent<HTMLTextAreaElement>
+  ) => {
+    if (e.target === null) return;
+    if (e.target.value !== e.target.defaultValue) {
+      updateUserDetailInfo();
+    }
+  };
 
   return (
     <Modal onClick={(e) => onCancle(e)} ref={backgroundRef}>
@@ -156,11 +204,18 @@ const ProfileModal = ({
               <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>
                 닉네임
               </Span>
-              <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>
-                {Utils.isEmpty(userDetailInfo.nickname)
-                  ? loding
-                  : userDetailInfo.nickname}
-              </Span>
+              {Utils.isEmpty(userDetailInfo.nickname) ? (
+                loding
+              ) : (
+                <Input
+                  type="text"
+                  onBlur={(e) => {
+                    handlerChangeUserDetailInfo(e);
+                  }}
+                  defaultValue={userDetailInfo.nickname}
+                  ref={nicknameInputRef}
+                />
+              )}
             </Content>
             <Content>
               <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>
@@ -186,9 +241,21 @@ const ProfileModal = ({
               <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>
                 자기소개
               </Span>
-              <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>
+              {Utils.isEmpty(userDetailInfo.introduction) ? (
+                loding
+              ) : (
+                <Textarea
+                  onBlur={(e) => {
+                    handlerChangeUserDetailInfo(e);
+                  }}
+                  defaultValue={userDetailInfo.introduction}
+                  ref={intoductionTextAreaRef}
+                />
+              )}
+
+              {/* <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>
                 {userDetailInfo.introduction}
-              </Span>
+              </Span> */}
             </Introduction>
           </Wraper>
         </Body>

@@ -19,7 +19,7 @@ const login = async (email: string, password: string) => {
 
 const getUserInfo = async () => {
   return await axiosInstance.get<{
-    userId: number;
+    id: number;
     email: string;
     nickname: string;
     userCode: string;
@@ -37,11 +37,20 @@ const getUserDetailInfo = async () => {
   }>("/users/me/detail");
 };
 
+const updateUserInfo = async (nickname: string, introduction: string) => {
+  const data = {
+    nickname,
+    introduction,
+  };
+  return await axiosInstance.put("/users/me", data);
+};
+
 const UserRequest = {
   registerUser,
   login,
   getUserInfo,
-  getUserDetailInfo
+  getUserDetailInfo,
+  updateUserInfo
 };
 
 export default UserRequest;

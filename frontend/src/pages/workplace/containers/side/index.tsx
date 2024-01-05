@@ -8,7 +8,7 @@ import UserRequest from "../../../../api/user";
 
 
 interface UserInfo {
-  userId: number;
+  id: number;
   email: string;
   nickname: string;
   userCode: string;
@@ -17,7 +17,7 @@ interface UserInfo {
 const Side = ({setIsProfileModalActive} : {setIsProfileModalActive: Dispatch<SetStateAction<boolean>>}) => {
 
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    userId: 0,
+    id: 0,
     email: "로딩 중...",
     nickname: "로딩 중...",
     userCode: "",
@@ -30,8 +30,6 @@ const Side = ({setIsProfileModalActive} : {setIsProfileModalActive: Dispatch<Set
     }
     getUserInfo();
   }, []);
-
-  
 
   return (
     <S.Container>
