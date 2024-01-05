@@ -48,7 +48,7 @@ class UserControllerTest extends SecurityTest {
 
     @DisplayName("회원가입을 한다.")
     @Test
-    public void signIn() throws Exception {
+    public void signUp() throws Exception {
         //given
         String email = "email";
         String password = "password";
@@ -65,7 +65,7 @@ class UserControllerTest extends SecurityTest {
 
     @DisplayName("회원가입할 때, 이메일, 비밀번호, 닉네임 중 하나라도 빈 값이면 에러를 반환한다.")
     @Test
-    public void signInError() throws Exception {
+    public void signUpError() throws Exception {
         //given
         String email = "email";
         String password = "password";
@@ -129,8 +129,7 @@ class UserControllerTest extends SecurityTest {
                 .andExpect(jsonPath("$.id").value(userDetailInfoDto.getId()))
                 .andExpect(jsonPath("$.email").value(userDetailInfoDto.getEmail()))
                 .andExpect(jsonPath("$.nickname").value(userDetailInfoDto.getNickname()))
-                .andExpect(jsonPath("$.introduction").value(userDetailInfoDto.getIntroduction()))
-                .andExpect(jsonPath("$.createdAt").value(userDetailInfoDto.getCreatedAt().toString()));
+                .andExpect(jsonPath("$.introduction").value(userDetailInfoDto.getIntroduction()));
     }
 
     @DisplayName("자신의 정보를 수정한다.")

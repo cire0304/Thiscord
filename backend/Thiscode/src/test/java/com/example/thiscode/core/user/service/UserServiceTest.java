@@ -25,7 +25,7 @@ class UserServiceTest {
     @Test
     public void singUp () {
         //given
-        String email = "email";
+        String email = "test-email";
         String password = "password";
         String nickname = "nickname";
 
@@ -40,7 +40,7 @@ class UserServiceTest {
     @Test
     public void singUpWithDuplicateEmail () {
         //given
-        String email = "email";
+        String email = "test-email";
         String password = "password";
         String nickname = "nickname";
         userService.singUp(email, password, nickname);
