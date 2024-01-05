@@ -20,7 +20,7 @@ import java.io.IOException;
 public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtTokenProvider jwtTokenProvider;
     private final String TOKEN = "TOKEN";
-    private final String REDIRECT_URL = "http://localhost:3000/workplace";
+    private final String REDIRECT_URL = "http://localhost:3000/workspace";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

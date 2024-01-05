@@ -174,7 +174,7 @@ class UserControllerTest extends CustomTestSupport {
         Cookie tokenCookie = new Cookie("TOKEN", token);
 
         //when then
-        mockMvc.perform(patch("/users/me")
+        mockMvc.perform(put("/users/me")
                         .cookie(tokenCookie)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new UpdateRequest("updateNickname", "updateIntroduction"))))

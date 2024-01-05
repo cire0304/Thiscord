@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
@@ -40,7 +37,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserDetailInfo(subject.getUserId()));
     }
 
-    @PatchMapping("/users/me")
+    @PutMapping("/users/me")
     public ResponseEntity<String> updateUser(@AuthenticationPrincipal JwtSubject subject,
                                              @RequestBody @Valid UpdateRequest request) {
         userService.updateUser(subject.getUserId(), request.getNickname(), request.getIntroduction());
