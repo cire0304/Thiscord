@@ -2,6 +2,7 @@ package com.example.thiscode.security.ajax;
 
 import com.example.thiscode.security.jwt.JwtTokenProvider;
 import com.example.thiscode.security.model.PrincipalUser;
+import com.example.thiscode.utils.CookieUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,19 +26,10 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.debug("User login successes : {}", authentication.getPrincipal());
 
-        String token = jwtTokenProvider.createToken((PrincipalUser) authentication.getPrincipal());
-        Cookie tokenCookie = createTokenCookie(token);
-        response.addCookie(tokenCookie);
+        String token = jwtTokenProvider.createJwtToken((PrincipalUser) authentication.getPrincipal());
+        Cookie jwtCookie = CookieUtils.createJwtCookie(token);
+        response.addCookie(jwtCookie);
         response.setStatus(HttpServletResponse.SC_OK);
-    }
-
-
-    private Cookie createTokenCookie(String token) {
-        Cookie cookie = new Cookie(TOKEN, token);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setSecure(true);
-        return cookie;
     }
 
 }
