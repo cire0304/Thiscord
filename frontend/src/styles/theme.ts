@@ -138,11 +138,21 @@ const position = {
   `,
 };
 
+const dragable = {
+  none: css`
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  `,
+};
+
 const theme = {
   color,
   flex,
   position,
   fontFormat,
+  dragable
 };
 
 export default theme;

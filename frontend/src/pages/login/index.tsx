@@ -75,7 +75,7 @@ const LoginPage = () => {
           <Input placeholder="abc@gmail.com" ref={emailRef}></Input>
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
-            visable={isValidEmail}
+            hidden={isValidEmail}
           >
             {warnEmail}
           </Span>
@@ -88,7 +88,7 @@ const LoginPage = () => {
 
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
-            visable={isValidPassword}
+            hidden={isValidPassword}
           >
             {warnPassword}
           </Span>

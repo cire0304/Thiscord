@@ -98,7 +98,7 @@ const RegisterPage = () => {
           <Input placeholder="abc@gmail.com" ref={emailRef}></Input>
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
-            visable={isValidEmail}
+            hidden={isValidEmail}
           >
             {warnEmail}
           </Span>
@@ -110,7 +110,7 @@ const RegisterPage = () => {
           <Input placeholder="12345678" ref={passwordRef}></Input>
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
-            visable={isValidPassword}
+            hidden={isValidPassword}
           >
             {warnPassword}
           </Span>
@@ -123,7 +123,7 @@ const RegisterPage = () => {
           <Input placeholder="your nickname" ref={nicknameRef}></Input>
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
-            visable={isValidNickname}
+            hidden={isValidNickname}
           >
             {warnNickname}
           </Span>
