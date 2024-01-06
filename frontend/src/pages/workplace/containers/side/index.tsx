@@ -1,32 +1,21 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+
 import * as S from "./styles";
 import ControlBar from "./components/controlBar";
 
 import GroupRoom from "./components/groupRoom";
 import DirectRoom from "./components/directRoom";
 import UserRequest from "../../../../api/user";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserInfoState } from "../../../../store";
 
-
-interface UserInfo {
-  id: number;
-  email: string;
-  nickname: string;
-  userCode: string;
-}
 
 const Side = ({setIsProfileModalActive} : {setIsProfileModalActive: Dispatch<SetStateAction<boolean>>}) => {
-
-  const [userInfo, setUserInfo] = useState<UserInfo>({
-    id: 0,
-    email: "로딩 중...",
-    nickname: "로딩 중...",
-    userCode: "",
-  });
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const getUserInfo = async () => {
       const res = await UserRequest.getUserInfo()
-      res.data && setUserInfo(res.data);
+      res.data && dispatch(setUserInfoState(res.data));
     }
     getUserInfo();
   }, []);
@@ -38,7 +27,7 @@ const Side = ({setIsProfileModalActive} : {setIsProfileModalActive: Dispatch<Set
         <GroupRoom nickname="이동준" userCount={1}></GroupRoom>
         <DirectRoom nickname="시레"></DirectRoom>
       </S.RoomsWrapper>
-      <ControlBar nickname={userInfo.nickname} userCode={userInfo.userCode} setIsProfileModalActive={setIsProfileModalActive}></ControlBar>
+      <ControlBar setIsProfileModalActive={setIsProfileModalActive}></ControlBar>
     </S.Container>
   );
 };

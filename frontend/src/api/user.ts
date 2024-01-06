@@ -17,13 +17,16 @@ const login = async (email: string, password: string) => {
   return await axiosInstance.post("/login", data);
 };
 
+export interface UserInfo {
+  id: number;
+  nickname: string;
+  userCode: number;
+  email: string;
+  introduction: string;
+}
+
 const getUserInfo = async () => {
-  return await axiosInstance.get<{
-    id: number;
-    email: string;
-    nickname: string;
-    userCode: string;
-  }>("/users/me");
+  return await axiosInstance.get<UserInfo>("/users/me");
 };
 
 const getUserDetailInfo = async () => {

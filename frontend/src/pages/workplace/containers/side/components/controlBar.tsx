@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { ReactComponent as GearIcon } from "../../../../../assets/icons/gear.svg";
 import { ReactComponent as HeadphoneIcon } from "../../../../../assets/icons/headphone.svg";
@@ -10,6 +10,9 @@ import Profile from "../../../../../assets/images/discodeProfile.jpg";
 import Span from "../../../../../components/span";
 import theme from "../../../../../styles/theme";
 import ProfileImage from "./profileImage";
+import { useDispatch, useSelector } from "react-redux";
+import UserRequest from "../../../../../api/user";
+import { setUserInfoState } from "../../../../../store";
 
 const Container = styled.div`
   max-width: 250px;
@@ -25,8 +28,8 @@ const UserInfoWrapper = styled.div`
   ${({ theme }) => theme.flex.columnCenterStart};
   max-width: 100px;
   flex-grow: 1;
-  padding-left: 5px;
-  margin-left: 5px;
+
+  margin: 5px;
   border-radius: 5px;
   
   &:hover {
@@ -40,6 +43,8 @@ const UserNickname = styled(Span)`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow:hidden;
+  padding-left: 5px;
+  text-align: left;
 `
 const ControleWrapper = styled.div`
   gap: 10px;
@@ -47,12 +52,8 @@ const ControleWrapper = styled.div`
 `;
 
 const ControlBar = ({
-  nickname,
-  userCode,
   setIsProfileModalActive,
 }: {
-  nickname: string;
-  userCode: string;
   setIsProfileModalActive: Dispatch<SetStateAction<boolean>>;
 }) => {
   const userInfoWrapperRef = useRef<HTMLDivElement>(null);
@@ -60,6 +61,18 @@ const ControlBar = ({
     setIsProfileModalActive(true);
   };
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const res = await UserRequest.getUserInfo()
+      res.data && dispatch(setUserInfoState(res.data));
+    }
+    getUserInfo();
+  }, []);
+
+  const user = useSelector((state: any) => state.user)
+  
   return (
     <Container>
       <ProfileImage src={Profile} />
@@ -67,9 +80,9 @@ const ControlBar = ({
         onClick={(e) => clickHandler(e)}
         ref={userInfoWrapperRef}
       >
-        <UserNickname styles={[theme.color.neutral]}>{nickname}</UserNickname>
+        <UserNickname styles={[theme.color.neutral]}>{user.nickname}</UserNickname>
         <UserNickname styles={[theme.color.secondary, theme.fontFormat.footnote]}>
-          {nickname}#{userCode}asdasdasd
+          {user.nickname}#{user.userCode}
         </UserNickname>
       </UserInfoWrapper>
       <ControleWrapper>

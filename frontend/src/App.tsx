@@ -7,6 +7,8 @@ import { ThemeProvider } from "styled-components";
 import theme from "./styles/theme";
 import RegistgerPage from "./pages/register";
 import WorkplacePage from "./pages/workplace";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const router = createBrowserRouter([
   {
@@ -15,20 +17,22 @@ const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: <RegistgerPage/>,
+    element: <RegistgerPage />,
   },
   {
     path: "/workspace",
-    element: <WorkplacePage/>,
+    element: <WorkplacePage />,
   },
 ]);
 
 function App() {
   return (
     <div className="App">
-      <ThemeProvider theme={theme}>
-        <RouterProvider router={router}></RouterProvider>
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <RouterProvider router={router}></RouterProvider>
+        </ThemeProvider>
+      </Provider>
     </div>
   );
 }

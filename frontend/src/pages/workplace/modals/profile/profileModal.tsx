@@ -1,9 +1,15 @@
-import React, { useRef, Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, {
+  useRef,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { styled } from "styled-components";
 import Span from "../../../../components/span";
 import theme from "../../../../styles/theme";
-import UserRequest from "../../../../api/user";
-import Utils from "../../../../utils/string";
+import UserRequest, { UserInfo } from "../../../../api/user";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setUserInfoState } from "../../../../store";
 
 const Modal = styled.div`
   width: 100vw;
@@ -99,7 +105,6 @@ const Introduction = styled(Content)`
   height: 150px;
 `;
 
-
 const Input = styled.input`
   ${({ theme }) => theme.fontFormat.headline};
   ${({ theme }) => theme.color.neutral};
@@ -124,27 +129,15 @@ interface ProfileModalProps {
   setIsProfileModalActive: Dispatch<SetStateAction<boolean>>;
 }
 
-interface UserDetailInfo {
-  nickname: string;
-  email: string;
-  introduction: string;
-  createdAt: string;
-  userCode: string;
-}
-
 const ProfileModal = ({
   isProfileModalActive,
   setIsProfileModalActive,
 }: ProfileModalProps) => {
-  const loding = "로딩중...";
+
   const backgroundRef = useRef<HTMLDivElement>(null);
-  const [userDetailInfo, setUserDetailInfo] = useState<UserDetailInfo>({
-    nickname: "",
-    email: "",
-    introduction: "",
-    createdAt: "",
-    userCode: "",
-  });
+
+  const user = useSelector((state: any) => state.user) as UserInfo;
+  const dispatch = useDispatch();
 
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const intoductionTextAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -155,17 +148,8 @@ const ProfileModal = ({
     }
   };
 
-  useEffect(() => {
-    const getUserDetailInfo = async () => {
-      const res = await UserRequest.getUserDetailInfo();
-      setUserDetailInfo(res.data);
-    };
-    if (isProfileModalActive) {
-      getUserDetailInfo();
-    }
-  }, [isProfileModalActive]);
 
-  const updateUserDetailInfo = async () => {
+  const updateUserInfo = async () => {
     if (
       nicknameInputRef.current === null ||
       intoductionTextAreaRef.current === null
@@ -173,19 +157,19 @@ const ProfileModal = ({
       return;
     const nickname = nicknameInputRef.current.value;
     const introduction = intoductionTextAreaRef.current.value;
-    const res = await UserRequest.updateUserInfo(
-      nickname,
-      introduction,
-    );
-    setUserDetailInfo({...userDetailInfo, nickname, introduction });
+    await UserRequest.updateUserInfo(nickname, introduction);
+    const res = await UserRequest.getUserInfo();
+    dispatch(setUserInfoState(res.data));
   };
 
-  const handlerChangeUserDetailInfo = (
-    e: React.FocusEvent<HTMLInputElement> | React.FocusEvent<HTMLTextAreaElement>
+  const handlerChangeUserInfo = (
+    e:
+      | React.FocusEvent<HTMLInputElement>
+      | React.FocusEvent<HTMLTextAreaElement>
   ) => {
     if (e.target === null) return;
     if (e.target.value !== e.target.defaultValue) {
-      updateUserDetailInfo();
+      updateUserInfo();
     }
   };
 
@@ -204,27 +188,22 @@ const ProfileModal = ({
               <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>
                 닉네임
               </Span>
-              {Utils.isEmpty(userDetailInfo.nickname) ? (
-                loding
-              ) : (
-                <Input
-                  type="text"
-                  onBlur={(e) => {
-                    handlerChangeUserDetailInfo(e);
-                  }}
-                  defaultValue={userDetailInfo.nickname}
-                  ref={nicknameInputRef}
-                />
-              )}
+
+              <Input
+                type="text"
+                onBlur={(e) => {
+                  handlerChangeUserInfo(e);
+                }}
+                defaultValue={user.nickname}
+                ref={nicknameInputRef}
+              />
             </Content>
             <Content>
               <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>
                 초대코드
               </Span>
               <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>
-                {Utils.isEmpty(userDetailInfo.userCode)
-                  ? loding
-                  : userDetailInfo.userCode}
+                {user.userCode}
               </Span>
             </Content>
             <Content>
@@ -232,30 +211,20 @@ const ProfileModal = ({
                 이메일
               </Span>
               <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>
-                {Utils.isEmpty(userDetailInfo.email)
-                  ? loding
-                  : userDetailInfo.email}
+                {user.email}
               </Span>
             </Content>
             <Introduction>
               <Span styles={[theme.fontFormat.headline, theme.color.neutral]}>
                 자기소개
               </Span>
-              {Utils.isEmpty(userDetailInfo.introduction) ? (
-                loding
-              ) : (
-                <Textarea
-                  onBlur={(e) => {
-                    handlerChangeUserDetailInfo(e);
-                  }}
-                  defaultValue={userDetailInfo.introduction}
-                  ref={intoductionTextAreaRef}
-                />
-              )}
-
-              {/* <Span styles={[theme.fontFormat.title3, theme.color.neutral]}>
-                {userDetailInfo.introduction}
-              </Span> */}
+              <Textarea
+                onBlur={(e) => {
+                  handlerChangeUserInfo(e);
+                }}
+                defaultValue={user.introduction}
+                ref={intoductionTextAreaRef}
+              />
             </Introduction>
           </Wraper>
         </Body>
