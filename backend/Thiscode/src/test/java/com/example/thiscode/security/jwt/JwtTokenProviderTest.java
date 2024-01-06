@@ -24,20 +24,21 @@ class JwtTokenProviderTest {
     @Test
     public void  PrincipalUser() {
         //given
-        User user = userRepository.save(new User("email", "password", "nickname", "userCode"));
+        User user = userRepository.save(new User("email", "password", "nickname", "introduction"));
         ProviderUser providerUser = new ProviderUser(user);
         PrincipalUser principalUser = new PrincipalUser(providerUser);
-        String token = jwtTokenProvider.createToken(principalUser);
+        String token = jwtTokenProvider.createJwtToken(principalUser);
 
         //when
         Authentication authentication =  jwtTokenProvider.getAuthentication(token);
         JwtSubject principal = (JwtSubject) authentication.getPrincipal();
 
         //then
-        assertThat(principal.getUserId()).isEqualTo(user.getId());
+        assertThat(principal.getId()).isEqualTo(user.getId());
         assertThat(principal.getUserCode()).isEqualTo(user.getUserCode());
         assertThat(principal.getNickname()).isEqualTo(user.getNickname());
         assertThat(principal.getEmail()).isEqualTo(user.getEmail());
+        assertThat(principal.getIntroduction()).isEqualTo(user.getIntroduction());
      }
 
 

@@ -41,7 +41,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(PrincipalUser principalUser) {
+    public String createJwtToken(PrincipalUser principalUser) {
         JwtSubject customJwtSubject = new JwtSubject(principalUser);
         Claims claims = Jwts.claims().setSubject("JWT Token");
         claims.put(SUBJECT, customJwtSubject);

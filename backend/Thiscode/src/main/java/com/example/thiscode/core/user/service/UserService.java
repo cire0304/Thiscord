@@ -28,6 +28,7 @@ public class UserService {
     }
 
     @Transactional
+    @Deprecated
     public UserDetailInfoDto getUserDetailInfo(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
@@ -35,10 +36,11 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(Long userId, String nickname, String introduction) {
+    public User updateUser(Long userId, String nickname, String introduction) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
         user.updateNicknameAndIntroduction(nickname, introduction);
+        return user;
     }
 
 }

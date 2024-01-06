@@ -34,6 +34,10 @@ public class ProviderUser {
         return user.getUserCode();
     }
 
+    public String getIntroduction() {
+        return user.getIntroduction();
+    }
+
     public List<? extends GrantedAuthority> getAuthorities() {
         return null;
     }

@@ -2,9 +2,16 @@ package com.example.thiscode.core.user.controller;
 
 import com.example.thiscode.core.user.controller.request.SignUpRequest;
 import com.example.thiscode.core.user.controller.request.UpdateRequest;
+import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.service.UserService;
 import com.example.thiscode.core.user.service.dto.UserDetailInfoDto;
 import com.example.thiscode.security.jwt.JwtSubject;
+import com.example.thiscode.security.jwt.JwtTokenProvider;
+import com.example.thiscode.security.model.PrincipalUser;
+import com.example.thiscode.security.model.ProviderUser;
+import com.example.thiscode.utils.CookieUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid SignUpRequest request) {
@@ -32,15 +40,27 @@ public class UserController {
         return ResponseEntity.ok(subject);
     }
 
+    /**
+     * Use {@link #getUserInfo(JwtSubject)} instead.
+     */
     @GetMapping("/users/me/detail")
+    @Deprecated(since = "2021-08-01", forRemoval = true)
     public ResponseEntity<UserDetailInfoDto> getUserDetailInfo(@AuthenticationPrincipal JwtSubject subject) {
-        return ResponseEntity.ok(userService.getUserDetailInfo(subject.getUserId()));
+        return ResponseEntity.ok(userService.getUserDetailInfo(subject.getId()));
     }
 
     @PutMapping("/users/me")
     public ResponseEntity<String> updateUser(@AuthenticationPrincipal JwtSubject subject,
-                                             @RequestBody @Valid UpdateRequest request) {
-        userService.updateUser(subject.getUserId(), request.getNickname(), request.getIntroduction());
+                                             @RequestBody @Valid UpdateRequest request,
+                                             HttpServletResponse response) {
+        User user = userService.updateUser(subject.getId(), request.getNickname(), request.getIntroduction());
+
+        ProviderUser providerUser = new ProviderUser(user);
+        PrincipalUser principalUser = new PrincipalUser(providerUser);
+        String jwtToken = jwtTokenProvider.createJwtToken(principalUser);
+
+        Cookie jwtCookie = CookieUtils.createJwtCookie(jwtToken);
+        response.addCookie(jwtCookie);
         return ResponseEntity.ok("success");
     }
 

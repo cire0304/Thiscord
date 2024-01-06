@@ -28,7 +28,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -105,7 +104,7 @@ class UserControllerTest extends CustomTestSupport {
         User user = new User(email, password, nickname, introduction);
         ProviderUser providerUser = new ProviderUser(user);
         PrincipalUser principalUser = new PrincipalUser(providerUser);
-        String token = jwtTokenProvider.createToken(principalUser);
+        String token = jwtTokenProvider.createJwtToken(principalUser);
         Cookie tokenCookie = new Cookie("TOKEN", token);
 
         //when then
@@ -135,7 +134,7 @@ class UserControllerTest extends CustomTestSupport {
         User user = new User(email, password, nickname, introduction);
         ProviderUser providerUser = new ProviderUser(user);
         PrincipalUser principalUser = new PrincipalUser(providerUser);
-        String token = jwtTokenProvider.createToken(principalUser);
+        String token = jwtTokenProvider.createJwtToken(principalUser);
         Cookie tokenCookie = new Cookie("TOKEN", token);
 
         UserDetailInfoDto userDetailInfoDto = new UserDetailInfoDto(userId, email, password, nickname, introduction, now);
@@ -170,8 +169,10 @@ class UserControllerTest extends CustomTestSupport {
         User user = new User(email, password, nickname, introduction);
         ProviderUser providerUser = new ProviderUser(user);
         PrincipalUser principalUser = new PrincipalUser(providerUser);
-        String token = jwtTokenProvider.createToken(principalUser);
+        String token = jwtTokenProvider.createJwtToken(principalUser);
         Cookie tokenCookie = new Cookie("TOKEN", token);
+
+        given(userService.updateUser(any(), any(), any())).willReturn(user);
 
         //when then
         mockMvc.perform(put("/users/me")

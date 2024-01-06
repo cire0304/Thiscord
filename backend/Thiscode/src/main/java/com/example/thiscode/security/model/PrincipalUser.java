@@ -30,6 +30,10 @@ public class PrincipalUser implements UserDetails, OAuth2User {
         return providerUser.getEmail();
     }
 
+    public String getIntroduction() {
+        return providerUser.getIntroduction();
+    }
+
     @Override
     public String getPassword() {
         return providerUser.getPassword();

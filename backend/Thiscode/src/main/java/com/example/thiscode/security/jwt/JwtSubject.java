@@ -12,16 +12,18 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class JwtSubject implements Serializable {
 
-    private Long userId;
+    private Long id;
     private String userCode;
     private String nickname;
     private String email;
+    private String introduction;
 
     public JwtSubject(PrincipalUser principalUser) {
-        this.userId = principalUser.getId();
+        this.id = principalUser.getId();
         this.userCode = principalUser.getUserCode();
         this.nickname = principalUser.getNickname();
         this.email = principalUser.getEmail();
+        this.introduction = principalUser.getIntroduction();
     }
 
 }
