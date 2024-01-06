@@ -18,13 +18,13 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional
-    public void singUp(String email, String password, String nickname) {
+    public User singUp(String email, String password, String nickname) {
         if (userRepository.existsByEmail(email)) {
             throw new DuplicateKeyException("이미 사용중인 이메일입니다.");
         }
 
         User user = new User(email, password, nickname, "introduction");
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Transactional
