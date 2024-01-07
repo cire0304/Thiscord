@@ -9,7 +9,6 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
-
-
 include::api/user/user.adoc[]
+include::api/user/friend.adoc[]
 

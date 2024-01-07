@@ -1,8 +1,6 @@
 package com.example.thiscode;
 
 import com.example.thiscode.config.SecurityConfig;
-import com.example.thiscode.core.user.controller.FriendController;
-import com.example.thiscode.core.user.controller.UserController;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.repository.FriendRepository;
 import com.example.thiscode.core.user.repository.UserRepository;
@@ -22,19 +20,21 @@ import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = {UserController.class, FriendController.class})
+@SpringBootTest
+@AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @MockBean(JpaMetamodelMappingContext.class)
 @ExtendWith(RestDocumentationExtension.class)
 @Import({SecurityConfig.class, JwtTokenProvider.class, CommonAuthenticationEntryPoint.class, Oauth2AuthenticationSuccessHandler.class, AjaxAuthenticationFailureHandler.class, AjaxAuthenticationSuccessHandler.class, AjaxAuthenticationProvider.class,  AjaxUserDetailsService.class})
-public class CustomTestSupport {
+public class CustomControllerTestSupport {
 
     @Autowired
     protected MockMvc mockMvc;

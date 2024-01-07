@@ -2,25 +2,18 @@
 
 == 회원가입
 === 회원가입 요청
-include::{snippets}/sign-up/http-request.adoc[]
+include::{snippets}/user-sign-up/http-request.adoc[]
 === 회원가입 응답
-include::{snippets}/sign-up/response-body.adoc[]
+include::{snippets}/user-sign-up/response-body.adoc[]
 
 == 유저 정보 조회
 === 유저 정보 조회 요청
-include::{snippets}/get-user-info/http-request.adoc[]
+include::{snippets}/user-get-info/http-request.adoc[]
 === 유저 정보 조회 응답
-include::{snippets}/get-user-info/response-body.adoc[]
-
-== 유저 상세 정보 조회
-=== 유저 상세 정보 조회 요청
-include::{snippets}/get-user-detail-info/http-request.adoc[]
-=== 유저 상세 정보 조회 응답
-include::{snippets}/get-user-detail-info/response-body.adoc[]
-
+include::{snippets}/user-get-info/response-body.adoc[]
 
 == 유저 정보 수정
 === 유저 정보 수정 요청
-include::{snippets}/update-user/http-request.adoc[]
+include::{snippets}/user-update/http-request.adoc[]
 === 유저 정보 수정 응답
-include::{snippets}/update-user/response-body.adoc[]
+include::{snippets}/user-update/response-body.adoc[]

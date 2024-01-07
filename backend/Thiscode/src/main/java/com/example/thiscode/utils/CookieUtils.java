@@ -1,6 +1,5 @@
 package com.example.thiscode.utils;
 
-import jakarta.servlet.Filter;
 import jakarta.servlet.http.Cookie;
 
 public class CookieUtils {

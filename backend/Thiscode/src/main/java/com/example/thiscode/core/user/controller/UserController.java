@@ -1,7 +1,7 @@
 package com.example.thiscode.core.user.controller;
 
 import com.example.thiscode.core.user.controller.request.SignUpRequest;
-import com.example.thiscode.core.user.controller.request.UpdateRequest;
+import com.example.thiscode.core.user.controller.request.UpdateUserRequest;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.service.UserService;
 import com.example.thiscode.core.user.service.dto.UserDetailInfoDto;
@@ -51,7 +51,7 @@ public class UserController {
 
     @PutMapping("/users/me")
     public ResponseEntity<String> updateUser(@AuthenticationPrincipal JwtSubject subject,
-                                             @RequestBody @Valid UpdateRequest request,
+                                             @RequestBody @Valid UpdateUserRequest request,
                                              HttpServletResponse response) {
         User user = userService.updateUser(subject.getId(), request.getNickname(), request.getIntroduction());
 

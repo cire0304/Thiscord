@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateRequest {
+public class UpdateUserRequest {
 
     @NotBlank(message = "닉네임은 필수입니다.")
     private String nickname;
