@@ -1,4 +1,3 @@
-import { get } from "http";
 import axiosInstance from "./axios";
 
 const registerUser = async (data: {

@@ -76,9 +76,12 @@ const LoginPage = () => {
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
             hidden={isValidEmail}
+            // hidden={true}
+
           >
             {warnEmail}
           </Span>
+
         </S.InputWrapper>
         <S.InputWrapper>
           <Span styles={[theme.fontFormat.subhead, theme.color.neutral]}>
@@ -89,6 +92,7 @@ const LoginPage = () => {
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
             hidden={isValidPassword}
+
           >
             {warnPassword}
           </Span>

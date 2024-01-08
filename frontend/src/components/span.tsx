@@ -2,9 +2,10 @@ import { ReactNode } from "react";
 import styled, { RuleSet, css } from "styled-components";
 
 const Span = styled.span<SpanElementProps>`
+  display:inline-block;
   ${({ styles }) => styles}
-  ${({ hidden: visable }) =>
-    visable &&
+  ${({ hidden }) =>
+    hidden &&
     css`
       visibility: hidden;
     `}

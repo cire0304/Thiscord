@@ -1,9 +1,12 @@
 import React from "react";
 
 import { styled } from "styled-components";
-import FindFriend from "../../components/findFreind";
+import AddFriend from "../../components/addFreind";
 import { useDispatch, useSelector } from "react-redux";
 import { ViewState } from "../../../../store/slices/viewState";
+import RequestFreind from "../../components/requestFreind";
+import ShowFriend from "../../components/showFriend";
+import ShowOnlineFriend from "../../components/showOnlineFriend";
 
 export const Container = styled.div`
   width: 800px;
@@ -16,11 +19,13 @@ export const Container = styled.div`
 
 const Main = () => {
   const viewState = useSelector((state: any) => state.viewState) as ViewState;
-  const dispatch = useDispatch();
 
   return (
     <Container>
-      {viewState.infos[4].active && <FindFriend></FindFriend>}
+      {viewState.infos[0].active && <ShowOnlineFriend></ShowOnlineFriend>}
+      {viewState.infos[1].active && <ShowFriend></ShowFriend>}
+      {viewState.infos[2].active && <RequestFreind></RequestFreind>}
+      {viewState.infos[4].active && <AddFriend></AddFriend>}
     </Container>
   );
 };
