@@ -21,21 +21,20 @@ public class FriendService {
     private final FriendRepository friendRepository;
 
     @Transactional
-    public void requestFriend(Long senderUserId, String receiverUsername, String receiverUserCode) {
-        User receiver = userRepository.findByNicknameAndUserCode(receiverUsername, receiverUserCode)
+    public void requestFriend(Long senderUserId, String receiverNickname, String receiverUserCode) {
+        User receiver = userRepository.findByNicknameAndUserCode(receiverNickname, receiverUserCode)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
 
         User sender = userRepository.findById(senderUserId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
 
-        List<Friend> friends = friendRepository.findBySenderId(senderUserId)
+        if (sender.equals(receiver)) {
+            throw new IllegalArgumentException("자기 자신에게 친구 요청을 보낼 수 없습니다.");
+        }
+
+        friendRepository.findBySenderId(senderUserId)
                 .stream()
                 .filter(friend -> friend.getReceiver().equals(receiver))
-                .toList();
-
-        friends
-                .stream()
-                .filter(friend -> friend.getFriendState().equals(State.ACCEPT) || friend.getFriendState().equals(State.REQUEST))
                 .findFirst()
                 .ifPresent(friend -> {
                     if (friend.getFriendState().equals(State.ACCEPT))
@@ -55,6 +54,7 @@ public class FriendService {
         return friendRepository.findByReceiverIdOrSenderId(userId)
                 .stream()
                 .filter(friend -> !friend.getFriendState().equals(State.REJECT))
+                .sorted((f1, f2) -> f2.getFriendState().compareTo(f1.getFriendState()))
                 .toList();
     }
 
@@ -68,7 +68,7 @@ public class FriendService {
         if (!state.equals(State.ACCEPT) && !state.equals(State.REJECT)) {
             throw new IllegalArgumentException("잘못된 요청입니다.");
         }
-        if (!friend.getReceiver().getId().equals(userId)) {
+        if (!friend.getReceiver().getId().equals(userId) && !friend.getSender().getId().equals(userId)) {
             throw new IllegalArgumentException("유효하지 않은 유저가 요청을 보냈습니다.");
         }
 

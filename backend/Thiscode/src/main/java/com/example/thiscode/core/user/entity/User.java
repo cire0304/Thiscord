@@ -2,11 +2,9 @@ package com.example.thiscode.core.user.entity;
 
 import com.example.thiscode.core.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = false)
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

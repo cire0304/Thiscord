@@ -58,11 +58,9 @@ class FriendServiceTest {
         friendService.requestFriend(sender.getId(), receiver.getNickname(), receiver.getUserCode());
 
         //then
-        friendRepository.findByReceiverId(receiver.getId())
-                .ifPresent(friend -> {
-                    assertThat(friend.getSender()).isEqualTo(sender);
-                    assertThat(friend.getReceiver()).isEqualTo(receiver);
-                });
+        Friend friend = friendRepository.findByReceiverId(receiver.getId()).get(0);
+        assertThat(friend.getSender()).isEqualTo(sender);
+        assertThat(friend.getReceiver()).isEqualTo(receiver);
     }
 
     @DisplayName("반복된 친구 요청을 할 수 없다.")
@@ -72,7 +70,7 @@ class FriendServiceTest {
         friendService.requestFriend(sender.getId(), receiver.getNickname(), receiver.getUserCode());
 
         //when
-        Friend friendRequest = friendRepository.findByReceiverId(receiver.getId()).get();
+        Friend friendRequest = friendRepository.findByReceiverId(receiver.getId()).get(0);
         friendService.updateFriendState(receiver.getId(), friendRequest.getId(), State.ACCEPT);
 
         //then

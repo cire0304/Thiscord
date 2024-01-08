@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 public class AddFriendRequest {
 
     @NotBlank(message = "친구 이름을 입력해주세요.")
-    private String name;
+    private String nickname;
     @NotBlank(message = "친구 코드를 입력해주세요.")
-    private String code;
+    private String userCode;
 
 }

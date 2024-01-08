@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
-    Optional<Friend> findBySenderId(Long senderId);
-    Optional<Friend> findByReceiverId(Long receiverId);
+    List<Friend> findBySenderId(Long senderId);
+    List<Friend> findByReceiverId(Long receiverId);
 
     @Query("select f from Friend f where f.receiver.id = :userId or f.sender.id = :userId")
     List<Friend> findByReceiverIdOrSenderId(Long userId);

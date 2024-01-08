@@ -38,7 +38,7 @@ public class FriendController {
     @PostMapping("/users/me/friends")
     public ResponseEntity<String> addFriend(@RequestBody @Valid AddFriendRequest request,
                                             @AuthenticationPrincipal JwtSubject subject) {
-        friendService.requestFriend(subject.getId(), request.getName(), request.getCode());
+        friendService.requestFriend(subject.getId(), request.getNickname(), request.getUserCode());
         return ResponseEntity.ok("친구 요청을 보냈습니다.");
     }
 
