@@ -28,6 +28,7 @@ const getUserInfo = async () => {
   return await axiosInstance.get<UserInfo>("/users/me");
 };
 
+// Deprecated
 const getUserDetailInfo = async () => {
   return await axiosInstance.get<{
     id: number;

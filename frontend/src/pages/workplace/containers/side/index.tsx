@@ -11,15 +11,6 @@ import { setUserInfoState } from "../../../../store";
 
 
 const Side = ({setIsProfileModalActive} : {setIsProfileModalActive: Dispatch<SetStateAction<boolean>>}) => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const getUserInfo = async () => {
-      const res = await UserRequest.getUserInfo()
-      res.data && dispatch(setUserInfoState(res.data));
-    }
-    getUserInfo();
-  }, []);
-
   return (
     <S.Container>
       <S.Title>그룹 및 메세지</S.Title>

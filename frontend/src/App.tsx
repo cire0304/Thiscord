@@ -9,6 +9,7 @@ import RegistgerPage from "./pages/register";
 import WorkplacePage from "./pages/workplace";
 import { Provider } from "react-redux";
 import store from "./store";
+import UserGuard from "./utils/userGuard";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/workspace",
-    element: <WorkplacePage />,
+    element: <UserGuard><WorkplacePage /></UserGuard>,
+  },
+  {
+    path: "/",
+    element: <UserGuard><WorkplacePage /></UserGuard>,
   },
 ]);
 
