@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @MockBean(JpaMetamodelMappingContext.class)
 @ExtendWith(RestDocumentationExtension.class)
 @Import({SecurityConfig.class, JwtTokenProvider.class, CommonAuthenticationEntryPoint.class, Oauth2AuthenticationSuccessHandler.class, AjaxAuthenticationFailureHandler.class, AjaxAuthenticationSuccessHandler.class, AjaxAuthenticationProvider.class,  AjaxUserDetailsService.class})
-public class CustomControllerTestSupport {
+public abstract class CustomControllerTestSupport {
 
     @Autowired
     protected MockMvc mockMvc;

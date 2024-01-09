@@ -1,0 +1,19 @@
+
+
+== 채팅방 조회
+=== 채팅방 조회 요청
+include::{snippets}/room-get/http-request.adoc[]
+=== 채팅방 조회 응답
+include::{snippets}/room-get/response-body.adoc[]
+
+== DM방 생성
+=== DM방 생성 요청
+include::{snippets}/room-create/http-request.adoc[]
+=== DM방 생성 응답
+include::{snippets}/room-create/response-body.adoc[]
+
+== 채팅방 나가기
+=== 채팅방 나가기 요청
+include::{snippets}/room-exit/http-request.adoc[]
+=== 채팅방 나가기 응답
+include::{snippets}/room-exit/response-body.adoc[]

@@ -1,5 +1,6 @@
 package com.example.thiscode.core.common;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,13 @@ public class CommonExceptionHandler {
     public ResponseEntity<String> handle(EntityNotFoundException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<String> handle(EntityExistsException e) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
                 .body(e.getMessage());
     }
 

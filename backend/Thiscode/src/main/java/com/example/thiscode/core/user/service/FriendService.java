@@ -20,6 +20,7 @@ public class FriendService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
 
+    // TODO: it should not request friend each other, but this code does. fix it.
     @Transactional
     public void requestFriend(Long senderUserId, String receiverNickname, String receiverUserCode) {
         User receiver = userRepository.findByNicknameAndUserCode(receiverNickname, receiverUserCode)
