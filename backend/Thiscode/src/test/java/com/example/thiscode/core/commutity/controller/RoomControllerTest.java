@@ -4,7 +4,7 @@ import com.example.thiscode.CustomControllerTestSupport;
 import com.example.thiscode.core.commutity.controller.request.CreateDmRoomRequest;
 import com.example.thiscode.core.commutity.controller.request.ExitDmRoomRequest;
 import com.example.thiscode.core.commutity.service.RoomService;
-import com.example.thiscode.core.commutity.service.dto.RoomDmInfo;
+import com.example.thiscode.core.commutity.service.dto.RoomDmInfoDto;
 import com.example.thiscode.core.commutity.controller.request.ShowRoomsResponse;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
@@ -32,10 +32,10 @@ class RoomControllerTest extends CustomControllerTestSupport {
         //given
         Cookie defaultJwtCookie = getDefaultJwtCookie();
 
-        RoomDmInfo roomDmInfoA = new RoomDmInfo(1L, "user nickname A");
-        RoomDmInfo roomDmInfoB = new RoomDmInfo(2L, "user nickname B");
+        RoomDmInfoDto roomDmInfoA = new RoomDmInfoDto(1L, "user nickname A");
+        RoomDmInfoDto roomDmInfoB = new RoomDmInfoDto(2L, "user nickname B");
 
-        List<RoomDmInfo> roomDmInfoList = List.of(roomDmInfoA, roomDmInfoB);
+        List<RoomDmInfoDto> roomDmInfoList = List.of(roomDmInfoA, roomDmInfoB);
         given(roomService.getRoomList(any())).willReturn(roomDmInfoList);
 
         ShowRoomsResponse response = new ShowRoomsResponse(roomDmInfoList);

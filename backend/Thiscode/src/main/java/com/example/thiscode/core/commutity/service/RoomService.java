@@ -4,8 +4,7 @@ import com.example.thiscode.core.commutity.entity.Room;
 import com.example.thiscode.core.commutity.entity.RoomUser;
 import com.example.thiscode.core.commutity.repository.RoomRepository;
 import com.example.thiscode.core.commutity.repository.RoomUserRepository;
-import com.example.thiscode.core.commutity.service.dto.RoomDmInfo;
-import com.example.thiscode.core.commutity.controller.request.ShowRoomsResponse;
+import com.example.thiscode.core.commutity.service.dto.RoomDmInfoDto;
 import com.example.thiscode.core.commutity.entity.type.RoomType;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.repository.UserRepository;
@@ -64,14 +63,14 @@ public class RoomService {
     // TODO: consider processing group room later
     // TODO: consider performance later
     @Transactional
-    public List<RoomDmInfo> getRoomList(Long userId) {
+    public List<RoomDmInfoDto> getRoomList(Long userId) {
         List<Long> roomIds = roomUserRepository.findByUserId(userId).stream()
                 .map(roomUser -> roomUser.getRoom().getId())
                 .toList();
 
         // TODO: check if below findAllById use where in query
         List<Room> rooms = roomRepository.findAllById(roomIds);
-        List<RoomDmInfo> roomDmInfos = new ArrayList<>();
+        List<RoomDmInfoDto> roomDmInfos = new ArrayList<>();
         for (Room room : rooms) {
             if (room.getType() != RoomType.DM) continue;
 
@@ -82,7 +81,7 @@ public class RoomService {
                     .orElseThrow(() -> new IllegalArgumentException("방에 참여한 사용자가 아닙니다."));
             User user = userRepository.findById(roomUser1.getUserId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-            roomDmInfos.add(new RoomDmInfo(room.getId(), user.getNickname()));
+            roomDmInfos.add(new RoomDmInfoDto(room.getId(), user.getNickname()));
         }
 
         return roomDmInfos;

@@ -5,6 +5,8 @@ import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.entity.type.State;
 import com.example.thiscode.core.user.repository.FriendRepository;
 import com.example.thiscode.core.user.repository.UserRepository;
+import com.example.thiscode.core.user.service.dto.FriendInfoDto;
+import com.example.thiscode.core.user.service.dto.FriendRequestsDto;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -84,15 +86,28 @@ class FriendServiceTest {
     public void getFriends() {
         //given
         friendService.requestFriend(sender.getId(), receiver.getNickname(), receiver.getUserCode());
+        List<FriendInfoDto> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
+                .getReceivedFriendRequests();
+        FriendInfoDto friendInfoDto = receivedFriendRequests.get(0);
+
+        friendService.updateFriendState(receiver.getId(), friendInfoDto.getId(), State.ACCEPT);
 
         //when
-        List<Friend> friends = friendService.getFriends(receiver.getId());
+        List<FriendInfoDto> friendsOfReceiver = friendService.getFriends(receiver.getId());
+        List<FriendInfoDto> friendsOfSender = friendService.getFriends(sender.getId());
 
         //then
-        assertThat(friends).hasSize(1);
-        assertThat(friends.get(0).getSender()).isEqualTo(sender);
-        assertThat(friends.get(0).getReceiver()).isEqualTo(receiver);
-        assertThat(friends.get(0).getFriendState()).isEqualTo(State.REQUEST);
+        assertThat(friendsOfReceiver).hasSize(1);
+        assertThat(friendsOfReceiver.get(0).getNickname()).isEqualTo(sender.getNickname());
+        assertThat(friendsOfReceiver.get(0).getUserCode()).isEqualTo(sender.getUserCode());
+        assertThat(friendsOfReceiver.get(0).getEmail()).isEqualTo(sender.getEmail());
+        assertThat(friendsOfReceiver.get(0).getUserId()).isEqualTo(sender.getId());
+
+        assertThat(friendsOfSender).hasSize(1);
+        assertThat(friendsOfSender.get(0).getNickname()).isEqualTo(receiver.getNickname());
+        assertThat(friendsOfSender.get(0).getUserCode()).isEqualTo(receiver.getUserCode());
+        assertThat(friendsOfSender.get(0).getEmail()).isEqualTo(receiver.getEmail());
+        assertThat(friendsOfSender.get(0).getUserId()).isEqualTo(receiver.getId());
     }
 
     @DisplayName("친구 요청을 수락할 수 있다.")
@@ -100,14 +115,16 @@ class FriendServiceTest {
     public void acceptFriendRequest() {
         //given
         friendService.requestFriend(sender.getId(), receiver.getNickname(), receiver.getUserCode());
-        Friend friendRequest = friendService.getFriends(receiver.getId()).get(0);
+        List<FriendInfoDto> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
+                .getReceivedFriendRequests();
+        FriendInfoDto friendInfoDto = receivedFriendRequests.get(0);
 
         //when
-        friendService.updateFriendState(receiver.getId(), friendRequest.getId(), State.ACCEPT);
+        friendService.updateFriendState(receiver.getId(), friendInfoDto.getId(), State.ACCEPT);
 
         //then
-        Friend result = friendService.getFriends(receiver.getId()).get(0);
-        assertThat(result.getFriendState()).isEqualTo(State.ACCEPT);
+        List<FriendInfoDto> friends = friendService.getFriends(receiver.getId());
+        assertThat(friends).hasSize(1);
     }
 
     @DisplayName("거절된 친구 요청은 조회되지 않는다.")
@@ -115,27 +132,31 @@ class FriendServiceTest {
     public void rejectFriendRequest() {
         //given
         friendService.requestFriend(sender.getId(), receiver.getNickname(), receiver.getUserCode());
-        Friend friendRequest = friendService.getFriends(receiver.getId()).get(0);
+        List<FriendInfoDto> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
+                .getReceivedFriendRequests();
+        FriendInfoDto friendInfoDto = receivedFriendRequests.get(0);
 
         //when
-        friendService.updateFriendState(receiver.getId(), friendRequest.getId(), State.REJECT);
+        friendService.updateFriendState(receiver.getId(), friendInfoDto.getId(), State.REJECT);
 
         //then
         assertThat(friendService.getFriends(receiver.getId())).isEmpty();
     }
 
-    @DisplayName("수락되거나 거절된 친구 요청을 다시 처리할 수 없다.")
+    @DisplayName("수락되거나 거절된 친구 요청을 다시 수락하거나 거절할 수 없다.")
     @Test
     public void invalidFriendRequest() {
         //given
         friendService.requestFriend(sender.getId(), receiver.getNickname(), receiver.getUserCode());
-        Friend friendRequest = friendService.getFriends(receiver.getId()).get(0);
+        List<FriendInfoDto> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
+                .getReceivedFriendRequests();
+        FriendInfoDto friendInfoDto = receivedFriendRequests.get(0);
 
         //when
-        friendService.updateFriendState(receiver.getId(), friendRequest.getId(), State.ACCEPT);
+        friendService.updateFriendState(receiver.getId(), friendInfoDto.getId(), State.ACCEPT);
 
         //then
-        assertThatThrownBy(() -> friendService.updateFriendState(receiver.getId(), friendRequest.getId(), State.ACCEPT))
+        assertThatThrownBy(() -> friendService.updateFriendState(receiver.getId(), friendInfoDto.getId(), State.ACCEPT))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("이미 처리된 요청입니다.");
     }

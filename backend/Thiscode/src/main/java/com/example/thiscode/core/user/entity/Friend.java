@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 
 @ToString
 @Getter
@@ -22,11 +23,13 @@ public class Friend extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_user_id")
+    @BatchSize(size = 100)
     private User sender;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_user_id")
+    @BatchSize(size = 100)
     private User receiver;
 
     @Enumerated(EnumType.STRING)

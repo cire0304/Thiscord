@@ -3,14 +3,17 @@ package com.example.thiscode.core.user.controller;
 import com.example.thiscode.CustomControllerTestSupport;
 import com.example.thiscode.core.user.controller.request.AddFriendRequest;
 import com.example.thiscode.core.user.controller.request.UpdateFriendStateRequest;
-import com.example.thiscode.core.user.controller.response.FriendDto;
 import com.example.thiscode.core.user.controller.response.FriendsResponse;
 import com.example.thiscode.core.user.entity.Friend;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.entity.type.State;
+import com.example.thiscode.core.user.service.FriendConverter;
+import com.example.thiscode.core.user.service.dto.FriendInfoDto;
+import com.example.thiscode.core.user.service.dto.FriendRequestsDto;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.util.List;
@@ -25,6 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class FriendControllerTest extends CustomControllerTestSupport {
+
+    @Autowired
+    private FriendConverter friendConverter;
 
     @DisplayName("친구 요청을 보낸다.")
     @Test
@@ -56,13 +62,14 @@ class FriendControllerTest extends CustomControllerTestSupport {
         //given
         Cookie tokenCookie = getDefaultJwtCookie();
         User sender = getDefaultUser();
+        Long senderId = 1L;
         User receiver = getDefaultUser();
 
         Friend friend = new Friend(sender, receiver);
-        given(friendService.getFriends(any())).willReturn(List.of(friend));
+        FriendInfoDto friendInfoDto = friendConverter.convertToFriendInfoDto(senderId, friend);
+        given(friendService.getFriends(any())).willReturn(List.of(friendInfoDto));
 
-        List<FriendDto> getFriendDtos = List.of(new FriendDto(friend.getId(), friend.getSender().getId(), friend.getSender().getNickname(), friend.getSender().getUserCode(), friend.getReceiver().getId(), friend.getReceiver().getNickname(), friend.getReceiver().getUserCode(), friend.getFriendState().toString()));
-        FriendsResponse expect = new FriendsResponse(getFriendDtos);
+        FriendsResponse expect = new FriendsResponse(List.of(friendInfoDto));
 
         //when then
         mockMvc.perform(get("/users/me/friends")
@@ -74,18 +81,42 @@ class FriendControllerTest extends CustomControllerTestSupport {
                 .andDo(
                         document("friend-get",
                                 preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                responseFields(
-                                        fieldWithPath("friends").description("친구 목록"),
-                                        fieldWithPath("friends[].id").description("친구 요청 식별자"),
-                                        fieldWithPath("friends[].senderId").description("친구 요청 보낸 사람 식별자"),
-                                        fieldWithPath("friends[].senderNickname").description("친구 요청 보낸 사람 닉네임"),
-                                        fieldWithPath("friends[].senderUserCode").description("친구 요청 보낸 사람 유저 코드"),
-                                        fieldWithPath("friends[].receiverId").description("친구 요청 받은 사람 식별자"),
-                                        fieldWithPath("friends[].receiverNickname").description("친구 요청 받은 사람 닉네임"),
-                                        fieldWithPath("friends[].receiverUserCode").description("친구 요청 받은 사람 유저 코드"),
-                                        fieldWithPath("friends[].state").description("친구 요청 상태 [ACCEPT, REQUEST]")
-                                )
+                                preprocessResponse(prettyPrint())
+                        ));
+    }
+
+    @DisplayName("요청하거나 요청된 친구목록을 조회한다.")
+    @Test
+    public void getFriendsByState() throws Exception {
+        //given
+        Cookie tokenCookie = getDefaultJwtCookie();
+        User user = getDefaultUser();
+        Long userId = 1L;
+        User otherUserA = getDefaultUser();
+        User otherUserB = getDefaultUser();
+
+        Friend sentFriendRequest = new Friend(user, otherUserA);
+        Friend ReceivedFriendRequest = new Friend(otherUserB, user);
+
+        FriendInfoDto sentFriendRequestDto = friendConverter.convertToFriendInfoDto(userId, sentFriendRequest);
+        FriendInfoDto ReceivedFriendRequestDto = friendConverter.convertToFriendInfoDto(userId, ReceivedFriendRequest);
+
+        FriendRequestsDto friendRequestsDto = new FriendRequestsDto(List.of(ReceivedFriendRequestDto), List.of(sentFriendRequestDto));
+        given(friendService.getFriendRequests(any())).willReturn(friendRequestsDto);
+
+        FriendRequestsDto expect = friendRequestsDto;
+
+        //when then
+        mockMvc.perform(get("/users/me/friend-requests")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(tokenCookie)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().string(objectMapper.writeValueAsString(expect)))
+                .andDo(
+                        document("friend-request-get",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
                         ));
     }
 
@@ -95,12 +126,14 @@ class FriendControllerTest extends CustomControllerTestSupport {
         //given
         Cookie tokenCookie = getDefaultJwtCookie();
         User sender = getDefaultUser();
+        Long senderId = 1L;
         User receiver = getDefaultUser();
 
         Friend friend = new Friend(sender, receiver);
-        given(friendService.getFriends(any())).willReturn(List.of(friend));
+        FriendInfoDto friendInfoDto = friendConverter.convertToFriendInfoDto(senderId, friend);
+        given(friendService.getFriends(any())).willReturn(List.of(friendInfoDto));
 
-        UpdateFriendStateRequest friendRequest = new UpdateFriendStateRequest(friend.getId(), State.ACCEPT);
+        UpdateFriendStateRequest friendRequest = new UpdateFriendStateRequest(friendInfoDto.getId(), State.ACCEPT);
 
         //when then
         mockMvc.perform(put("/users/me/friends", friend.getId())

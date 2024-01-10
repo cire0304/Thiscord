@@ -5,8 +5,7 @@ import com.example.thiscode.core.commutity.entity.RoomUser;
 import com.example.thiscode.core.commutity.repository.RoomRepository;
 import com.example.thiscode.core.commutity.repository.RoomUserRepository;
 import com.example.thiscode.core.commutity.service.RoomService;
-import com.example.thiscode.core.commutity.controller.request.ShowRoomsResponse;
-import com.example.thiscode.core.commutity.service.dto.RoomDmInfo;
+import com.example.thiscode.core.commutity.service.dto.RoomDmInfoDto;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.repository.UserRepository;
 import com.example.thiscode.core.user.service.UserService;
@@ -134,7 +133,7 @@ class RoomServiceTest {
         roomService.createDmRoom(senderId, receiverId2);
 
         //when
-        List<RoomDmInfo> result = roomService.getRoomList(senderId);
+        List<RoomDmInfoDto> result = roomService.getRoomList(senderId);
 
         //then
         assertThat(result.size()).isEqualTo(2);

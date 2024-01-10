@@ -1,6 +1,6 @@
 package com.example.thiscode.core.commutity.controller.request;
 
-import com.example.thiscode.core.commutity.service.dto.RoomDmInfo;
+import com.example.thiscode.core.commutity.service.dto.RoomDmInfoDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,9 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 public class ShowRoomsResponse {
 
-    private List<RoomDmInfo> roomDmInfos;
+    private List<RoomDmInfoDto> roomDmInfos;
 
-    public ShowRoomsResponse(List<RoomDmInfo> roomDmInfos) {
+    public ShowRoomsResponse(List<RoomDmInfoDto> roomDmInfos) {
         this.roomDmInfos = roomDmInfos;
     }
 

@@ -5,11 +5,14 @@ import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.entity.type.State;
 import com.example.thiscode.core.user.repository.FriendRepository;
 import com.example.thiscode.core.user.repository.UserRepository;
+import com.example.thiscode.core.user.service.dto.FriendInfoDto;
+import com.example.thiscode.core.user.service.dto.FriendRequestsDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // TODO: Valid 클래스를 따로 만들어도 좋을 것 같다.
@@ -19,6 +22,7 @@ public class FriendService {
 
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
+    private final FriendConverter friendConverter;
 
     // TODO: it should not request friend each other, but this code does. fix it.
     @Transactional
@@ -48,15 +52,39 @@ public class FriendService {
     }
 
     @Transactional
-    public List<Friend> getFriends(Long userId) {
+    public List<FriendInfoDto> getFriends(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
 
         return friendRepository.findByReceiverIdOrSenderId(userId)
                 .stream()
-                .filter(friend -> !friend.getFriendState().equals(State.REJECT))
-                .sorted((f1, f2) -> f2.getFriendState().compareTo(f1.getFriendState()))
+                .filter(friend -> friend.getFriendState().equals(State.ACCEPT))
+                .map(friend -> friendConverter.convertToFriendInfoDto(userId, friend))
                 .toList();
+    }
+
+    // TODO: Is it okay to return sent and received request info together as type FriendRequestsDto?
+    // TODO: consider refactoring this method later
+    @Transactional
+    public FriendRequestsDto getFriendRequests(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
+
+        List<FriendInfoDto> receivedFriendRequests = new ArrayList<>();
+        List<FriendInfoDto> sentFriendRequests = new ArrayList<>();
+
+        friendRepository.findByReceiverIdOrSenderId(userId)
+                .stream()
+                .filter(friend -> friend.getFriendState().equals(State.REQUEST))
+                .forEach(friend -> {
+                    if (friend.getReceiver().getId().equals(userId)) {
+                        receivedFriendRequests.add(friendConverter.convertToFriendInfoDto(userId, friend));
+                    } else {
+                        sentFriendRequests.add(friendConverter.convertToFriendInfoDto(userId, friend));
+                    }
+                });
+
+        return new FriendRequestsDto(receivedFriendRequests, sentFriendRequests);
     }
 
     @Transactional
