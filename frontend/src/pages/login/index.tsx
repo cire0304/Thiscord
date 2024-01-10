@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import * as S from "./styles";
-import { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import theme from "../../styles/theme";
 import Span from "../../components/span";
 import { Input } from "../../components/input";
@@ -130,14 +130,13 @@ const LoginPage = () => {
         <S.FooterWrapper>
           <Span styles={[theme.fontFormat.footnote, theme.color.neutral]}>
             계정이 없다면{" "}
-            <Span
-              styles={[theme.fontFormat.footnote, theme.color.neutralBlue]}
+            <ResisterSpan
               onClick={() => {
                 navigate("/register");
               }}
             >
               회원가입
-            </Span>
+            </ResisterSpan>
             을 해보는게 어떠세요?
           </Span>
         </S.FooterWrapper>
@@ -147,3 +146,9 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+const ResisterSpan = styled(Span)`
+  ${({ theme }) => theme.fontFormat.footnote}
+  ${({ theme }) => theme.color.neutralBlue}
+  cursor: pointer;
+`;
