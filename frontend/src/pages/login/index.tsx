@@ -60,6 +60,12 @@ const LoginPage = () => {
     }
   };
 
+  const handleOnKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      loginHandler();
+    }
+  };
+
   return (
     <S.Container>
       <S.Modal>
@@ -72,27 +78,32 @@ const LoginPage = () => {
           <Span styles={[theme.fontFormat.subhead, theme.color.neutral]}>
             이메일
           </Span>
-          <Input placeholder="abc@gmail.com" ref={emailRef}></Input>
+          <Input
+            placeholder="abc@gmail.com"
+            ref={emailRef}
+            onKeyUp={handleOnKeyPress}
+          ></Input>
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
             hidden={isValidEmail}
             // hidden={true}
-
           >
             {warnEmail}
           </Span>
-
         </S.InputWrapper>
         <S.InputWrapper>
           <Span styles={[theme.fontFormat.subhead, theme.color.neutral]}>
             비밀번호
           </Span>
-          <Input placeholder="12345678" ref={passwordRef}></Input>
+          <Input
+            placeholder="12345678"
+            ref={passwordRef}
+            onKeyUp={handleOnKeyPress}
+          ></Input>
 
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
             hidden={isValidPassword}
-
           >
             {warnPassword}
           </Span>
