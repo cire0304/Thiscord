@@ -33,6 +33,10 @@ public class RoomService {
     // TODO: return type is good to be DTO not Entity.
     @Transactional
     public Room createDmRoom(Long senderId, Long receiverId) {
+        if (Objects.equals(senderId, receiverId)) {
+            throw new IllegalArgumentException("자기 자신과의 방을 만들 수 없습니다.");
+        }
+
         List<Long> roomIdsOfSender = roomUserRepository.findByUserId(senderId).stream()
                 .map(roomUser -> roomUser.getRoom().getId())
                 .toList();

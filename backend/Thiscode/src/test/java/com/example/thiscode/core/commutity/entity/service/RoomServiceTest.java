@@ -90,7 +90,7 @@ class RoomServiceTest {
         assertThat(roomUsers.get(1).getUserId()).isEqualTo(receiverId);
     }
 
-    @DisplayName("같은 사용자간에 DM 방을 생성할 수 없다.")
+    @DisplayName("상대방과 DM방이 있다면, DM 방을 생성할 수 없다.")
     @Test
     public void createDmRoomInError() {
         //given
@@ -107,6 +107,19 @@ class RoomServiceTest {
         assertThatThrownBy(() -> roomService.createDmRoom(receiverId, senderId))
                 .isInstanceOf(EntityExistsException.class)
                 .hasMessage("이미 상대방과의 방이 존재합니다.");
+    }
+
+    @DisplayName("자기 자신과의 방을 생성할 수 없다.")
+    @Test
+    public void createDmRoomInError2() {
+        //given
+        Long senderId = sender.getId();
+
+        //when
+        //then
+        assertThatThrownBy(() -> roomService.createDmRoom(senderId, senderId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("자기 자신과의 방을 만들 수 없습니다.");
     }
 
     @DisplayName("DM 방 목록을 가져올 수 있다.")
