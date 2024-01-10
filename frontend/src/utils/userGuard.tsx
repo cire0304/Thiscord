@@ -12,6 +12,7 @@ export default function UserGuard({ children }: { children: ReactNode }) {
       const res = await UserRequest.getUserInfo();
       res.data ? dispatch(setUserInfoState(res.data)) : navigate("/login");
     };
+
     getUserInfo();
   }, []);
 

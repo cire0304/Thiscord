@@ -10,6 +10,7 @@ import WorkplacePage from "./pages/workplace";
 import { Provider } from "react-redux";
 import store from "./store";
 import UserGuard from "./utils/userGuard";
+import FetchRoomList from "./utils/fetchRoomList";
 
 const router = createBrowserRouter([
   {
@@ -22,11 +23,22 @@ const router = createBrowserRouter([
   },
   {
     path: "/workspace",
-    element: <UserGuard><WorkplacePage /></UserGuard>,
+    element: (
+      <UserGuard>
+        <WorkplacePage />
+      </UserGuard>
+    ),
   },
   {
     path: "/",
-    element: <UserGuard><WorkplacePage /></UserGuard>,
+    element: (
+      <FetchRoomList>
+        {" "}
+        <UserGuard>
+          <WorkplacePage />
+        </UserGuard>
+      </FetchRoomList>
+    ),
   },
 ]);
 
