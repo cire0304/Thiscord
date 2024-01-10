@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
 import { css, styled } from "styled-components";
-import Span from "../../../components/span";
+import Span from "../../../../../components/span";
 
-import { Input } from "../../../components/input";
-import Button from "../../../components/button";
-import FriendReqeust from "../../../api/friend";
+import { Input } from "../../../../../components/input";
+import Button from "../../../../../components/button";
+import FriendReqeust from "../../../../../api/friend";
 
 const Container = styled.div`
   padding: 20px 20px;

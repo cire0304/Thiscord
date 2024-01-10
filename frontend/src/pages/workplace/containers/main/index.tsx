@@ -1,12 +1,12 @@
 import React from "react";
 
 import { styled } from "styled-components";
-import AddFriend from "../../components/addFreind";
+import AddFriend from "./components/addFreind";
 import { useDispatch, useSelector } from "react-redux";
 import { ViewState } from "../../../../store/slices/viewState";
-import RequestFreind from "../../components/requestFreind";
-import ShowFriend from "../../components/showFriend";
-import ShowOnlineFriend from "../../components/showOnlineFriend";
+import RequestFreind from "./components/showRequestFreind";
+import ShowFriend from "./components/showAllFriend";
+import ShowOnlineFriend from "./components/showOnlineFriend";
 
 export const Container = styled.div`
   width: 800px;

@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import Span from "../../../components/span";
+import Span from "../../../../../components/span";
 
 export const Container = styled.div`
   padding: 20px 20px;

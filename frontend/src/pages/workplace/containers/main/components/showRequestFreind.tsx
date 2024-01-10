@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { styled } from "styled-components";
-import Span from "../../../components/span";
-import FriendReqeust, { GetFriendResponse } from "../../../api/friend";
-import { useSelector } from "react-redux";
-import { UserInfo } from "../../../api/user";
+import FriendReqeust, {
+  GetFriendRequestResponse,
+} from "../../../../../api/friend";
 import * as S from "./styles";
 
 export default function RequestFreind() {
-  const [friend, setFriend] = useState<GetFriendResponse>();
+  const [getFriendRequestResponse, setGetFriendRequestResponse] =
+    useState<GetFriendRequestResponse>();
   const [requestCount, setRequestCount] = useState<number>(0);
-  const user = useSelector((state: any) => state.user) as UserInfo;
 
   useEffect(() => {
     const getFriendListRequest = async () => {
-      const res = await FriendReqeust.getFriendList();
-      setFriend(res.data);
+      const res = await FriendReqeust.getFriendRequestList();
+      if (res.status !== 200) {
+        alert(res.data);
+        return;
+      }
+      setGetFriendRequestResponse(res.data);
 
-      let count = 0;
-      res.data.friends.forEach((element) => {
-        if (element.state === "REQUEST") count++;
-      });
+      let count =
+        res.data.receivedFriendRequests.length +
+        res.data.sentFriendRequests.length;
       setRequestCount(count);
     };
     getFriendListRequest();
@@ -32,26 +33,12 @@ export default function RequestFreind() {
       </S.Header>
 
       <S.Body>
-        {friend && friend.friends?.map((element) => {
-          if (element.state !== "REQUEST") return;
-
-          if (user.id === element.senderId) {
+        {getFriendRequestResponse &&
+          getFriendRequestResponse.receivedFriendRequests?.map((element) => {
             return (
               <S.Friend>
                 <S.Info>
-                  <S.Nickname>{element.receiverNickname}</S.Nickname>
-                  <S.Type>보낸 친구 요청</S.Type>
-                </S.Info>
-                <S.Button onClick={() => rejectFriendRequest(element.id)}>
-                  X
-                </S.Button>
-              </S.Friend>
-            );
-          } else {
-            return (
-              <S.Friend>
-                <S.Info>
-                  <S.Nickname>{element.senderNickname}</S.Nickname>
+                  <S.Nickname>{element.nickname}</S.Nickname>
                   <S.Type>받은 친구 요청</S.Type>
                 </S.Info>
                 <S.Button onClick={() => acceptFriendRequest(element.id)}>
@@ -62,8 +49,21 @@ export default function RequestFreind() {
                 </S.Button>
               </S.Friend>
             );
-          }
-        })}
+          })}
+        {getFriendRequestResponse &&
+          getFriendRequestResponse.sentFriendRequests?.map((element) => {
+            return (
+              <S.Friend>
+                <S.Info>
+                  <S.Nickname>{element.nickname}</S.Nickname>
+                  <S.Type>보낸 친구 요청</S.Type>
+                </S.Info>
+                <S.Button onClick={() => rejectFriendRequest(element.id)}>
+                  X
+                </S.Button>
+              </S.Friend>
+            );
+          })}
       </S.Body>
     </S.Container>
   );
