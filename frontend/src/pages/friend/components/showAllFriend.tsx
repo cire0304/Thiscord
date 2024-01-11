@@ -1,17 +1,18 @@
 import { Dispatch, useEffect, useState } from "react";
 import { styled } from "styled-components";
-import FriendReqeust, { GetFriendResponse } from "../../../../../api/friend";
+
 import * as S from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
-import RoomRequest from "../../../../../api/room";
+
 import { useDispatch } from "react-redux";
-import { setRoomInfoState } from "../../../../../store";
-
-
+import FriendReqeust, { GetFriendResponse } from "../../../api/friend";
+import RoomRequest from "../../../api/room";
+import { setRoomInfoState } from "../../../store";
 
 export default function ShowFriend() {
-  const [getFriendResponse, setGetFriendResponse] = useState<GetFriendResponse>();
+  const [getFriendResponse, setGetFriendResponse] =
+    useState<GetFriendResponse>();
   const [requestCount, setRequestCount] = useState<number>(0);
   const dispatch = useDispatch();
 
@@ -65,7 +66,7 @@ async function createRoomHandler(receiverId: number, dispatch: Dispatch<any>) {
     alert(res.data);
   }
   res = await RoomRequest.getRoomList();
-  
+
   // Is this rigth way to use redux?
   // replace with another way like socket.io
   dispatch(setRoomInfoState(res.data));

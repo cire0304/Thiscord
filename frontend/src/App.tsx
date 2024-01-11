@@ -1,19 +1,16 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import {
-  Route,
-  RouterProvider,
-  Routes,
-  createBrowserRouter,
-} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/login";
 import { ThemeProvider } from "styled-components";
 import theme from "./styles/theme";
 import RegistgerPage from "./pages/register";
-import WorkplacePage from "./pages/workplace";
+
 import { Provider } from "react-redux";
 import store from "./store";
+import Layout from "./components/layout/layout";
+import FriendPage from "./pages/friend/friendPage";
 
 function App() {
   return (
@@ -25,11 +22,11 @@ function App() {
             <Route path="/" element={<LoginPage />} />
             <Route path="/register" element={<RegistgerPage />} />
 
-            <Route path="/workspace" element={<WorkplacePage />}>
+            <Route path="/workspace" element={<Layout />}>
+              <Route path="" element={<FriendPage />} />
 
             </Route>
           </Routes>
-
         </ThemeProvider>
       </Provider>
     </div>

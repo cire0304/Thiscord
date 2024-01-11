@@ -3,10 +3,14 @@ import styled, { RuleSet, css } from "styled-components";
 
 const Span = styled.span<SpanElementProps>`
   display: inline-block;
+
+  font-weight: 900px;
+
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
   ${({ styles }) => styles}
   ${({ hidden }) =>
     hidden &&

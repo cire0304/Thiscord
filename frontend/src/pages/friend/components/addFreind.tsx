@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
 import { css, styled } from "styled-components";
-import Span from "../../../../../components/span";
+import FriendReqeust from "../../../api/friend";
+import { Input } from "../../../components/input";
+import { Button } from "./styles";
+import Span from "../../../components/span";
 
-import { Input } from "../../../../../components/input";
-import Button from "../../../../../components/button";
-import FriendReqeust from "../../../../../api/friend";
 
 export default function AddFriend() {
   const [buttonActive, setButtonActive] = useState(false);

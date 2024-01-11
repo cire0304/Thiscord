@@ -16,6 +16,9 @@ const userSlice = createSlice({
     setUserInfoState(state, action: { payload: UserInfo; type: string }) {
       return action.payload;
     },
+    clearUser() {
+      
+    }
   },
 });
 

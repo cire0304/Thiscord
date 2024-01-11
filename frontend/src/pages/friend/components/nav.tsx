@@ -1,12 +1,50 @@
+import { ReactComponent as ChannelIcon } from "../../../assets/icons/channel.svg";
+import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
+import { activeById } from "../../../store";
+import { ViewState } from "../../../store/slices/viewState";
+
+const Nav = () => {
+  const dispatch = useDispatch();
+  const viewState = useSelector((state: any) => state.viewState) as ViewState;
+
+  return (
+    <Container>
+      <ChannelIcon />
+      <Text>친구</Text>
+
+      <Navigates>
+        {viewState.infos.map((item, index) => {
+          return (
+            <Button
+              key={index}
+              active={viewState.infos[index].active}
+              onClick={() => {
+                dispatch(activeById({ id: index }));
+              }}
+            >
+              {item.name}
+            </Button>
+          );
+        })}
+      </Navigates>
+    </Container>
+  );
+};
+
+export default Nav;
 
 export const Container = styled.div`
-  height: 100%;
-
+  height: 50px;
   padding: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  flex-grow: 1;
+  border-bottom: 1px solid ${({ theme }) => theme.color.border};
   ${({ theme }) => theme.color.backgroundTertiary}
-  ${({ theme }) => theme.flex.rowStartCenter}
-    flex-grow: 1;
 `;
 
 export const Text = styled.span`
@@ -14,7 +52,7 @@ export const Text = styled.span`
   margin: 0px 5px;
   padding: 0px 10px;
   border-right: 1px solid white;
-  
+
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -73,5 +111,4 @@ export const FriendButton = styled.button`
   &:active {
     background-color: #2e3136;
   }
-
 `;

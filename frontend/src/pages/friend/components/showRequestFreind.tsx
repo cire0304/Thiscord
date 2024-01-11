@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import FriendReqeust, {
-  GetFriendRequestResponse,
-} from "../../../../../api/friend";
+
 import * as S from "./styles";
+import FriendReqeust, { GetFriendRequestResponse } from "../../../api/friend";
 
 export default function RequestFreind() {
   const [getFriendRequestResponse, setGetFriendRequestResponse] =

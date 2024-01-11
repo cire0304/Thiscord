@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { styled } from "styled-components";
-import Profile from "../../../../../assets/images/discodeProfile.jpg";
+import Profile from "../../../assets/images/discodeProfile.jpg";
+import RoomRequest from "../../../api/room";
+import Span from "../../span";
 import ProfileImage from "./profileImage";
-import Span from "../../../../../components/span";
-import RoomRequest from "../../../../../api/room";
 
 async function exitRoom(roomId: number) {
   const res = await RoomRequest.exitRoom(roomId);
@@ -14,14 +14,13 @@ async function exitRoom(roomId: number) {
   }
 }
 
-
-const DirectRoom = ({
+export default function DirectMessageRoom({
   nickname,
   roomId,
 }: {
   nickname: string;
   roomId: number;
-}) => {
+}) {
   const [deleteButtonVisible, setDeleteButtonVisible] = useState(false);
 
   return (
@@ -40,9 +39,7 @@ const DirectRoom = ({
       </OuterWrapper>
     </Container>
   );
-};
-
-export default DirectRoom;
+}
 
 const Container = styled.div`
   width: 100%;
