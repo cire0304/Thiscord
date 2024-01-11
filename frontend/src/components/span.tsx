@@ -4,7 +4,7 @@ import styled, { RuleSet, css } from "styled-components";
 const Span = styled.span<SpanElementProps>`
   display: inline-block;
 
-  font-weight: 900px;
+  font-weight: 700;
 
   -webkit-user-select: none;
   -moz-user-select: none;

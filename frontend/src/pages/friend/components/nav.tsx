@@ -10,7 +10,7 @@ const Nav = () => {
 
   return (
     <Container>
-      <ChannelIcon />
+      <ChannelIcon width="30" height="30"/>
       <Text>친구</Text>
 
       <Navigates>

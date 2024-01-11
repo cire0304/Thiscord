@@ -53,7 +53,7 @@ const LoginPage = () => {
 
     const res = await UserRequest.login(email, password);
     if (res.status === 200) {
-      navigate("/workspace");
+      navigate("/workspace/me");
     } else {
       setWarnPassword("이메일이 존재하지 않거나 비밀번호가 틀렸습니다.");
       setValidPassword(false);
@@ -86,7 +86,6 @@ const LoginPage = () => {
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
             hidden={isValidEmail}
-            // hidden={true}
           >
             {warnEmail}
           </Span>

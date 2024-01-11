@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 import Profile from "../../../assets/images/discodeProfile.jpg";
 import RoomRequest from "../../../api/room";
 import Span from "../../span";
-import ProfileImage from "./profileImage";
+import ProfileImage from "../../profileImage";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentChatRoomId } from "../../../store";
+import { useNavigate } from "react-router-dom";
+
 
 async function exitRoom(roomId: number) {
   const res = await RoomRequest.exitRoom(roomId);
@@ -22,12 +26,23 @@ export default function DirectMessageRoom({
   roomId: number;
 }) {
   const [deleteButtonVisible, setDeleteButtonVisible] = useState(false);
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const changeChatRoom = (roomId: number) => {
+    dispatch(setCurrentChatRoomId(roomId));
+    navigate(`/workspace/rooms/${roomId}`)
+  };
+
+  const chatRoom = useSelector((state: any) => state.chatRoom);
 
   return (
     <Container>
       <OuterWrapper
         onMouseOver={() => setDeleteButtonVisible(true)}
         onMouseLeave={() => setDeleteButtonVisible(false)}
+        onClick={() => changeChatRoom(roomId)}
+        $active={chatRoom.currentChatRoom.id === roomId}
       >
         <ProfileImage src={Profile} />
         <InfoWrapper>
@@ -49,13 +64,19 @@ const Container = styled.div`
   ${({ theme }) => theme.flex.rowStartCenter};
 `;
 
-const OuterWrapper = styled.div`
+const OuterWrapper = styled.div<{ $active: boolean }>`
   width: 100%;
   padding: 10px 5px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   border-radius: 5px;
+
+  ${(props) =>
+    props.$active &&
+    css`
+      background-color: #36393f;
+    `}
 
   &:hover {
     background-color: #36393f;

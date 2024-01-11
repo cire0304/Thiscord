@@ -4,7 +4,69 @@ import * as S from "./styles";
 import FriendReqeust, { GetFriendRequestResponse } from "../../../api/friend";
 
 export default function RequestFreind() {
-  const [getFriendRequestResponse, setGetFriendRequestResponse] =
+  const { friendRequestResponse, requestCount } = useFriendRequest();
+  const [reRender, setReRender] = useState<boolean>(false);
+
+  return (
+    <S.Container>
+      <S.Header>
+        <S.Title>대기 중 - {requestCount}명</S.Title>
+      </S.Header>
+
+      <S.Body>
+        {friendRequestResponse &&
+          friendRequestResponse.receivedFriendRequests?.map((element) => {
+            return (
+              <S.Friend>
+                <S.Info>
+                  <S.Nickname>{element.nickname}</S.Nickname>
+                  <S.Type>받은 친구 요청</S.Type>
+                </S.Info>
+                <S.Button
+                  onClick={() => {
+                    acceptFriendRequest(element.id);
+                  }}
+                >
+                  O
+                </S.Button>
+                <S.Button
+                  onClick={() => {
+                    rejectFriendRequest(element.id);
+                  }}
+                >
+                  X
+                </S.Button>
+              </S.Friend>
+            );
+          })}
+        {friendRequestResponse &&
+          friendRequestResponse.sentFriendRequests?.map((element) => {
+            return (
+              <S.Friend>
+                <S.Info>
+                  <S.Nickname>{element.nickname}</S.Nickname>
+                  <S.Type>보낸 친구 요청</S.Type>
+                </S.Info>
+                <S.Button
+                  onClick={() => {
+                    rejectFriendRequest(element.id);
+                  }}
+                >
+                  X
+                </S.Button>
+              </S.Friend>
+            );
+          })}
+      </S.Body>
+    </S.Container>
+  );
+}
+
+function useFriendRequest(): {
+  friendRequestResponse?: GetFriendRequestResponse;
+  requestCount?: number;
+} {
+  const [friendRequestResponse, setFriendRequestResponse] =
     useState<GetFriendRequestResponse>();
   const [requestCount, setRequestCount] = useState<number>(0);
 
@@ -15,7 +77,7 @@ export default function RequestFreind() {
         alert(res.data);
         return;
       }
-      setGetFriendRequestResponse(res.data);
+      setFriendRequestResponse(res.data);
 
       let count =
         res.data.receivedFriendRequests.length +
@@ -25,47 +87,7 @@ export default function RequestFreind() {
     getFriendListRequest();
   }, []);
 
-  return (
-    <S.Container>
-      <S.Header>
-        <S.Title>대기 중 - {requestCount}명</S.Title>
-      </S.Header>
-
-      <S.Body>
-        {getFriendRequestResponse &&
-          getFriendRequestResponse.receivedFriendRequests?.map((element) => {
-            return (
-              <S.Friend>
-                <S.Info>
-                  <S.Nickname>{element.nickname}</S.Nickname>
-                  <S.Type>받은 친구 요청</S.Type>
-                </S.Info>
-                <S.Button onClick={() => acceptFriendRequest(element.id)}>
-                  O
-                </S.Button>
-                <S.Button onClick={() => rejectFriendRequest(element.id)}>
-                  X
-                </S.Button>
-              </S.Friend>
-            );
-          })}
-        {getFriendRequestResponse &&
-          getFriendRequestResponse.sentFriendRequests?.map((element) => {
-            return (
-              <S.Friend>
-                <S.Info>
-                  <S.Nickname>{element.nickname}</S.Nickname>
-                  <S.Type>보낸 친구 요청</S.Type>
-                </S.Info>
-                <S.Button onClick={() => rejectFriendRequest(element.id)}>
-                  X
-                </S.Button>
-              </S.Friend>
-            );
-          })}
-      </S.Body>
-    </S.Container>
-  );
+  return { friendRequestResponse, requestCount };
 }
 
 const acceptFriendRequest = async (id: number) => {

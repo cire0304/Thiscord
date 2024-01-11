@@ -1,5 +1,3 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/login";
@@ -11,6 +9,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import Layout from "./components/layout/layout";
 import FriendPage from "./pages/friend/friendPage";
+import ChatPage from "./pages/chat/chatPage";
 
 function App() {
   return (
@@ -22,9 +21,9 @@ function App() {
             <Route path="/" element={<LoginPage />} />
             <Route path="/register" element={<RegistgerPage />} />
 
-            <Route path="/workspace" element={<Layout />}>
-              <Route path="" element={<FriendPage />} />
-
+            <Route path="/workspace" element={<Layout />} >
+              <Route path="me" element={<FriendPage />} />
+              <Route path="rooms/:id" element={<ChatPage />} />
             </Route>
           </Routes>
         </ThemeProvider>

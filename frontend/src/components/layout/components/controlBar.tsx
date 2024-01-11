@@ -5,13 +5,12 @@ import { ReactComponent as HeadphoneIcon } from "../../../assets/icons/headphone
 import { ReactComponent as MuteMike } from "../../../assets/icons/muteMike.svg";
 import { ReactComponent as ActiveMike } from "../../../assets/icons/activeMike.svg";
 
-import Profile from "../../../assets/images/discodeProfile.jpg";
 import Span from "../../span";
 import { useDispatch, useSelector } from "react-redux";
-import UserRequest from "../../../api/user";
+import UserRequest, { UserInfo } from "../../../api/user";
 import { setUserInfoState } from "../../../store";
 import theme from "../../../styles/theme";
-import ProfileImage from "./profileImage";
+import ProfileImage from "../../profileImage";
 
 export default function ControlBar({
   setIsProfileModalActive,
@@ -33,11 +32,12 @@ export default function ControlBar({
     getUserInfo();
   }, []);
 
-  const user = useSelector((state: any) => state.user);
+  const user = useSelector((state: any) => state.user) as UserInfo;
 
   return (
     <Container>
-      <ProfileImage src={Profile} />
+      {/* <ProfileImage src={Profile} /> */}
+      <ProfileImage src={`https://gravatar.com/avatar/${user.id}?d=identicon`} />
       <UserInfoWrapper
         onClick={(e) => clickHandler(e)}
         ref={userInfoWrapperRef}

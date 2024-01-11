@@ -7,14 +7,14 @@ export default function MessageRooms() {
   const roomList = useSelector(
     (state: any) => state.room
   ) as GetRoomListResponse;
-  // 방 리덕스 스토어 사용해서 업데이트하는 코드 개발하기
+  //TODO: 방 리덕스 스토어 사용해서 업데이트하는 코드 개발하기
 
   return (
     <Container>
       <Title>그룹 및 메세지</Title>
       <RoomsWrapper>
         {roomList?.roomDmInfos.map((room, index) => {
-          // add GroupRoom component here later
+          // TODO: add GroupRoom component here later
           return (
             <DirectMessageRoom
               key={index}
@@ -23,6 +23,7 @@ export default function MessageRooms() {
             ></DirectMessageRoom>
           );
         })}
+        {/* TODO: develop for groupRoom */}
         {/* <GroupRoom nickname="이동준" userCount={1}></GroupRoom> */}
       </RoomsWrapper>
     </Container>

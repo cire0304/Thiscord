@@ -13,7 +13,6 @@ export default function FriendPage() {
   return (
     <Container>
       <Nav></Nav>
-
       <Content>
         {viewState.infos[0].active && <ShowOnlineFriend></ShowOnlineFriend>}
         {viewState.infos[1].active && <ShowFriend></ShowFriend>}
