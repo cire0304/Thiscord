@@ -1,7 +1,8 @@
-package com.example.thiscode.core.commutity.entity.service;
+package com.example.thiscode.core.commutity.service;
 
 import com.example.thiscode.core.commutity.entity.Room;
 import com.example.thiscode.core.commutity.entity.RoomUser;
+import com.example.thiscode.core.commutity.entity.type.RoomUserState;
 import com.example.thiscode.core.commutity.repository.RoomRepository;
 import com.example.thiscode.core.commutity.repository.RoomUserRepository;
 import com.example.thiscode.core.commutity.service.RoomService;
@@ -143,6 +144,29 @@ class RoomServiceTest {
         assertThat(result.get(1).getOtherUserNickname()).isEqualTo(receiverB.getNickname());
     }
 
+    @DisplayName("퇴장한 DM 방은 목록에 나오지 않는다.")
+    @Test
+    public void getRoomListWithJoin() {
+        //given
+        Long senderId = sender.getId();
+        Long receiverAId = receiverA.getId();
+        Long receiverBId = receiverB.getId();
+        roomService.createDmRoom(senderId, receiverAId);
+        Room exitRoom = roomService.createDmRoom(senderId, receiverBId);
+
+        roomService.exitDmRoom(senderId, exitRoom.getId());
+
+        //when
+        List<RoomDmInfoDto> result = roomService.getRoomList(senderId);
+
+        //then
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getRoomId()).isNotNull();
+        assertThat(result.get(0).getOtherUserNickname()).isEqualTo(receiverA.getNickname());
+    }
+
+
+
     @DisplayName("DM 방을 나갈 수 있다.")
     @Test
     public void exitDmRoom() {
@@ -156,7 +180,8 @@ class RoomServiceTest {
         roomService.exitDmRoom(senderId, roomId);
 
         // then
-        assertThat(roomUserRepository.findByRoomIdAndUserId(roomId, senderId).isEmpty()).isTrue();
+        assertThat(roomUserRepository.findByRoomIdAndUserId(roomId, senderId).get().getState())
+                .isEqualTo(RoomUserState.EXIT);
     }
 
     @DisplayName("방에 아무도 없으면 방을 삭제한다.")

@@ -36,11 +36,11 @@ public class RoomService {
             throw new IllegalArgumentException("자기 자신과의 방을 만들 수 없습니다.");
         }
 
-        List<Long> roomIdsOfSender = roomUserRepository.findByUserId(senderId).stream()
+        List<Long> roomIdsOfSender = roomUserRepository.findAllByUserId(senderId).stream()
                 .map(roomUser -> roomUser.getRoom().getId())
                 .toList();
 
-        Set<Long> roomsIdsOfReceiver = roomUserRepository.findByUserId(receiverId).stream()
+        Set<Long> roomsIdsOfReceiver = roomUserRepository.findAllByUserId(receiverId).stream()
                 .map(roomUser -> roomUser.getRoom().getId())
                 .collect(Collectors.toSet());
 
@@ -64,7 +64,9 @@ public class RoomService {
     // TODO: consider performance later
     @Transactional
     public List<RoomDmInfoDto> getRoomList(Long userId) {
-        List<Long> roomIds = roomUserRepository.findByUserId(userId).stream()
+        // TODO: check if below findAllByUserId make N+1 problem
+        List<Long> roomIds = roomUserRepository.findAllByUserId(userId).stream()
+                .filter(RoomUser::isJoin)
                 .map(roomUser -> roomUser.getRoom().getId())
                 .toList();
 
@@ -91,12 +93,13 @@ public class RoomService {
     public void exitDmRoom(Long userId, Long roomId) {
         RoomUser roomUser = roomUserRepository.findByRoomIdAndUserId(roomId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("방에 참여한 사용자가 아닙니다."));
-        roomUserRepository.delete(roomUser);
+        roomUser.exit();
 
         Room room = roomUser.getRoom();
         room.onUserExit();
         if (room.isEmptyMember()) {
             roomRepository.delete(room);
+            roomUserRepository.deleteAll(roomUserRepository.findAllByRoomId(roomId));
         }
         // TODO: if you develop state server later, you should send message to other user that this user exit room here
     }

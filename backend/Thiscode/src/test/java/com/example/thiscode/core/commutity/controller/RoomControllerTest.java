@@ -80,15 +80,17 @@ class RoomControllerTest extends CustomControllerTestSupport {
     @DisplayName("DM 방을 나간다.")
     @Test
     public void exitDmRoom() throws Exception {
+
+        StringBuilder sb = new StringBuilder();
+
         //given
         Cookie defaultJwtCookie = getDefaultJwtCookie();
-        ExitDmRoomRequest request = new ExitDmRoomRequest(1L);
+        long roomId = 1L;
 
         //when //then
-        mockMvc.perform(delete("/rooms/dm-room/users/me")
+        mockMvc.perform(delete("/rooms/dm-room/{roomId}/users/me", roomId)
                         .contentType("application/json")
                         .cookie(defaultJwtCookie)
-                        .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().string("방을 나갔습니다."))

@@ -1,6 +1,7 @@
 package com.example.thiscode.core.commutity.entity;
 
 import com.example.thiscode.core.common.BaseEntity;
+import com.example.thiscode.core.commutity.entity.type.RoomUserState;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,10 @@ public class RoomUser extends BaseEntity {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "state")
+    @Enumerated(EnumType.STRING)
+    private RoomUserState state;
+
     @Column(name = "joined_at")
     private LocalDateTime joinedAt;
 
@@ -35,9 +40,18 @@ public class RoomUser extends BaseEntity {
     public RoomUser(Room room, Long userId) {
         this.room = room;
         this.userId = userId;
+        this.state = RoomUserState.JOIN;
         this.joinedAt = LocalDateTime.now();
         this.lastReadAt = LocalDateTime.now();
         room.addRoomUser(this);
+    }
+
+    public boolean isJoin() {
+        return this.state == RoomUserState.JOIN;
+    }
+
+    public void exit() {
+        this.state = RoomUserState.EXIT;
     }
 
 }

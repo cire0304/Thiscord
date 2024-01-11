@@ -11,6 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RequiredArgsConstructor
 @Controller
 public class RoomController {
@@ -30,10 +32,13 @@ public class RoomController {
         return ResponseEntity.ok("상대방과의 새로운 방을 만들었습니다.");
     }
 
-    @DeleteMapping("/rooms/dm-room/users/me")
+    @DeleteMapping("/rooms/dm-room/{roomId}/users/me")
     public ResponseEntity<String> exitDmRoom(@AuthenticationPrincipal JwtSubject jwtSubject,
-                                             @RequestBody ExitDmRoomRequest request) {
-        roomService.exitDmRoom(jwtSubject.getId(), request.getRoomId());
+                                             @PathVariable Long roomId) {
+        if (Objects.isNull(roomId)) {
+            throw new IllegalArgumentException("방의 아이디를 입력해주세요.");
+        }
+        roomService.exitDmRoom(jwtSubject.getId(), roomId);
         return ResponseEntity.ok("방을 나갔습니다.");
     }
 
