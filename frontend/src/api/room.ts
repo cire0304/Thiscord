@@ -19,7 +19,7 @@ const createDmRoom = async (otherUserId: number) => {
 };
 
 const exitRoom = async (roomId: number) => {
-  return await axiosInstance.delete(`/rooms/dm-room/users/me`);
+  return await axiosInstance.delete(`/rooms/dm-room/${roomId}/users/me`);
 };
 
 const RoomRequest = {
