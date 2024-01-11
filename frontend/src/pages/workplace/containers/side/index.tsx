@@ -25,7 +25,7 @@ const Side = ({setIsProfileModalActive} : {setIsProfileModalActive: Dispatch<Set
         {
           roomList?.roomDmInfos.map((room, index) => {
             // add GroupRoom component here later
-            return <DirectRoom key={index} nickname={room.otherUserNickname}></DirectRoom>
+            return <DirectRoom key={index} nickname={room.otherUserNickname} roomId={room.roomId} ></DirectRoom>
           })
         }
          {/* <GroupRoom nickname="이동준" userCount={1}></GroupRoom> */}
