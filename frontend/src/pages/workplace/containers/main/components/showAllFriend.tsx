@@ -5,16 +5,15 @@ import * as S from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
 import RoomRequest from "../../../../../api/room";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setRoomInfoState } from "../../../../../store";
-import { UserInfo } from "../../../../../api/user";
+
 
 
 export default function ShowFriend() {
   const [getFriendResponse, setGetFriendResponse] = useState<GetFriendResponse>();
   const [requestCount, setRequestCount] = useState<number>(0);
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user) as UserInfo;
 
   useEffect(() => {
     const getFriendListRequest = async () => {
