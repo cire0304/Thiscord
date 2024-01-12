@@ -7,7 +7,7 @@ import { ReactComponent as ActiveMike } from "../../../assets/icons/activeMike.s
 
 import Span from "../../span";
 import { useDispatch, useSelector } from "react-redux";
-import UserRequest, { UserInfo } from "../../../api/user";
+import UserAPI, { UserInfo } from "../../../api/user";
 import { setUserInfoState } from "../../../store";
 import theme from "../../../styles/theme";
 import ProfileImage from "../../profileImage";
@@ -26,7 +26,7 @@ export default function ControlBar({
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const res = await UserRequest.getUserInfo();
+      const res = await UserAPI.getUserInfo();
       res.data && dispatch(setUserInfoState(res.data));
     };
     getUserInfo();

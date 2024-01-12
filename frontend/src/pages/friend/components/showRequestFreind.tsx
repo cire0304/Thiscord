@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import * as S from "./styles";
-import FriendReqeust, { GetFriendRequestResponse } from "../../../api/friend";
+import FriendAPI, { GetFriendRequestResponse } from "../../../api/friend";
 
 export default function RequestFreind() {
   const { friendRequestResponse, requestCount } = useFriendRequest();
@@ -72,7 +72,7 @@ function useFriendRequest(): {
 
   useEffect(() => {
     const getFriendListRequest = async () => {
-      const res = await FriendReqeust.getFriendRequestList();
+      const res = await FriendAPI.getFriendRequestList();
       if (res.status !== 200) {
         alert(res.data);
         return;
@@ -91,11 +91,11 @@ function useFriendRequest(): {
 }
 
 const acceptFriendRequest = async (id: number) => {
-  const res = await FriendReqeust.acceptFriend(id);
+  const res = await FriendAPI.acceptFriend(id);
   res.status === 200 && window.location.reload();
 };
 
 const rejectFriendRequest = async (id: number) => {
-  const res = await FriendReqeust.rejectFriend(id);
+  const res = await FriendAPI.rejectFriend(id);
   res.status === 200 && window.location.reload();
 };

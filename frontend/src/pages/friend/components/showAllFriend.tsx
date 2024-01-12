@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
 
 import { useDispatch } from "react-redux";
-import FriendReqeust, { GetFriendResponse } from "../../../api/friend";
-import RoomRequest from "../../../api/room";
+import FriendAPI, { GetFriendResponse } from "../../../api/friend";
+import RoomAPI from "../../../api/room";
 import { setRoomInfoState } from "../../../store";
 
 export default function ShowFriend() {
@@ -18,7 +18,7 @@ export default function ShowFriend() {
 
   useEffect(() => {
     const getFriendListRequest = async () => {
-      const res = await FriendReqeust.getFriendList();
+      const res = await FriendAPI.getFriendList();
       if (res.status !== 200) {
         alert(res.data);
         return;
@@ -60,12 +60,12 @@ export default function ShowFriend() {
 }
 
 async function createRoomHandler(receiverId: number, dispatch: Dispatch<any>) {
-  let res = await RoomRequest.createDmRoom(receiverId);
+  let res = await RoomAPI.createDmRoom(receiverId);
   if (res.status !== 200) {
     console.log(res);
     alert(res.data);
   }
-  res = await RoomRequest.getRoomList();
+  res = await RoomAPI.getRoomList();
 
   // Is this rigth way to use redux?
   // replace with another way like socket.io

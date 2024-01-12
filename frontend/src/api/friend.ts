@@ -42,7 +42,7 @@ const rejectFriend = async (id: number) => {
   return await axiosInstance.put(`/users/me/friends`, { id, state: "REJECT" });
 };
 
-const FriendReqeust = {
+const FriendAPI = {
   addFriend,
   getFriendList,
   getFriendRequestList,
@@ -50,4 +50,4 @@ const FriendReqeust = {
   rejectFriend,
 };
 
-export default FriendReqeust;
+export default FriendAPI;

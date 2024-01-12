@@ -7,7 +7,7 @@ import { Input } from "../../components/input";
 import { useNavigate } from "react-router-dom";
 
 import Button from "../../components/button";
-import UserRequest from "../../api/user";
+import UserAPI from "../../api/user";
 import Utils from "../../utils/string";
 
 const RegisterPage = () => {
@@ -71,7 +71,7 @@ const RegisterPage = () => {
       return;
     }
 
-      const res = await UserRequest.registerUser({ email, password, nickname });
+      const res = await UserAPI.registerUser({ email, password, nickname });
 
     if (res.status === 200) {
       navigate("/login");

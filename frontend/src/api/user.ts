@@ -48,7 +48,7 @@ const updateUserInfo = async (nickname: string, introduction: string) => {
   return await axiosInstance.put("/users/me", data);
 };
 
-const UserRequest = {
+const UserAPI = {
   registerUser,
   login,
   getUserInfo,
@@ -56,4 +56,4 @@ const UserRequest = {
   updateUserInfo
 };
 
-export default UserRequest;
+export default UserAPI;

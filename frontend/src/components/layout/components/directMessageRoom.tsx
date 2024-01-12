@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { css, styled } from "styled-components";
 import Profile from "../../../assets/images/discodeProfile.jpg";
-import RoomRequest from "../../../api/room";
+import RoomAPI from "../../../api/room";
 import Span from "../../span";
 import ProfileImage from "../../profileImage";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 
 async function exitRoom(roomId: number) {
-  const res = await RoomRequest.exitRoom(roomId);
+  const res = await RoomAPI.exitRoom(roomId);
   if (res.status === 200) {
     window.location.reload();
   } else {

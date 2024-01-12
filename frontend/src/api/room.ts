@@ -22,10 +22,10 @@ const exitRoom = async (roomId: number) => {
   return await axiosInstance.delete(`/rooms/dm-room/${roomId}/users/me`);
 };
 
-const RoomRequest = {
+const RoomAPI = {
   createDmRoom,
   getRoomList,
   exitRoom,
 };
 
-export default RoomRequest;
+export default RoomAPI;

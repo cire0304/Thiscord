@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { css, styled } from "styled-components";
-import FriendReqeust from "../../../api/friend";
+import FriendAPI from "../../../api/friend";
 import { Input } from "../../../components/input";
 import { Button } from "./styles";
 import Span from "../../../components/span";
@@ -41,7 +41,7 @@ export default function AddFriend() {
 
     const addFreindRequest = async () => {
       const data = { nickname, userCode };
-      const res = await FriendReqeust.addFriend(data);
+      const res = await FriendAPI.addFriend(data);
 
       if (res.status !== 200) {
         setWarningMessage(res.data);

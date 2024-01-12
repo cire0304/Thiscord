@@ -1,9 +1,13 @@
-import React, { useRef, Dispatch, SetStateAction } from "react";
+import React, {
+  useRef,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
 import UserAPI, { UserInfo } from "../../../api/user";
 import { setUserInfoState } from "../../../store";
-import Span from "../../span";
+import Span from "../../../components/span";
 import theme from "../../../styles/theme";
 
 interface ProfileModalProps {
@@ -11,10 +15,12 @@ interface ProfileModalProps {
   setIsProfileModalActive: Dispatch<SetStateAction<boolean>>;
 }
 
+
 export default function ProfileModal({
   isProfileModalActive,
   setIsProfileModalActive,
-}: ProfileModalProps) {
+}: ProfileModalProps)  {
+
   const backgroundRef = useRef<HTMLDivElement>(null);
 
   const user = useSelector((state: any) => state.user) as UserInfo;
@@ -28,6 +34,7 @@ export default function ProfileModal({
       setIsProfileModalActive(false);
     }
   };
+
 
   const updateUserInfo = async () => {
     if (
@@ -111,7 +118,7 @@ export default function ProfileModal({
       </Container>
     </Modal>
   );
-}
+};
 
 const Modal = styled.div`
   width: 100vw;
@@ -123,6 +130,7 @@ const Modal = styled.div`
 
   background-color: rgba(0, 0, 0, 0.4);
 `;
+
 
 const Container = styled.div`
   height: 500px;
@@ -230,3 +238,4 @@ interface ProfileModalProps {
   isProfileModalActive: boolean;
   setIsProfileModalActive: Dispatch<SetStateAction<boolean>>;
 }
+
