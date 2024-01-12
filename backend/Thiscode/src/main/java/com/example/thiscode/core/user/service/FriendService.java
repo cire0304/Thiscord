@@ -5,8 +5,8 @@ import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.entity.type.State;
 import com.example.thiscode.core.user.repository.FriendRepository;
 import com.example.thiscode.core.user.repository.UserRepository;
-import com.example.thiscode.core.user.service.dto.FriendInfoDto;
-import com.example.thiscode.core.user.service.dto.FriendRequestsDto;
+import com.example.thiscode.core.user.service.dto.FriendDTO;
+import com.example.thiscode.core.user.service.dto.FriendRequestsDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,7 +52,7 @@ public class FriendService {
     }
 
     @Transactional
-    public List<FriendInfoDto> getFriends(Long userId) {
+    public List<FriendDTO> getFriends(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
 
@@ -63,15 +63,15 @@ public class FriendService {
                 .toList();
     }
 
-    // TODO: Is it okay to return sent and received request info together as type FriendRequestsDto?
+    // TODO: Is it okay to return sent and received request info together as type FriendRequestsDTO?
     // TODO: consider refactoring this method later
     @Transactional
-    public FriendRequestsDto getFriendRequests(Long userId) {
+    public FriendRequestsDTO getFriendRequests(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
 
-        List<FriendInfoDto> receivedFriendRequests = new ArrayList<>();
-        List<FriendInfoDto> sentFriendRequests = new ArrayList<>();
+        List<FriendDTO> receivedFriendRequests = new ArrayList<>();
+        List<FriendDTO> sentFriendRequests = new ArrayList<>();
 
         friendRepository.findByReceiverIdOrSenderId(userId)
                 .stream()
@@ -84,7 +84,7 @@ public class FriendService {
                     }
                 });
 
-        return new FriendRequestsDto(receivedFriendRequests, sentFriendRequests);
+        return new FriendRequestsDTO(receivedFriendRequests, sentFriendRequests);
     }
 
     @Transactional

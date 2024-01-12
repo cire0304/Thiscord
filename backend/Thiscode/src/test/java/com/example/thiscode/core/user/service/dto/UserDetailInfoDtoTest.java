@@ -31,7 +31,7 @@ class UserDetailInfoDtoTest {
         User saveUser = userRepository.save(user);
 
         //when
-        UserDetailInfoDto userDetailInfoDto = userMapper.toUserDetailInfoDto(saveUser);
+        UserDTO userDetailInfoDto = userMapper.toUserDetailInfoDto(saveUser);
 
         //then
         assertThat(userDetailInfoDto.getEmail()).isEqualTo(email);

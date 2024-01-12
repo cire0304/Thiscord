@@ -4,7 +4,7 @@ import com.example.thiscode.core.user.controller.request.SignUpRequest;
 import com.example.thiscode.core.user.controller.request.UpdateUserRequest;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.service.UserService;
-import com.example.thiscode.core.user.service.dto.UserDetailInfoDto;
+import com.example.thiscode.core.user.service.dto.UserDTO;
 import com.example.thiscode.security.jwt.JwtSubject;
 import com.example.thiscode.security.jwt.JwtTokenProvider;
 import com.example.thiscode.security.model.PrincipalUser;
@@ -45,7 +45,7 @@ public class UserController {
      */
     @GetMapping("/users/me/detail")
     @Deprecated(since = "2021-08-01", forRemoval = true)
-    public ResponseEntity<UserDetailInfoDto> getUserDetailInfo(@AuthenticationPrincipal JwtSubject subject) {
+    public ResponseEntity<UserDTO> getUserDetailInfo(@AuthenticationPrincipal JwtSubject subject) {
         return ResponseEntity.ok(userService.getUserDetailInfo(subject.getId()));
     }
 

@@ -1,6 +1,6 @@
 package com.example.thiscode.core.user.controller.response;
 
-import com.example.thiscode.core.user.service.dto.FriendInfoDto;
+import com.example.thiscode.core.user.service.dto.FriendDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class FriendsResponse {
 
-    List<FriendInfoDto> friends;
+    List<FriendDTO> friends;
 
 }

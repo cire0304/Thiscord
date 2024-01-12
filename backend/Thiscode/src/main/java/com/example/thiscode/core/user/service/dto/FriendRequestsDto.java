@@ -8,9 +8,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-public class FriendRequestsDto {
+public class FriendRequestsDTO {
 
-    List<FriendInfoDto> receivedFriendRequests;
-    List<FriendInfoDto> sentFriendRequests;
+    List<FriendDTO> receivedFriendRequests;
+    List<FriendDTO> sentFriendRequests;
 
 }

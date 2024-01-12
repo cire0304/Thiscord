@@ -2,7 +2,7 @@ package com.example.thiscode.core.user.service;
 
 import com.example.thiscode.core.user.repository.UserRepository;
 import com.example.thiscode.core.user.entity.User;
-import com.example.thiscode.core.user.service.dto.UserDetailInfoDto;
+import com.example.thiscode.core.user.service.dto.UserDTO;
 import com.example.thiscode.core.user.service.dto.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class UserService {
 
     @Transactional
     @Deprecated
-    public UserDetailInfoDto getUserDetailInfo(Long userId) {
+    public UserDTO getUserDetailInfo(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
         return userMapper.toUserDetailInfoDto(user);

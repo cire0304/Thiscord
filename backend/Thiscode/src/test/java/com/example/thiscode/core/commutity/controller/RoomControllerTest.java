@@ -2,10 +2,11 @@ package com.example.thiscode.core.commutity.controller;
 
 import com.example.thiscode.CustomControllerTestSupport;
 import com.example.thiscode.core.commutity.controller.request.CreateDmRoomRequest;
-import com.example.thiscode.core.commutity.controller.request.ExitDmRoomRequest;
+import com.example.thiscode.core.commutity.entity.type.RoomUserState;
 import com.example.thiscode.core.commutity.service.RoomService;
-import com.example.thiscode.core.commutity.service.dto.RoomDmInfoDto;
-import com.example.thiscode.core.commutity.controller.request.ShowRoomsResponse;
+import com.example.thiscode.core.commutity.service.dto.DmRoomDTO;
+import com.example.thiscode.core.commutity.controller.request.FindRoomsResponse;
+import com.example.thiscode.core.commutity.service.dto.RoomUserDTO;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,14 +32,19 @@ class RoomControllerTest extends CustomControllerTestSupport {
     public void getRooms() throws Exception {
         //given
         Cookie defaultJwtCookie = getDefaultJwtCookie();
+        Long roomAId = 1L;
+        Long roomBId = 2L;
+        Long RoomUserAId = 1L;
+        Long RoomUserBId = 2L;
 
-        RoomDmInfoDto roomDmInfoA = new RoomDmInfoDto(1L, "user nickname A");
-        RoomDmInfoDto roomDmInfoB = new RoomDmInfoDto(2L, "user nickname B");
 
-        List<RoomDmInfoDto> roomDmInfoList = List.of(roomDmInfoA, roomDmInfoB);
+        DmRoomDTO roomDmInfoA = new DmRoomDTO(roomAId, RoomUserAId, "user nickname A");
+        DmRoomDTO roomDmInfoB = new DmRoomDTO(roomBId, RoomUserBId, "user nickname B");
+
+        List<DmRoomDTO> roomDmInfoList = List.of(roomDmInfoA, roomDmInfoB);
         given(roomService.getRoomList(any())).willReturn(roomDmInfoList);
 
-        ShowRoomsResponse response = new ShowRoomsResponse(roomDmInfoList);
+        FindRoomsResponse response = new FindRoomsResponse(roomDmInfoList);
         //when //then
         mockMvc.perform(get("/rooms")
                         .contentType("application/json")
@@ -71,6 +77,36 @@ class RoomControllerTest extends CustomControllerTestSupport {
                 .andExpect(content().string("상대방과의 새로운 방을 만들었습니다."))
                 .andDo(
                         document("room-create",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );
+    }
+
+    @DisplayName("DM 방에 참여한 사용자의 정보를 가져온다.")
+    @Test
+    public void getRoomUser() throws Exception {
+        //given
+        Cookie defaultJwtCookie = getDefaultJwtCookie();
+        RoomUserDTO roomUserDTO = RoomUserDTO.builder()
+                .userId(20L)
+                .nickname("userNickname")
+                .email("userEmail")
+                .userCode("userCode")
+                .introduction("userIntroduction")
+                .state(RoomUserState.JOIN)
+                .build();
+        given(roomService.findRoomUser(any(), any(), any())).willReturn(roomUserDTO);
+
+        //when //then
+        mockMvc.perform(get("/rooms/dm-room/{roomId}/users/{userId}", 1, 20)
+                        .contentType("application/json")
+                        .cookie(defaultJwtCookie)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().string(objectMapper.writeValueAsString(roomUserDTO)))
+                .andDo(
+                        document("room-user-get",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint())
                         )

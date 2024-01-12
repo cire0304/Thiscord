@@ -8,8 +8,8 @@ import com.example.thiscode.core.user.entity.Friend;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.entity.type.State;
 import com.example.thiscode.core.user.service.FriendConverter;
-import com.example.thiscode.core.user.service.dto.FriendInfoDto;
-import com.example.thiscode.core.user.service.dto.FriendRequestsDto;
+import com.example.thiscode.core.user.service.dto.FriendDTO;
+import com.example.thiscode.core.user.service.dto.FriendRequestsDTO;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,7 +66,7 @@ class FriendControllerTest extends CustomControllerTestSupport {
         User receiver = getDefaultUser();
 
         Friend friend = new Friend(sender, receiver);
-        FriendInfoDto friendInfoDto = friendConverter.convertToFriendInfoDto(senderId, friend);
+        FriendDTO friendInfoDto = friendConverter.convertToFriendInfoDto(senderId, friend);
         given(friendService.getFriends(any())).willReturn(List.of(friendInfoDto));
 
         FriendsResponse expect = new FriendsResponse(List.of(friendInfoDto));
@@ -98,13 +98,13 @@ class FriendControllerTest extends CustomControllerTestSupport {
         Friend sentFriendRequest = new Friend(user, otherUserA);
         Friend ReceivedFriendRequest = new Friend(otherUserB, user);
 
-        FriendInfoDto sentFriendRequestDto = friendConverter.convertToFriendInfoDto(userId, sentFriendRequest);
-        FriendInfoDto ReceivedFriendRequestDto = friendConverter.convertToFriendInfoDto(userId, ReceivedFriendRequest);
+        FriendDTO sentFriendRequestDto = friendConverter.convertToFriendInfoDto(userId, sentFriendRequest);
+        FriendDTO ReceivedFriendRequestDto = friendConverter.convertToFriendInfoDto(userId, ReceivedFriendRequest);
 
-        FriendRequestsDto friendRequestsDto = new FriendRequestsDto(List.of(ReceivedFriendRequestDto), List.of(sentFriendRequestDto));
+        FriendRequestsDTO friendRequestsDto = new FriendRequestsDTO(List.of(ReceivedFriendRequestDto), List.of(sentFriendRequestDto));
         given(friendService.getFriendRequests(any())).willReturn(friendRequestsDto);
 
-        FriendRequestsDto expect = friendRequestsDto;
+        FriendRequestsDTO expect = friendRequestsDto;
 
         //when then
         mockMvc.perform(get("/users/me/friend-requests")
@@ -130,7 +130,7 @@ class FriendControllerTest extends CustomControllerTestSupport {
         User receiver = getDefaultUser();
 
         Friend friend = new Friend(sender, receiver);
-        FriendInfoDto friendInfoDto = friendConverter.convertToFriendInfoDto(senderId, friend);
+        FriendDTO friendInfoDto = friendConverter.convertToFriendInfoDto(senderId, friend);
         given(friendService.getFriends(any())).willReturn(List.of(friendInfoDto));
 
         UpdateFriendStateRequest friendRequest = new UpdateFriendStateRequest(friendInfoDto.getId(), State.ACCEPT);

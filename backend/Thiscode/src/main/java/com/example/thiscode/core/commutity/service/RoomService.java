@@ -4,8 +4,9 @@ import com.example.thiscode.core.commutity.entity.Room;
 import com.example.thiscode.core.commutity.entity.RoomUser;
 import com.example.thiscode.core.commutity.repository.RoomRepository;
 import com.example.thiscode.core.commutity.repository.RoomUserRepository;
-import com.example.thiscode.core.commutity.service.dto.RoomDmInfoDto;
+import com.example.thiscode.core.commutity.service.dto.DmRoomDTO;
 import com.example.thiscode.core.commutity.entity.type.RoomType;
+import com.example.thiscode.core.commutity.service.dto.RoomUserDTO;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
@@ -63,7 +64,7 @@ public class RoomService {
     // TODO: consider processing group room later
     // TODO: consider performance later
     @Transactional
-    public List<RoomDmInfoDto> getRoomList(Long userId) {
+    public List<DmRoomDTO> getRoomList(Long userId) {
         // TODO: check if below findAllByUserId make N+1 problem
         List<Long> roomIds = roomUserRepository.findAllByUserId(userId).stream()
                 .filter(RoomUser::isJoin)
@@ -72,7 +73,7 @@ public class RoomService {
 
         // TODO: check if below findAllById use where in query
         List<Room> rooms = roomRepository.findAllById(roomIds);
-        List<RoomDmInfoDto> roomDmInfos = new ArrayList<>();
+        List<DmRoomDTO> roomDmDTOs = new ArrayList<>();
         for (Room room : rooms) {
             if (room.getType() != RoomType.DM) continue;
 
@@ -83,10 +84,10 @@ public class RoomService {
                     .orElseThrow(() -> new IllegalArgumentException("방에 참여한 사용자가 아닙니다."));
             User user = userRepository.findById(roomUser1.getUserId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-            roomDmInfos.add(new RoomDmInfoDto(room.getId(), user.getNickname()));
+            roomDmDTOs.add(new DmRoomDTO(room.getId(), user.getId(), user.getNickname()));
         }
 
-        return roomDmInfos;
+        return roomDmDTOs;
     }
 
     @Transactional
@@ -102,5 +103,26 @@ public class RoomService {
             roomUserRepository.deleteAll(roomUserRepository.findAllByRoomId(roomId));
         }
         // TODO: if you develop state server later, you should send message to other user that this user exit room here
+    }
+
+    @Transactional
+    public RoomUserDTO findRoomUser(Long userIdRequestBy, Long roomId, Long userId) {
+        roomUserRepository.findByRoomIdAndUserId(roomId, userIdRequestBy)
+                .orElseThrow(() -> new IllegalArgumentException("방에 참여한 사용자가 아닙니다."));
+
+        RoomUser roomUser = roomUserRepository.findByRoomIdAndUserId(roomId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("방에 참여한 사용자가 아닙니다."));
+
+        User user = userRepository.findById(roomUser.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        return RoomUserDTO.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .userCode(user.getUserCode())
+                .email(user.getEmail())
+                .introduction(user.getIntroduction())
+                .state(roomUser.getState())
+                .build();
     }
 }

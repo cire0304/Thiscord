@@ -4,8 +4,8 @@ import com.example.thiscode.core.user.controller.request.AddFriendRequest;
 import com.example.thiscode.core.user.controller.request.UpdateFriendStateRequest;
 import com.example.thiscode.core.user.controller.response.FriendsResponse;
 import com.example.thiscode.core.user.service.FriendService;
-import com.example.thiscode.core.user.service.dto.FriendInfoDto;
-import com.example.thiscode.core.user.service.dto.FriendRequestsDto;
+import com.example.thiscode.core.user.service.dto.FriendDTO;
+import com.example.thiscode.core.user.service.dto.FriendRequestsDTO;
 import com.example.thiscode.security.jwt.JwtSubject;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +27,13 @@ public class FriendController {
 
     @GetMapping("/users/me/friends")
     public ResponseEntity<FriendsResponse> getFriends(@AuthenticationPrincipal JwtSubject subject) {
-        List<FriendInfoDto> friends = friendService.getFriends(subject.getId());
+        List<FriendDTO> friends = friendService.getFriends(subject.getId());
         return ResponseEntity.ok(new FriendsResponse(friends));
     }
 
     @GetMapping("/users/me/friend-requests")
-    public ResponseEntity<FriendRequestsDto> getFriendRequests(@AuthenticationPrincipal JwtSubject subject) {
-        FriendRequestsDto friendRequests = friendService.getFriendRequests(subject.getId());
+    public ResponseEntity<FriendRequestsDTO> getFriendRequests(@AuthenticationPrincipal JwtSubject subject) {
+        FriendRequestsDTO friendRequests = friendService.getFriendRequests(subject.getId());
         return ResponseEntity.ok(friendRequests);
     }
 

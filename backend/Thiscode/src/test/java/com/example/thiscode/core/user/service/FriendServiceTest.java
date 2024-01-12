@@ -5,8 +5,7 @@ import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.entity.type.State;
 import com.example.thiscode.core.user.repository.FriendRepository;
 import com.example.thiscode.core.user.repository.UserRepository;
-import com.example.thiscode.core.user.service.dto.FriendInfoDto;
-import com.example.thiscode.core.user.service.dto.FriendRequestsDto;
+import com.example.thiscode.core.user.service.dto.FriendDTO;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -86,15 +85,15 @@ class FriendServiceTest {
     public void getFriends() {
         //given
         friendService.requestFriend(sender.getId(), receiver.getNickname(), receiver.getUserCode());
-        List<FriendInfoDto> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
+        List<FriendDTO> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
                 .getReceivedFriendRequests();
-        FriendInfoDto friendInfoDto = receivedFriendRequests.get(0);
+        FriendDTO friendInfoDto = receivedFriendRequests.get(0);
 
         friendService.updateFriendState(receiver.getId(), friendInfoDto.getId(), State.ACCEPT);
 
         //when
-        List<FriendInfoDto> friendsOfReceiver = friendService.getFriends(receiver.getId());
-        List<FriendInfoDto> friendsOfSender = friendService.getFriends(sender.getId());
+        List<FriendDTO> friendsOfReceiver = friendService.getFriends(receiver.getId());
+        List<FriendDTO> friendsOfSender = friendService.getFriends(sender.getId());
 
         //then
         assertThat(friendsOfReceiver).hasSize(1);
@@ -115,15 +114,15 @@ class FriendServiceTest {
     public void acceptFriendRequest() {
         //given
         friendService.requestFriend(sender.getId(), receiver.getNickname(), receiver.getUserCode());
-        List<FriendInfoDto> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
+        List<FriendDTO> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
                 .getReceivedFriendRequests();
-        FriendInfoDto friendInfoDto = receivedFriendRequests.get(0);
+        FriendDTO friendInfoDto = receivedFriendRequests.get(0);
 
         //when
         friendService.updateFriendState(receiver.getId(), friendInfoDto.getId(), State.ACCEPT);
 
         //then
-        List<FriendInfoDto> friends = friendService.getFriends(receiver.getId());
+        List<FriendDTO> friends = friendService.getFriends(receiver.getId());
         assertThat(friends).hasSize(1);
     }
 
@@ -132,9 +131,9 @@ class FriendServiceTest {
     public void rejectFriendRequest() {
         //given
         friendService.requestFriend(sender.getId(), receiver.getNickname(), receiver.getUserCode());
-        List<FriendInfoDto> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
+        List<FriendDTO> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
                 .getReceivedFriendRequests();
-        FriendInfoDto friendInfoDto = receivedFriendRequests.get(0);
+        FriendDTO friendInfoDto = receivedFriendRequests.get(0);
 
         //when
         friendService.updateFriendState(receiver.getId(), friendInfoDto.getId(), State.REJECT);
@@ -148,9 +147,9 @@ class FriendServiceTest {
     public void invalidFriendRequest() {
         //given
         friendService.requestFriend(sender.getId(), receiver.getNickname(), receiver.getUserCode());
-        List<FriendInfoDto> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
+        List<FriendDTO> receivedFriendRequests = friendService.getFriendRequests(receiver.getId())
                 .getReceivedFriendRequests();
-        FriendInfoDto friendInfoDto = receivedFriendRequests.get(0);
+        FriendDTO friendInfoDto = receivedFriendRequests.get(0);
 
         //when
         friendService.updateFriendState(receiver.getId(), friendInfoDto.getId(), State.ACCEPT);

@@ -4,7 +4,7 @@ import com.example.thiscode.CustomControllerTestSupport;
 import com.example.thiscode.core.user.controller.request.SignUpRequest;
 import com.example.thiscode.core.user.controller.request.UpdateUserRequest;
 import com.example.thiscode.core.user.entity.User;
-import com.example.thiscode.core.user.service.dto.UserDetailInfoDto;
+import com.example.thiscode.core.user.service.dto.UserDTO;
 import com.example.thiscode.security.jwt.JwtSubject;
 import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.model.ProviderUser;
@@ -111,7 +111,7 @@ class UserControllerTest extends CustomControllerTestSupport {
         String token = jwtTokenProvider.createJwtToken(principalUser);
         Cookie tokenCookie = new Cookie("TOKEN", token);
 
-        UserDetailInfoDto userDetailInfoDto = new UserDetailInfoDto(userId, email, password, nickname, introduction, now);
+        UserDTO userDetailInfoDto = new UserDTO(userId, email, password, nickname, introduction, now);
         given(userService.getUserDetailInfo(any())).willReturn(userDetailInfoDto);
 
         //when then

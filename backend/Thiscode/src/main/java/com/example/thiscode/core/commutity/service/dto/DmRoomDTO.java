@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomDmInfoDto {
+public class DmRoomDTO {
     private Long roomId;
+    private Long otherUserId;
     private String otherUserNickname;
 }

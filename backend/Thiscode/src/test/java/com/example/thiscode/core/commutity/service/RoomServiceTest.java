@@ -5,8 +5,8 @@ import com.example.thiscode.core.commutity.entity.RoomUser;
 import com.example.thiscode.core.commutity.entity.type.RoomUserState;
 import com.example.thiscode.core.commutity.repository.RoomRepository;
 import com.example.thiscode.core.commutity.repository.RoomUserRepository;
-import com.example.thiscode.core.commutity.service.RoomService;
-import com.example.thiscode.core.commutity.service.dto.RoomDmInfoDto;
+import com.example.thiscode.core.commutity.service.dto.DmRoomDTO;
+import com.example.thiscode.core.commutity.service.dto.RoomUserDTO;
 import com.example.thiscode.core.user.entity.User;
 import com.example.thiscode.core.user.repository.UserRepository;
 import com.example.thiscode.core.user.service.UserService;
@@ -134,14 +134,38 @@ class RoomServiceTest {
         roomService.createDmRoom(senderId, receiverId2);
 
         //when
-        List<RoomDmInfoDto> result = roomService.getRoomList(senderId);
+        List<DmRoomDTO> result = roomService.getRoomList(senderId);
 
         //then
         assertThat(result.size()).isEqualTo(2);
         assertThat(result.get(0).getRoomId()).isNotNull();
+        assertThat(result.get(0).getOtherUserId()).isEqualTo(receiverA.getId());
         assertThat(result.get(0).getOtherUserNickname()).isEqualTo(receiverA.getNickname());
         assertThat(result.get(1).getRoomId()).isNotNull();
+        assertThat(result.get(1).getOtherUserId()).isEqualTo(receiverB.getId());
         assertThat(result.get(1).getOtherUserNickname()).isEqualTo(receiverB.getNickname());
+    }
+
+    @DisplayName("방에 참여한 사용자의 정보를 가져올 수 있다.")
+    @Test
+    public void findRoomUser() {
+        //given
+        Long senderId = sender.getId();
+        Long receiverId = receiverA.getId();
+        Room room = roomService.createDmRoom(senderId, receiverId);
+        Long roomId = room.getId();
+
+        //when
+        RoomUserDTO result = roomService.findRoomUser(senderId, roomId, receiverId);
+
+        //then
+        assertThat(result.getUserId()).isEqualTo(receiverId);
+        assertThat(result.getNickname()).isEqualTo(receiverA.getNickname());
+        assertThat(result.getUserCode()).isEqualTo(receiverA.getUserCode());
+        assertThat(result.getEmail()).isEqualTo(receiverA.getEmail());
+        assertThat(result.getIntroduction()).isEqualTo(receiverA.getIntroduction());
+        assertThat(result.getState()).isEqualTo(RoomUserState.JOIN);
+
     }
 
     @DisplayName("퇴장한 DM 방은 목록에 나오지 않는다.")
@@ -157,7 +181,7 @@ class RoomServiceTest {
         roomService.exitDmRoom(senderId, exitRoom.getId());
 
         //when
-        List<RoomDmInfoDto> result = roomService.getRoomList(senderId);
+        List<DmRoomDTO> result = roomService.getRoomList(senderId);
 
         //then
         assertThat(result.size()).isEqualTo(1);
