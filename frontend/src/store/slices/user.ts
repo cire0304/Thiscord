@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UserInfo } from "../../api/user";
+import { UserInfo } from "../../api/userAPI";
 
 const initialState: UserInfo = {
   id: 0,

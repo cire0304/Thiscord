@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import UserAPI, { UserInfo } from "../api/user";
+import UserAPI, { UserInfo } from "../api/userAPI";
 import { setUserInfoState } from "../store";
 import { useNavigate } from "react-router-dom";
 

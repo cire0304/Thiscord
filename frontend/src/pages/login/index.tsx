@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/button";
 import { GOOGLE_LOGIN_URL } from "../../constants/constants";
 import Utils from "../../utils/string";
-import UserRequest from "../../api/user";
+import UserAPI from "../../api/userAPI";
 
 const LoginPage = () => {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -51,7 +51,7 @@ const LoginPage = () => {
       return;
     }
 
-    const res = await UserRequest.login(email, password);
+    const res = await UserAPI.login(email, password);
     if (res.status === 200) {
       navigate("/workspace/me");
     } else {

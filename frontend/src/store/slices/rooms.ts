@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GetRoomListResponse } from "../../api/room";
+import { GetRoomListResponse } from "../../api/roomAPI";
 
 // below code is not complete yet.
 // Group Room info is not included.
 const initialState: GetRoomListResponse = {
-  roomDmInfos: [],
+  dmRooms: [],
 };
 
 const roomSlice = createSlice({
@@ -15,10 +15,10 @@ const roomSlice = createSlice({
       state,
       action: { payload: GetRoomListResponse; type: string }
     ) {
-      state.roomDmInfos = [];
+      state.dmRooms = [];
 
-      action.payload.roomDmInfos.forEach((roomDmInfo) => {
-        state.roomDmInfos.push(roomDmInfo);
+      action.payload.dmRooms.forEach((dmRoom) => {
+        state.dmRooms.push(dmRoom);
       });
     },
   },

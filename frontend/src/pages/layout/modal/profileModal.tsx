@@ -5,7 +5,7 @@ import React, {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
-import UserAPI, { UserInfo } from "../../../api/user";
+import UserAPI, { UserInfo } from "../../../api/userAPI";
 import { setUserInfoState } from "../../../store";
 import Span from "../../../components/span";
 import theme from "../../../styles/theme";

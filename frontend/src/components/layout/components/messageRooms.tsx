@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { styled } from "styled-components";
-import { GetRoomListResponse } from "../../../api/room";
+import { GetRoomListResponse } from "../../../api/roomAPI";
 import DirectMessageRoom from "./directMessageRoom";
 
 export default function MessageRooms() {
@@ -13,7 +13,7 @@ export default function MessageRooms() {
     <Container>
       <Title>그룹 및 메세지</Title>
       <RoomsWrapper>
-        {roomList?.roomDmInfos.map((room, index) => {
+        {roomList?.dmRooms.map((room, index) => {
           // TODO: add GroupRoom component here later
           return (
             <DirectMessageRoom

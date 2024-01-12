@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { css, styled } from "styled-components";
 import Profile from "../../../assets/images/discodeProfile.jpg";
-import RoomAPI from "../../../api/room";
+import RoomAPI from "../../../api/roomAPI";
 import Span from "../../span";
 import ProfileImage from "../../profileImage";
 import { useDispatch, useSelector } from "react-redux";

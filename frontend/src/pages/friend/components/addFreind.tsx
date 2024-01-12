@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { css, styled } from "styled-components";
-import FriendAPI from "../../../api/friend";
+import FriendAPI from "../../../api/friendAPI";
 import { Input } from "../../../components/input";
 import { Button } from "./styles";
 import Span from "../../../components/span";

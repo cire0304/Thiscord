@@ -7,7 +7,7 @@ import { ReactComponent as ActiveMike } from "../../../assets/icons/activeMike.s
 
 import Span from "../../span";
 import { useDispatch, useSelector } from "react-redux";
-import UserAPI, { UserInfo } from "../../../api/user";
+import UserAPI, { UserInfo } from "../../../api/userAPI";
 import { setUserInfoState } from "../../../store";
 import theme from "../../../styles/theme";
 import ProfileImage from "../../profileImage";

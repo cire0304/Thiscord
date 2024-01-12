@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
 
 import { useDispatch } from "react-redux";
-import FriendAPI, { GetFriendResponse } from "../../../api/friend";
-import RoomAPI from "../../../api/room";
+import FriendAPI, { GetFriendResponse } from "../../../api/friendAPI";
+import RoomAPI from "../../../api/roomAPI";
 import { setRoomInfoState } from "../../../store";
 
 export default function ShowFriend() {

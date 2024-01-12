@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { setRoomInfoState } from "../store";
-import RoomAPI from "../api/room";
+import RoomAPI from "../api/roomAPI";
 
 export default function FetchRoomList({ children }: { children: ReactNode }) {
   const dispatch = useDispatch();

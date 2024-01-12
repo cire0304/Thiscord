@@ -7,7 +7,7 @@ import { Input } from "../../components/input";
 import { useNavigate } from "react-router-dom";
 
 import Button from "../../components/button";
-import UserAPI from "../../api/user";
+import UserAPI from "../../api/userAPI";
 import Utils from "../../utils/string";
 
 const RegisterPage = () => {
