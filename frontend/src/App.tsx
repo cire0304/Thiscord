@@ -23,7 +23,7 @@ function App() {
 
             <Route path="/workspace" element={<Layout />} >
               <Route path="me" element={<FriendPage />} />
-              <Route path="rooms/:id" element={<ChatPage />} />
+              <Route path="rooms/:roomId" element={<ChatPage />} />
             </Route>
           </Routes>
         </ThemeProvider>

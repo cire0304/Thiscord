@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { GetRoomListResponse } from "../../../api/roomAPI";
 import DirectMessageRoom from "./directMessageRoom";
+import Span from "../../span";
 
 export default function MessageRooms() {
   const roomList = useSelector(
@@ -13,13 +14,12 @@ export default function MessageRooms() {
     <Container>
       <Title>그룹 및 메세지</Title>
       <RoomsWrapper>
-        {roomList?.dmRooms.map((room, index) => {
+        {roomList?.rooms.map((room, index) => {
           // TODO: add GroupRoom component here later
           return (
             <DirectMessageRoom
               key={index}
-              nickname={room.otherUserNickname}
-              roomId={room.roomId}
+              room={room}
             ></DirectMessageRoom>
           );
         })}
@@ -39,10 +39,9 @@ const Container = styled.div`
   ${({ theme }) => theme.color.backgroundPrimary}
 `;
 
-const Title = styled.span`
+const Title = styled(Span)`
   padding: 10px 15px;
   ${({ theme }) => theme.color.secondary}
-  font-weight: 700;
   align-self: start;
 `;
 

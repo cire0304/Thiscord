@@ -1,11 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GetRoomListResponse } from "../../api/roomAPI";
+import { DmRoom, GetRoomListResponse } from "../../api/roomAPI";
+
+interface ChatRoomState {
+  currentChatRoom: DmRoom;
+}
 
 // below code is not complete yet.
 // Group Room info is not included.
-const initialState = {
+const initialState:ChatRoomState = {
     currentChatRoom: {
-        id: 0,
+        roomId: 0,
+        otherUserId: 0,
+        otherUserNickname: "",
     }
 };
 
@@ -15,9 +21,9 @@ const chatRoomSlice = createSlice({
   reducers: {
     setCurrentChatRoomId(
       state,
-      action: { payload: number; type: string }
+      action: { payload: DmRoom; type: string }
     ) {
-      state.currentChatRoom.id = action.payload;
+      state.currentChatRoom = action.payload;
     },
   },
 });

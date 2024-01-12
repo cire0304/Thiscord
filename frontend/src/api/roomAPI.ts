@@ -8,11 +8,23 @@ export interface DmRoom {
 }
 
 export interface GetRoomListResponse {
-  dmRooms: DmRoom[];
+  rooms: DmRoom[];
 }
 
 const getRoomList = async () => {
   return await axiosInstance.get<GetRoomListResponse>("/rooms");
+};
+
+export interface RoomUser {
+  userId: number;
+  email: string;
+  nickname: string;
+  userCode: number;
+  introduction: string;
+  state: "JOIN" | "EXIT";
+}
+const getDmRoomUser = async (roomId: number, userId: number) => {
+  return await axiosInstance.get<RoomUser>(`/rooms/dm-room/${roomId}/users/${userId}`);
 };
 
 const createDmRoom = async (otherUserId: number) => {
@@ -27,6 +39,7 @@ const RoomAPI = {
   createDmRoom,
   getRoomList,
   exitRoom,
+  getDmRoomUser,
 };
 
 export default RoomAPI;

@@ -4,19 +4,20 @@ import { styled } from "styled-components";
 import { activeById } from "../../../store";
 import { ViewState } from "../../../store/slices/viewState";
 import ProfileImage from "../../../components/profileImage";
+import Span from "../../../components/span";
+import { DmRoom } from "../../../api/roomAPI";
 
-const Nav = () => {
-  const dispatch = useDispatch();
-  const viewState = useSelector((state: any) => state.viewState) as ViewState;
+const Nav = ({ room }: { room: DmRoom }) => {
 
-  // 상대방의 정보 가져오기
-  const userId = 123;
-  const userNickname = "test";
+  // TODO: status user info code would be here
 
   return (
     <Container>
-      <ProfileImage src={`https://gravatar.com/avatar/${userId}?d=identicon`} />
-      <Content></Content>
+      <ProfileImage
+        src={`https://gravatar.com/avatar/${room.otherUserId}?d=identicon`}
+        size="25px"
+      />
+      <Nickname>{room.otherUserNickname}</Nickname>
     </Container>
   );
 };
@@ -36,7 +37,7 @@ const Container = styled.div`
   ${({ theme }) => theme.color.backgroundTertiary}
 `;
 
-const Content = styled.div`
-    display: flex;
-
-`
+const Nickname = styled(Span)`
+  padding-left: 10px;
+  color: white;
+`;

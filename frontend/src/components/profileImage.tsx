@@ -3,13 +3,13 @@
 import React from "react";
 import { styled } from "styled-components";
 
-const Container = styled.img`
-  width: 30px;
+const Container = styled.img<{$size?:string}> `
+  width: ${props => props.$size || "30px"}; 
   border-radius: 50%;
 `;
 
-const ProfileImage = ({ src }: { src: string }) => {
-  return <Container src={src}></Container>;
+const ProfileImage = ({ src, size }: { src: string, size?: string }) => {
+  return <Container src={src} $size={size}></Container>;
 };
 
 export default ProfileImage;

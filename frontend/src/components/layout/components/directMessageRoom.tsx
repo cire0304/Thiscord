@@ -1,37 +1,21 @@
 import { useEffect, useState } from "react";
 import { css, styled } from "styled-components";
 import Profile from "../../../assets/images/discodeProfile.jpg";
-import RoomAPI from "../../../api/roomAPI";
+import RoomAPI, { DmRoom } from "../../../api/roomAPI";
 import Span from "../../span";
 import ProfileImage from "../../profileImage";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentChatRoomId } from "../../../store";
 import { useNavigate } from "react-router-dom";
 
-
-async function exitRoom(roomId: number) {
-  const res = await RoomAPI.exitRoom(roomId);
-  if (res.status === 200) {
-    window.location.reload();
-  } else {
-    alert(res.data);
-  }
-}
-
-export default function DirectMessageRoom({
-  nickname,
-  roomId,
-}: {
-  nickname: string;
-  roomId: number;
-}) {
+export default function DirectMessageRoom({ room }: { room: DmRoom }) {
   const [deleteButtonVisible, setDeleteButtonVisible] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const changeChatRoom = (roomId: number) => {
-    dispatch(setCurrentChatRoomId(roomId));
-    navigate(`/workspace/rooms/${roomId}`)
+  const changeChatRoom = (room: DmRoom) => {
+    dispatch(setCurrentChatRoomId(room));
+    navigate(`/workspace/rooms/${room.roomId}`);
   };
 
   const chatRoom = useSelector((state: any) => state.chatRoom);
@@ -41,19 +25,30 @@ export default function DirectMessageRoom({
       <OuterWrapper
         onMouseOver={() => setDeleteButtonVisible(true)}
         onMouseLeave={() => setDeleteButtonVisible(false)}
-        onClick={() => changeChatRoom(roomId)}
-        $active={chatRoom.currentChatRoom.id === roomId}
+        onClick={() => changeChatRoom(room)}
+        $active={chatRoom.currentChatRoom.roomId === room.roomId}
       >
-        <ProfileImage src={Profile} />
+        <ProfileImage
+          src={`https://gravatar.com/avatar/${room.otherUserId}?d=identicon`}
+        />
         <InfoWrapper>
-          <Nickname>{nickname}</Nickname>
+          <Nickname>{room.otherUserNickname}</Nickname>
         </InfoWrapper>
         {deleteButtonVisible && (
-          <Button onClick={() => exitRoom(roomId)}>X</Button>
+          <Button onClick={() => exitRoom(room.roomId)}>X</Button>
         )}
       </OuterWrapper>
     </Container>
   );
+}
+
+async function exitRoom(roomId: number) {
+  const res = await RoomAPI.exitRoom(roomId);
+  if (res.status === 200) {
+    window.location.reload();
+  } else {
+    alert(res.data);
+  }
 }
 
 const Container = styled.div`

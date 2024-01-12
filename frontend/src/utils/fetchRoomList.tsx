@@ -11,7 +11,7 @@ export default function FetchRoomList({ children }: { children: ReactNode }) {
     const fetchRoomList = async () => {
       const res = await RoomAPI.getRoomList();
 
-      // Is this rigth way to use redux?
+      // FIXME: Is this rigth way to use redux?
       // replace with another way like socket.io
       dispatch(setRoomInfoState(res.data));
     };

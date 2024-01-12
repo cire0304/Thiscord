@@ -4,7 +4,7 @@ import { GetRoomListResponse } from "../../api/roomAPI";
 // below code is not complete yet.
 // Group Room info is not included.
 const initialState: GetRoomListResponse = {
-  dmRooms: [],
+  rooms: [],
 };
 
 const roomSlice = createSlice({
@@ -15,10 +15,10 @@ const roomSlice = createSlice({
       state,
       action: { payload: GetRoomListResponse; type: string }
     ) {
-      state.dmRooms = [];
+      state.rooms = [];
 
-      action.payload.dmRooms.forEach((dmRoom) => {
-        state.dmRooms.push(dmRoom);
+      action.payload.rooms.forEach((dmRoom) => {
+        state.rooms.push(dmRoom);
       });
     },
   },
