@@ -28,18 +28,6 @@ const getUserInfo = async () => {
   return await axiosInstance.get<UserInfo>("/users/me");
 };
 
-// Deprecated
-const getUserDetailInfo = async () => {
-  return await axiosInstance.get<{
-    id: number;
-    email: string;
-    nickname: string;
-    userCode: string;
-    introduction: string;
-    createdAt: string;
-  }>("/users/me/detail");
-};
-
 const updateUserInfo = async (nickname: string, introduction: string) => {
   const data = {
     nickname,
@@ -52,7 +40,6 @@ const UserAPI = {
   registerUser,
   login,
   getUserInfo,
-  getUserDetailInfo,
   updateUserInfo
 };
 
