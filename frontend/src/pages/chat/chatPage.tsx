@@ -23,7 +23,7 @@ export default function ChatPage() {
       setRoomUser(res.data);
     };
     fetchRoomUser();
-  }, []);
+  }, [room]);
 
   return (
     <Container>
@@ -43,9 +43,7 @@ export default function ChatPage() {
           </Profile>
         </Header>
 
-        <Body>
-
-        </Body>
+        <Body></Body>
         <Footer>
           <MessageInputTextarea nickname={roomUser?.nickname} />
         </Footer>
