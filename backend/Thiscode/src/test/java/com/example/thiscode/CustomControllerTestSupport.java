@@ -1,11 +1,11 @@
 package com.example.thiscode;
 
 import com.example.thiscode.config.SecurityConfig;
-import com.example.thiscode.core.user.entity.User;
-import com.example.thiscode.core.user.repository.FriendRepository;
-import com.example.thiscode.core.user.repository.UserRepository;
-import com.example.thiscode.core.user.service.FriendService;
-import com.example.thiscode.core.user.service.UserService;
+import com.example.thiscode.domain.user.entity.User;
+import com.example.thiscode.domain.user.repository.FriendRepository;
+import com.example.thiscode.domain.user.repository.UserRepository;
+import com.example.thiscode.domain.user.service.FriendService;
+import com.example.thiscode.domain.user.service.UserService;
 import com.example.thiscode.security.ajax.AjaxAuthenticationFailureHandler;
 import com.example.thiscode.security.ajax.AjaxAuthenticationProvider;
 import com.example.thiscode.security.ajax.AjaxAuthenticationSuccessHandler;

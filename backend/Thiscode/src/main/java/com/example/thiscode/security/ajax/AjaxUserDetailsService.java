@@ -1,7 +1,7 @@
 package com.example.thiscode.security.ajax;
 
-import com.example.thiscode.core.user.repository.UserRepository;
-import com.example.thiscode.core.user.entity.User;
+import com.example.thiscode.domain.user.repository.UserRepository;
+import com.example.thiscode.domain.user.entity.User;
 import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.model.ProviderUser;
 import lombok.RequiredArgsConstructor;

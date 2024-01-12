@@ -1,6 +1,6 @@
 package com.example.thiscode.security.model;
 
-import com.example.thiscode.core.user.entity.User;
+import com.example.thiscode.domain.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
