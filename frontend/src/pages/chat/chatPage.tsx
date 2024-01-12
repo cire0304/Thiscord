@@ -5,14 +5,17 @@ import ProfileImage from "../../components/profileImage";
 import Span from "../../components/span";
 import { useSelector } from "react-redux";
 import RoomAPI, { DmRoom, RoomUser } from "../../api/roomAPI";
+import MessageInputTextarea from "./components/MessageForm";
 
 export default function ChatPage() {
-  const room = useSelector((state: any) => state.chatRoom.currentChatRoom) as DmRoom;
+  const room = useSelector(
+    (state: any) => state.chatRoom.currentChatRoom
+  ) as DmRoom;
   const [roomUser, setRoomUser] = useState<RoomUser>();
-  
+
   useEffect(() => {
     const fetchRoomUser = async () => {
-      const res = await RoomAPI.getDmRoomUser(room.roomId, room.otherUserId)
+      const res = await RoomAPI.getDmRoomUser(room.roomId, room.otherUserId);
       if (res.status !== 200) {
         alert(res.data);
         return;
@@ -20,7 +23,7 @@ export default function ChatPage() {
       setRoomUser(res.data);
     };
     fetchRoomUser();
-  });
+  }, []);
 
   return (
     <Container>
@@ -40,7 +43,12 @@ export default function ChatPage() {
           </Profile>
         </Header>
 
-        <Body></Body>
+        <Body>
+
+        </Body>
+        <Footer>
+          <MessageInputTextarea nickname={roomUser?.nickname} />
+        </Footer>
       </Content>
     </Container>
   );
@@ -49,9 +57,13 @@ export default function ChatPage() {
 // Below code is duplicated from src/pages/friend/friendPage.tsx:
 const Container = styled.div`
   width: 800px;
-  height: auto;
-
+  height: 100%;
   border-right: 1px solid #404147;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 
   ${({ theme }) => theme.color.backgroundTertiary}
 `;
@@ -59,6 +71,13 @@ const Container = styled.div`
 const Content = styled.div`
   width: 100%;
   height: auto;
+
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 const Header = styled.div`
@@ -70,6 +89,19 @@ const Header = styled.div`
   border-bottom: 1px solid #3a3a3d;
 
   ${({ theme }) => theme.color.backgroundTertiary};
+`;
+
+const Body = styled.div`
+  padding: 20px;
+  width: 100%;
+  flex-grow: 1;
+  background-color: white;
+`;
+
+const Footer = styled.div`
+  padding: 20px;
+  width: 100%;
+  height: fit-content;
 `;
 
 // i think below code might be converted to component
@@ -99,9 +131,3 @@ const Description = styled(Span)`
   ${({ theme }) => theme.color.secondary};
 `;
 // ===================================================
-
-const Body = styled.div`
-  padding: 20px;
-  width: 100%;
-  height: 100%;
-`;

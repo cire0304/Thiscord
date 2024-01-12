@@ -8,7 +8,6 @@ import Span from "../../../components/span";
 import { DmRoom } from "../../../api/roomAPI";
 
 const Nav = ({ room }: { room: DmRoom }) => {
-
   // TODO: status user info code would be here
 
   return (
@@ -25,6 +24,7 @@ const Nav = ({ room }: { room: DmRoom }) => {
 export default Nav;
 
 const Container = styled.div`
+  width: 100%;
   height: 50px;
   padding: 10px;
 
@@ -32,7 +32,6 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
 
-  flex-grow: 1;
   border-bottom: 1px solid ${({ theme }) => theme.color.border};
   ${({ theme }) => theme.color.backgroundTertiary}
 `;
