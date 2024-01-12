@@ -10,10 +10,11 @@ import java.util.List;
 @NoArgsConstructor
 public class FindRoomsResponse {
 
-    private List<DmRoomDTO> roomDmInfos;
+    // TODO: I'm going to append GroupRoomDTO class here not just DmRoomDTO
+    private List<DmRoomDTO> rooms;
 
-    public FindRoomsResponse(List<DmRoomDTO> roomDmInfos) {
-        this.roomDmInfos = roomDmInfos;
+    public FindRoomsResponse(List<DmRoomDTO> rooms) {
+        this.rooms = rooms;
     }
 
 }
