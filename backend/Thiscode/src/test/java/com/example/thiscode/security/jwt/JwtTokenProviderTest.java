@@ -1,7 +1,7 @@
 package com.example.thiscode.security.jwt;
 
-import com.example.thiscode.core.user.repository.UserRepository;
-import com.example.thiscode.core.user.entity.User;
+import com.example.thiscode.domain.user.repository.UserRepository;
+import com.example.thiscode.domain.user.entity.User;
 import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.model.ProviderUser;
 import org.junit.jupiter.api.DisplayName;
