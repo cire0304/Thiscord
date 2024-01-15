@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,7 @@ public class ChatService {
         Map<Long, UserInfo> userMap = userClient.getUserMap(userIds);
 
         return messages.stream()
+                .sorted(Comparator.comparing(ChatMessage::getSentDateTime))
                 .map(message -> {
                     UserInfo userInfo = userMap.get(message.getSenderId());
                     MessageInfo messageInfo = new MessageInfo(message.getRoomId(), message.getContent(), message.getMessageType(), message.getSentDateTime());
