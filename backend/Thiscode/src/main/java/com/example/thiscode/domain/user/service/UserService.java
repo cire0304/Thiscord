@@ -10,6 +10,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -41,6 +43,14 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
         user.updateNicknameAndIntroduction(nickname, introduction);
         return user;
+    }
+
+    @Transactional
+    public List<UserDTO> getUserInfos(List<Long> userIds) {
+         return userRepository.findAllById(userIds)
+                .stream()
+                .map(user -> new UserDTO(user.getId(), user.getEmail(), user.getNickname(), user.getUserCode(), user.getIntroduction(), user.getCreatedAt()))
+                .toList();
     }
 
 }

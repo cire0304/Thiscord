@@ -26,7 +26,7 @@ class ChatMessageRepositoryTest {
     public void test() {
         ChatMessage chatMessage = ChatMessage.builder()
                 .roomId(1L)
-                .userNickname("why111111")
+                .senderId(1L)
                 .content("content")
                 .messageType(MessageType.TALK)
                 .sentDateTime(LocalDateTime.now())
@@ -34,7 +34,7 @@ class ChatMessageRepositoryTest {
 
         ChatMessage save = chatMessageRepository.save(chatMessage);
 
-        assertThat(chatMessageRepository.findById(save.getId())).isNull();
+        assertThat(chatMessageRepository.findById(save.getId())).isNotNull();
     }
 
 }

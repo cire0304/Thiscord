@@ -2,6 +2,7 @@ package com.example.thiscode.domain.user.controller;
 
 import com.example.thiscode.domain.user.controller.request.SignUpRequest;
 import com.example.thiscode.domain.user.controller.request.UpdateUserRequest;
+import com.example.thiscode.domain.user.controller.response.UserInfosResponse;
 import com.example.thiscode.domain.user.entity.User;
 import com.example.thiscode.domain.user.service.UserService;
 import com.example.thiscode.domain.user.service.dto.UserDTO;
@@ -20,6 +21,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,12 +39,19 @@ public class UserController {
     }
 
     @GetMapping("/users/me")
-    public ResponseEntity<JwtSubject> getUserInfo(@AuthenticationPrincipal JwtSubject subject) {
+    public ResponseEntity<JwtSubject> getUserInfos(@AuthenticationPrincipal JwtSubject subject) {
         return ResponseEntity.ok(subject);
     }
 
+    // TODO: Write test code
+    @PostMapping("/users")
+    public ResponseEntity<UserInfosResponse> getUserInfos(@RequestBody List<Long> userId) {
+        UserInfosResponse response = new UserInfosResponse(userService.getUserInfos(userId));
+        return ResponseEntity.ok(response);
+    }
+
     /**
-     * Use {@link #getUserInfo(JwtSubject)} instead.
+     * Use {@link #getUserInfos(JwtSubject)} instead.
      */
     @GetMapping("/users/me/detail")
     @Deprecated(since = "2021-08-01", forRemoval = true)

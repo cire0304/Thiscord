@@ -34,6 +34,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    // Webclient
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -49,7 +52,7 @@ dependencies {
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     //embedded-redis
-    compileOnly 'it.ozimov:embedded-redis:0.7.2'
+    implementation 'it.ozimov:embedded-redis:0.7.2'
 
     // Lombok
     annotationProcessor 'org.projectlombok:lombok'
