@@ -1,7 +1,7 @@
-import { useState, useRef, ChangeEvent, KeyboardEvent } from "react";
+import { useState, useRef, ChangeEvent, KeyboardEvent, RefObject } from "react";
 import { styled } from "styled-components";
 
-function MessageInputTextarea({ nickname }: { nickname?: string }) {
+function MessageInputTextarea({ nickname, onMessageSend }: { nickname?: string, onMessageSend: (message: string) => void }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleResizeHeight = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -12,11 +12,11 @@ function MessageInputTextarea({ nickname }: { nickname?: string }) {
   };
 
   const handleSubmit = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key !== "Enter") return;
-    e.preventDefault();
+    if (e.code !== "Enter") return;
+    if (!e.currentTarget.value.trim()) return;
     if (textareaRef.current) {
-      // 매세지 보내는 로직 작성
-      alert(e.currentTarget.value);
+      e.preventDefault();
+      onMessageSend(textareaRef.current.value);
       textareaRef.current.value = "";
     }
   };
@@ -26,7 +26,7 @@ function MessageInputTextarea({ nickname }: { nickname?: string }) {
       <MessageTextArea
         rows={1}
         onChange={(e) => handleResizeHeight(e)}
-        onKeyDown={(e) => handleSubmit(e)}
+        onKeyPress={handleSubmit}
         placeholder={`${nickname}에게 메세지 보내기`}
         ref={textareaRef}
       />

@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 
 const Container = styled.img<{$size?:string}> `
   width: ${props => props.$size || "30px"}; 
+  height: ${props => props.$size || "30px"}; 
   border-radius: 50%;
 `;
 

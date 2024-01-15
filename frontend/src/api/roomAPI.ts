@@ -1,10 +1,11 @@
 import axiosInstance from "./axios";
 
-// it would be better to have a type for the room in the reposnse.
+// TODO: it would be better to have a type for the room in the reposnse.
 export interface DmRoom {
   roomId: number;
   otherUserId: number;
   otherUserNickname: string;
+  isLoading: boolean;
 }
 
 export interface GetRoomListResponse {

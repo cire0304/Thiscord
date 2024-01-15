@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { styled } from "styled-components";
 import Nav from "./components/nav";
 import ProfileImage from "../../components/profileImage";
@@ -7,14 +7,27 @@ import { useSelector } from "react-redux";
 import RoomAPI, { DmRoom, RoomUser } from "../../api/roomAPI";
 import MessageInputTextarea from "./components/MessageForm";
 
+import SockJS from "sockjs-client";
+import { Stomp, CompatClient } from "@stomp/stompjs";
+import ChatAPI, { ChatMessageHitory } from "../../api/ChatAPI";
+import { useNavigate } from "react-router-dom";
+import MessageHistory from "./components/MessageHistory";
+import { UserInfo } from "../../api/userAPI";
+
 export default function ChatPage() {
   const room = useSelector(
     (state: any) => state.chatRoom.currentChatRoom
   ) as DmRoom;
   const [roomUser, setRoomUser] = useState<RoomUser>();
+  const user = useSelector((state: any) => state.user) as UserInfo;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRoomUser = async () => {
+      if (room.isLoading === false) {
+        navigate("/workspace/me");
+        return;
+      }
       const res = await RoomAPI.getDmRoomUser(room.roomId, room.otherUserId);
       if (res.status !== 200) {
         alert(res.data);
@@ -24,6 +37,54 @@ export default function ChatPage() {
     };
     fetchRoomUser();
   }, [room]);
+
+  //================================================================
+  const [chatHistory, setChatHistory] = useState<ChatMessageHitory[]>([]);
+  const client = useRef<CompatClient | null>(null);
+
+  const connectHandler = () => {
+    const socket = new SockJS("http://localhost:8080/ws");
+    client.current = Stomp.over(socket);
+
+    // SockJS 연결
+    client.current.connect({}, () => {
+      // 채팅방 입장
+      ChatAPI.getChatHistories(room.roomId).then((res) => {
+        res.data && setChatHistory(res.data);
+      });
+
+      // 채팅방 구독
+      client.current?.subscribe(`/sub/chat/rooms/${room.roomId}`, (message) => {
+        message.body &&
+          setChatHistory((prev) => [...prev, JSON.parse(message.body)]);
+      });
+    });
+  };
+
+  useEffect(() => {
+    connectHandler();
+    return () => {
+      client.current?.deactivate();
+    };
+  }, []);
+
+  const sendHandler = (message: string) => {
+    if (client.current && client.current.connected) {
+      client.current.send(
+        `/pub/chat/rooms`,
+        {},
+        JSON.stringify({
+          roomId: room.roomId,
+          senderId: user.id,
+          content: message,
+          messageType: "TALK",
+          sentDateTime: new Date().toISOString(),
+        })
+      );
+    }
+  };
+
+  //================================================================
 
   return (
     <Container>
@@ -37,22 +98,26 @@ export default function ChatPage() {
             />
             <Nickname>{roomUser?.nickname}</Nickname>
             <NicknameAndCode>{`${roomUser?.nickname}#${roomUser?.userCode}`}</NicknameAndCode>
-            <Description>
-              {`${roomUser?.nickname}님과 다이렉트 메세지의 첫 부분이예요.`}
-            </Description>
           </Profile>
         </Header>
 
-        <Body></Body>
-        <Footer>
-          <MessageInputTextarea nickname={roomUser?.nickname} />
-        </Footer>
+        <Body>
+          {/* 스타일 고쳐라 */}
+          <MessageHistory chatHistories={chatHistory}></MessageHistory>
+
+         
+        </Body>
       </Content>
+      <Footer>
+        <MessageInputTextarea
+          onMessageSend={sendHandler}
+          nickname={roomUser?.nickname}
+        />
+      </Footer>
     </Container>
   );
 }
 
-// Below code is duplicated from src/pages/friend/friendPage.tsx:
 const Container = styled.div`
   width: 800px;
   height: 100%;
@@ -63,19 +128,27 @@ const Container = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
 
+  position: relative;
+
   ${({ theme }) => theme.color.backgroundTertiary}
 `;
 
 const Content = styled.div`
   width: 100%;
-  height: auto;
+
+  margin-bottom: 60px;
 
   flex-grow: 1;
-
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+
+  position: relative;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Header = styled.div`
@@ -83,16 +156,14 @@ const Header = styled.div`
   width: 100%;
 
   padding: 10px;
-
   border-bottom: 1px solid #3a3a3d;
-
   ${({ theme }) => theme.color.backgroundTertiary};
 `;
 
 const Body = styled.div`
-  padding: 20px;
   width: 100%;
   flex-grow: 1;
+
   background-color: white;
 `;
 
@@ -100,6 +171,10 @@ const Footer = styled.div`
   padding: 20px;
   width: 100%;
   height: fit-content;
+
+  position: absolute;
+  bottom: 0;
+  ${({ theme }) => theme.color.backgroundTertiary};
 `;
 
 // i think below code might be converted to component

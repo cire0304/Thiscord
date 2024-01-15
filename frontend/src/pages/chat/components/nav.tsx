@@ -26,6 +26,7 @@ export default Nav;
 const Container = styled.div`
   width: 100%;
   height: 50px;
+  min-height: 50px;
   padding: 10px;
 
   display: flex;

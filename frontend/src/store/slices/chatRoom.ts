@@ -5,13 +5,14 @@ interface ChatRoomState {
   currentChatRoom: DmRoom;
 }
 
-// below code is not complete yet.
+// TODO:  below code is not complete yet.
 // Group Room info is not included.
 const initialState:ChatRoomState = {
     currentChatRoom: {
         roomId: 0,
         otherUserId: 0,
         otherUserNickname: "",
+        isLoading: false,
     }
 };
 
@@ -23,7 +24,7 @@ const chatRoomSlice = createSlice({
       state,
       action: { payload: DmRoom; type: string }
     ) {
-      state.currentChatRoom = action.payload;
+      state.currentChatRoom = {...action.payload, isLoading: true};
     },
   },
 });
