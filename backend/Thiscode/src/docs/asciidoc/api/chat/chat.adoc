@@ -1,0 +1,5 @@
+== 채팅 메세지 내역 조회
+=== 채팅 메세지 내역 조회 요청
+include::{snippets}/chat-message-get/http-request.adoc[]
+=== 채팅 메세지 내역 조회 응답
+include::{snippets}/chat-message-get/response-body.adoc[]

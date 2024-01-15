@@ -5,7 +5,12 @@
 include::{snippets}/friend-get/http-request.adoc[]
 === 친구 목록 조회 응답
 include::{snippets}/friend-get/response-body.adoc[]
-include::{snippets}/friend-get/response-fields.adoc[]
+
+== 친구 요청 목록 조회
+=== 친구 요청 목록 조회 요청
+include::{snippets}/friend-request-get/http-request.adoc[]
+=== 친구 요청 목록 조회 응답
+include::{snippets}/friend-request-get/response-body.adoc[]
 
 == 친구 요청
 === 친구 요청 요청

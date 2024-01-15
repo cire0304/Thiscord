@@ -6,6 +6,12 @@ include::{snippets}/room-get/http-request.adoc[]
 === 채팅방 조회 응답
 include::{snippets}/room-get/response-body.adoc[]
 
+== 채팅방 유저 조회
+=== 채팅방 유저 조회 요청
+include::{snippets}/room-user-get/http-request.adoc[]
+=== 채팅방 유저 조회 응답
+include::{snippets}/room-user-get/response-body.adoc[]
+
 == DM방 생성
 === DM방 생성 요청
 include::{snippets}/room-create/http-request.adoc[]

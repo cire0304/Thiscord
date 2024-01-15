@@ -11,4 +11,5 @@ endif::[]
 
 include::api/user/user.adoc[]
 include::api/user/friend.adoc[]
-
+include::api/commutity/room.adoc[]
+include::api/chat/chat.adoc[]
