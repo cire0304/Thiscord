@@ -5,7 +5,6 @@ import com.example.thiscode.domain.commutity.entity.RoomUser;
 import com.example.thiscode.domain.commutity.repository.RoomRepository;
 import com.example.thiscode.domain.commutity.repository.RoomUserRepository;
 import com.example.thiscode.domain.commutity.dto.DmRoomDTO;
-import com.example.thiscode.domain.commutity.entity.type.RoomType;
 import com.example.thiscode.domain.commutity.dto.RoomUserDTO;
 import com.example.thiscode.domain.user.entity.User;
 import com.example.thiscode.domain.user.repository.UserRepository;
@@ -80,33 +79,49 @@ public class RoomService {
     }
 
     // TODO: consider processing group room later
-    // TODO: consider performance later
     @Transactional
     public List<DmRoomDTO> getRoomList(Long userId) {
-        // TODO: check if below findAllByUserId make N+1 problem
-        List<Long> roomIds = roomUserRepository.findAllByUserId(userId).stream()
+        List<Long> roomIdsJoinedRequestUser = roomUserRepository.findAllByUserId(userId).stream()
                 .filter(RoomUser::isJoin)
                 .map(roomUser -> roomUser.getRoom().getId())
                 .toList();
 
-        // TODO: check if below findAllById use where in query
-        List<Room> rooms = roomRepository.findAllById(roomIds);
-        List<DmRoomDTO> roomDmDTOs = new ArrayList<>();
-        for (Room room : rooms) {
-            if (room.getType() != RoomType.DM) continue;
+        // <RoomId, List<RoomUser>>
+        Map<Long, List<RoomUser>> collect = roomUserRepository.findAllByRoomIdIn(roomIdsJoinedRequestUser).stream()
+                .filter(roomUser -> !Objects.equals(roomUser.getUserId(), userId))
+                .collect(Collectors.groupingBy(roomUser -> roomUser.getRoom().getId()));
 
-            // TODO: refactor this code as using batch query
-            RoomUser roomUser1 = room.getRoomUsers().stream()
-                    .filter(roomUser -> !Objects.equals(roomUser.getUserId(), userId))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("방에 참여한 사용자가 아닙니다."));
-            User user = userRepository.findById(roomUser1.getUserId())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-            roomDmDTOs.add(new DmRoomDTO(room.getId(), user.getId(), user.getNickname()));
-        }
+        List<Long> userIds = collect.values().stream()
+                .flatMap(Collection::stream)
+                .map(RoomUser::getUserId)
+                .toList();
 
-        return roomDmDTOs;
+        // <UserId, User>
+        Map<Long, User> usersMap = userRepository.findAllById(userIds)
+                .stream()
+                .map(user -> Map.entry(user.getId(), user))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        return collect.entrySet().stream()
+                // <RoomId, List<RoomUser>> => <RoomId, List<User>>
+                .map(entry -> {
+                    Long roomId = entry.getKey();
+                    List<User> users = entry.getValue().stream()
+                            .map(roomUser -> usersMap.get(roomUser.getUserId()))
+                            .toList();
+                    return Map.entry(roomId, users);
+                })
+                // <RoomId, List<User>> => List<DmRoomDTO>
+                .map(entry -> {
+                    Long roomId = entry.getKey();
+                    return entry.getValue().stream()
+                            .map(user -> new DmRoomDTO(roomId, user.getId(), user.getNickname()))
+                            .toList();
+                })
+                .flatMap(Collection::stream)
+                .toList();
     }
+
 
     @Transactional
     public void exitDmRoom(Long userId, Long roomId) {
@@ -118,6 +133,8 @@ public class RoomService {
         room.onUserExit();
         if (room.isEmptyMember()) {
             roomRepository.delete(room);
+
+            // TODO: Do i really need to use deleteAll??
             roomUserRepository.deleteAll(roomUserRepository.findAllByRoomId(roomId));
         }
         // TODO: if you develop state server later, you should send message to other user that this user exit room here

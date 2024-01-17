@@ -4,6 +4,7 @@ import com.example.thiscode.domain.common.BaseEntity;
 import com.example.thiscode.domain.commutity.entity.type.RoomType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Room extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RoomUser> roomUsers = new ArrayList<>();
 

@@ -4,6 +4,7 @@ import com.example.thiscode.domain.common.BaseEntity;
 import com.example.thiscode.domain.commutity.entity.type.RoomUserState;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 
