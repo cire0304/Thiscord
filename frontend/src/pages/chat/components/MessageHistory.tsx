@@ -3,6 +3,7 @@ import { ChatMessageHitory } from "../../../api/ChatAPI";
 import ProfileImage from "../../../components/profileImage";
 import Span from "../../../components/span";
 import { convertDateFormat } from "../../../utils/Dates";
+import { useEffect, useRef } from "react";
 
 
 function MessageHistory({
@@ -10,6 +11,12 @@ function MessageHistory({
 }: {
   chatHistories?: ChatMessageHitory[];
 }) {
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  });
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   return (
     <div>
       {chatHistories &&
@@ -49,6 +56,8 @@ function MessageHistory({
             </div>
           </div>
         ))}
+
+        <div ref={messagesEndRef}></div>
     </div>
   );
 }
