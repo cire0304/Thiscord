@@ -1,11 +1,11 @@
 package com.example.thiscode.domain.chat.service;
 
 import com.example.thiscode.domain.chat.client.UserClient;
-import com.example.thiscode.domain.chat.client.dto.UserInfo;
+import com.example.thiscode.domain.chat.dto.UserInfoDTO;
 import com.example.thiscode.domain.chat.entity.ChatMessage;
 import com.example.thiscode.domain.chat.repository.ChatMessageRepository;
-import com.example.thiscode.domain.chat.service.dto.ChatMessageDTO;
-import com.example.thiscode.domain.chat.service.dto.MessageInfo;
+import com.example.thiscode.domain.chat.dto.ChatMessageDTO;
+import com.example.thiscode.domain.chat.dto.MessageInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -29,9 +29,9 @@ public class MessageSender {
     }
 
     private ChatMessageDTO convertToChatMessageDTO(ChatMessage message) {
-        UserInfo userInfo = userClient.getUserMap(List.of(message.getSenderId()))
+        UserInfoDTO userInfo = userClient.getUserMap(List.of(message.getSenderId()))
                 .get(message.getSenderId());
-        MessageInfo messageInfo = new MessageInfo(message.getRoomId(), message.getContent(), message.getMessageType(), message.getSentDateTime());
+        MessageInfoDTO messageInfo = new MessageInfoDTO(message.getRoomId(), message.getContent(), message.getMessageType(), message.getSentDateTime());
         return new ChatMessageDTO(messageInfo, userInfo);
     }
 

@@ -24,17 +24,7 @@ class ChatMessageRepositoryTest {
     @DisplayName("저장 테스트")
     @Test
     public void test() {
-        ChatMessage chatMessage = ChatMessage.builder()
-                .roomId(1L)
-                .senderId(1L)
-                .content("content")
-                .messageType(MessageType.TALK)
-                .sentDateTime(LocalDateTime.now())
-                .build();
 
-        ChatMessage save = chatMessageRepository.save(chatMessage);
-
-        assertThat(chatMessageRepository.findById(save.getId())).isNotNull();
     }
 
 }

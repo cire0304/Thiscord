@@ -1,11 +1,11 @@
 package com.example.thiscode.domain.chat.service;
 
 import com.example.thiscode.domain.chat.client.UserClient;
-import com.example.thiscode.domain.chat.client.dto.UserInfo;
+import com.example.thiscode.domain.chat.dto.UserInfoDTO;
 import com.example.thiscode.domain.chat.entity.ChatMessage;
 import com.example.thiscode.domain.chat.repository.ChatMessageRepository;
-import com.example.thiscode.domain.chat.service.dto.ChatMessageDTO;
-import com.example.thiscode.domain.chat.service.dto.MessageInfo;
+import com.example.thiscode.domain.chat.dto.ChatMessageDTO;
+import com.example.thiscode.domain.chat.dto.MessageInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,13 +33,13 @@ public class ChatService {
                 .toList();
 
         // TODO: check if user not found
-        Map<Long, UserInfo> userMap = userClient.getUserMap(userIds);
+        Map<Long, UserInfoDTO> userMap = userClient.getUserMap(userIds);
 
         return messages.stream()
                 .sorted(Comparator.comparing(ChatMessage::getSentDateTime))
                 .map(message -> {
-                    UserInfo userInfo = userMap.get(message.getSenderId());
-                    MessageInfo messageInfo = new MessageInfo(message.getRoomId(), message.getContent(), message.getMessageType(), message.getSentDateTime());
+                    UserInfoDTO userInfo = userMap.get(message.getSenderId());
+                    MessageInfoDTO messageInfo = new MessageInfoDTO(message.getRoomId(), message.getContent(), message.getMessageType(), message.getSentDateTime());
                     return new ChatMessageDTO(messageInfo, userInfo);
                 }).toList();
     }

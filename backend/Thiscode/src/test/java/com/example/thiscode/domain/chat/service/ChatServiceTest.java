@@ -1,13 +1,12 @@
 package com.example.thiscode.domain.chat.service;
 
 import com.example.thiscode.domain.chat.client.UserClient;
-import com.example.thiscode.domain.chat.client.dto.UserInfo;
+import com.example.thiscode.domain.chat.dto.UserInfoDTO;
 import com.example.thiscode.domain.chat.entity.ChatMessage;
 import com.example.thiscode.domain.chat.entity.type.MessageType;
 import com.example.thiscode.domain.chat.repository.ChatMessageRepository;
-import com.example.thiscode.domain.chat.service.dto.ChatMessageDTO;
+import com.example.thiscode.domain.chat.dto.ChatMessageDTO;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,24 +56,24 @@ class ChatServiceTest {
         LocalDateTime timeB = timeA.plusMinutes(1L);
         Long senderIdB = 2L;
 
-        ChatMessage chatMessageA = ChatMessage.builder().roomId(roomId).senderId(senderIdA).content("First Chat").messageType(MessageType.TALK).sentDateTime(timeA).build();
-        ChatMessage chatMessageB = ChatMessage.builder().roomId(roomId).senderId(senderIdB).content("Second Chat").messageType(MessageType.TALK).sentDateTime(timeB).build();
+        ChatMessage chatMessageA = ChatMessage.builder().roomId(roomId).senderId(senderIdA).content("First Chat").messageType(MessageType.TALK).sentDateTime(timeA.toString()).build();
+        ChatMessage chatMessageB = ChatMessage.builder().roomId(roomId).senderId(senderIdB).content("Second Chat").messageType(MessageType.TALK).sentDateTime(timeB.toString()).build();
 
         chatMessageRepository.save(chatMessageA);
         chatMessageRepository.save(chatMessageB);
 
         given(userClient.getUserMap(any()))
-                .willReturn(Map.of(senderIdA, new UserInfo(senderIdA, "nicknameA",  "123456"), senderIdB, new UserInfo(senderIdB, "nicknameB", "654321")));
+                .willReturn(Map.of(senderIdA, new UserInfoDTO(senderIdA, "nicknameA",  "123456"), senderIdB, new UserInfoDTO(senderIdB, "nicknameB", "654321")));
 
         //when
         List<ChatMessageDTO> chatMessages = chatService.getChatMessages(roomId, page, size);
 
         //then
         assertThat(chatMessages).hasSize(2);
-        assertThat(chatMessages.get(0).getMessage().getContent()).isEqualTo("Second Chat");
-        assertThat(chatMessages.get(0).getUser().getNickname()).isEqualTo("nicknameB");
-        assertThat(chatMessages.get(1).getMessage().getContent()).isEqualTo("First Chat");
-        assertThat(chatMessages.get(1).getUser().getNickname()).isEqualTo("nicknameA");
+        assertThat(chatMessages.get(0).getMessage().getContent()).isEqualTo("First Chat");
+        assertThat(chatMessages.get(0).getUser().getNickname()).isEqualTo("nicknameA");
+        assertThat(chatMessages.get(1).getMessage().getContent()).isEqualTo("Second Chat");
+        assertThat(chatMessages.get(1).getUser().getNickname()).isEqualTo("nicknameB");
      }
 
 }

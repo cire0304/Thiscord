@@ -1,7 +1,7 @@
 package com.example.thiscode.domain.chat.client;
 
-import com.example.thiscode.domain.chat.client.dto.UserInfo;
-import com.example.thiscode.domain.chat.client.dto.UserInfosResponse;
+import com.example.thiscode.domain.chat.dto.UserInfoDTO;
+import com.example.thiscode.domain.chat.dto.UserInfosDTO;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,14 +32,14 @@ public class UserClient {
                 .build();
     }
 
-    public Map<Long, UserInfo> getUserMap(List<Long> userIds) {
-        UserInfosResponse response = webClient.post()
+    public Map<Long, UserInfoDTO> getUserMap(List<Long> userIds) {
+        UserInfosDTO response = webClient.post()
                 .uri(REQUEST_URI)
                 .bodyValue(userIds)
                 .retrieve()
-                .bodyToMono(UserInfosResponse.class)
+                .bodyToMono(UserInfosDTO.class)
                 .block();
-        Map<Long, UserInfo> userInfoMap = new HashMap<>();
+        Map<Long, UserInfoDTO> userInfoMap = new HashMap<>();
         response.getUserInfos().forEach(userInfo -> userInfoMap.put(userInfo.getId(), userInfo));
         return userInfoMap;
     }

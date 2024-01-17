@@ -1,4 +1,4 @@
-package com.example.thiscode.domain.chat.client.dto;
+package com.example.thiscode.domain.chat.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfosResponse {
+public class UserInfosDTO {
 
-    List<UserInfo> userInfos;
+    List<UserInfoDTO> userInfos;
 
 }
