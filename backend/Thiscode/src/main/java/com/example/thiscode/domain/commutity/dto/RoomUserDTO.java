@@ -1,4 +1,4 @@
-package com.example.thiscode.domain.commutity.service.dto;
+package com.example.thiscode.domain.commutity.dto;
 
 import com.example.thiscode.domain.commutity.entity.type.RoomUserState;
 import lombok.*;

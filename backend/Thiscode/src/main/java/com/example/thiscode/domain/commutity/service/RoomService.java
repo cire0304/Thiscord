@@ -4,20 +4,16 @@ import com.example.thiscode.domain.commutity.entity.Room;
 import com.example.thiscode.domain.commutity.entity.RoomUser;
 import com.example.thiscode.domain.commutity.repository.RoomRepository;
 import com.example.thiscode.domain.commutity.repository.RoomUserRepository;
-import com.example.thiscode.domain.commutity.service.dto.DmRoomDTO;
+import com.example.thiscode.domain.commutity.dto.DmRoomDTO;
 import com.example.thiscode.domain.commutity.entity.type.RoomType;
-import com.example.thiscode.domain.commutity.service.dto.RoomUserDTO;
+import com.example.thiscode.domain.commutity.dto.RoomUserDTO;
 import com.example.thiscode.domain.user.entity.User;
 import com.example.thiscode.domain.user.repository.UserRepository;
-import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,29 +33,45 @@ public class RoomService {
             throw new IllegalArgumentException("자기 자신과의 방을 만들 수 없습니다.");
         }
 
-        List<Long> roomIdsOfSender = roomUserRepository.findAllByUserId(senderId).stream()
-                .map(roomUser -> roomUser.getRoom().getId())
-                .toList();
+        List<RoomUser> roomsOfSender = roomUserRepository.findAllByUserId(senderId);
+        List<RoomUser> roomsOfReceiver = roomUserRepository.findAllByUserId(receiverId);
 
-        Set<Long> roomsIdsOfReceiver = roomUserRepository.findAllByUserId(receiverId).stream()
-                .map(roomUser -> roomUser.getRoom().getId())
-                .collect(Collectors.toSet());
-
-        for (Long roomIdOfSender : roomIdsOfSender) {
-            if (roomsIdsOfReceiver.contains(roomIdOfSender)) {
-                // TODO: in case of user exited and re-entered room, this code cause bug
-                throw new EntityExistsException("이미 상대방과의 방이 존재합니다.");
-            }
+        Optional<RoomUser> roomUserOptional = getRoomUserBetweenSenderAndReceiver(roomsOfSender, roomsOfReceiver);
+        if (roomUserOptional.isPresent()) {
+            RoomUser roomUser = roomUserOptional.get();
+            roomUser.join();
+            return roomUser.getRoom();
         }
 
+        return createRoom(senderId, receiverId);
+    }
+
+    private Room createRoom(Long senderId, Long receiverId) {
         Room room = Room.createDmRoom();
         roomRepository.save(room);
-        RoomUser roomUser = new RoomUser(room, senderId);
-        RoomUser roomUser2 = new RoomUser(room, receiverId);
-        roomUserRepository.save(roomUser);
-        roomUserRepository.save(roomUser2);
-
+        RoomUser senderRoomUser = new RoomUser(room, senderId);
+        RoomUser receiverRoomUser = new RoomUser(room, receiverId);
+        roomUserRepository.save(senderRoomUser);
+        roomUserRepository.save(receiverRoomUser);
         return room;
+    }
+
+    /**
+     * return Room Entity if exist room between sender and receiver.
+     * if not exist, return Optional.empty()
+     */
+    private Optional<RoomUser> getRoomUserBetweenSenderAndReceiver(List<RoomUser> roomsOfSender, List<RoomUser> roomsOfReceiver) {
+        // TODO: check this code occur N+1 problem
+        Map<Long, RoomUser> roomUserMapOfSender = roomsOfSender.stream()
+                .map(roomUser -> Map.entry(roomUser.getRoom().getId(), roomUser))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        for (RoomUser RoomUserOfReceiver : roomsOfReceiver) {
+            Long roomId = RoomUserOfReceiver.getRoom().getId();
+            if (roomUserMapOfSender.containsKey(roomId))
+                return Optional.of(roomUserMapOfSender.get(roomId));
+        }
+        return Optional.empty();
     }
 
     // TODO: consider processing group room later

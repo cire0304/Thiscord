@@ -1,4 +1,4 @@
-package com.example.thiscode.domain.commutity.service.dto;
+package com.example.thiscode.domain.commutity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

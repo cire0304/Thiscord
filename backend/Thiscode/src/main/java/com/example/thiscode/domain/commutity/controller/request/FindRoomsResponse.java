@@ -1,6 +1,6 @@
 package com.example.thiscode.domain.commutity.controller.request;
 
-import com.example.thiscode.domain.commutity.service.dto.DmRoomDTO;
+import com.example.thiscode.domain.commutity.dto.DmRoomDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

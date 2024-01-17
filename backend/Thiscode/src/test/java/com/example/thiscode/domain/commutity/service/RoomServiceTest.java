@@ -5,8 +5,8 @@ import com.example.thiscode.domain.commutity.entity.RoomUser;
 import com.example.thiscode.domain.commutity.entity.type.RoomUserState;
 import com.example.thiscode.domain.commutity.repository.RoomRepository;
 import com.example.thiscode.domain.commutity.repository.RoomUserRepository;
-import com.example.thiscode.domain.commutity.service.dto.DmRoomDTO;
-import com.example.thiscode.domain.commutity.service.dto.RoomUserDTO;
+import com.example.thiscode.domain.commutity.dto.DmRoomDTO;
+import com.example.thiscode.domain.commutity.dto.RoomUserDTO;
 import com.example.thiscode.domain.user.entity.User;
 import com.example.thiscode.domain.user.repository.UserRepository;
 import com.example.thiscode.domain.user.service.UserService;
@@ -88,25 +88,6 @@ class RoomServiceTest {
         assertThat(roomUsers.size()).isEqualTo(2);
         assertThat(roomUsers.get(0).getUserId()).isEqualTo(senderId);
         assertThat(roomUsers.get(1).getUserId()).isEqualTo(receiverId);
-    }
-
-    @DisplayName("상대방과 DM방이 있다면, DM 방을 생성할 수 없다.")
-    @Test
-    public void createDmRoomInError() {
-        //given
-        Long senderId = sender.getId();
-        Long receiverId = receiverA.getId();
-
-        //when
-        roomService.createDmRoom(senderId, receiverId);
-
-        //then
-        assertThatThrownBy(() -> roomService.createDmRoom(senderId, receiverId))
-                .isInstanceOf(EntityExistsException.class)
-                .hasMessage("이미 상대방과의 방이 존재합니다.");
-        assertThatThrownBy(() -> roomService.createDmRoom(receiverId, senderId))
-                .isInstanceOf(EntityExistsException.class)
-                .hasMessage("이미 상대방과의 방이 존재합니다.");
     }
 
     @DisplayName("자기 자신과의 방을 생성할 수 없다.")

@@ -3,7 +3,7 @@ package com.example.thiscode.domain.commutity.controller;
 import com.example.thiscode.domain.commutity.controller.request.CreateDmRoomRequest;
 import com.example.thiscode.domain.commutity.service.RoomService;
 import com.example.thiscode.domain.commutity.controller.request.FindRoomsResponse;
-import com.example.thiscode.domain.commutity.service.dto.RoomUserDTO;
+import com.example.thiscode.domain.commutity.dto.RoomUserDTO;
 import com.example.thiscode.security.jwt.JwtSubject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

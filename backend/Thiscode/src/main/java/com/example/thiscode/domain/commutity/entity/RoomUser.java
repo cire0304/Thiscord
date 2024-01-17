@@ -46,6 +46,10 @@ public class RoomUser extends BaseEntity {
         room.addRoomUser(this);
     }
 
+    public void join() {
+        this.state = RoomUserState.JOIN;
+    }
+
     public boolean isJoin() {
         return this.state == RoomUserState.JOIN;
     }
