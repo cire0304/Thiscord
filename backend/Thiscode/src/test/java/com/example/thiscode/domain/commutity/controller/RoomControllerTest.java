@@ -74,7 +74,6 @@ class RoomControllerTest extends CustomControllerTestSupport {
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
-                .andExpect(content().string("상대방과의 새로운 방을 만들었습니다."))
                 .andDo(
                         document("room-create",
                                 preprocessRequest(prettyPrint()),

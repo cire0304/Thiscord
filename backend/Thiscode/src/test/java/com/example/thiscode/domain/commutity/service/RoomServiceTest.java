@@ -78,10 +78,10 @@ class RoomServiceTest {
         Long receiverId = receiverA.getId();
 
         //when
-        Room room = roomService.createDmRoom(senderId, receiverId);
+        DmRoomDTO dmRoom = roomService.createDmRoom(senderId, receiverId);
 
         //then
-        Room result = roomRepository.findById(room.getId())
+        Room result = roomRepository.findById(dmRoom.getRoomId())
                 .orElseThrow(IllegalArgumentException::new);
         assertThat(result).isNotNull();
         List<RoomUser> roomUsers = result.getRoomUsers();
@@ -133,8 +133,8 @@ class RoomServiceTest {
         //given
         Long senderId = sender.getId();
         Long receiverId = receiverA.getId();
-        Room room = roomService.createDmRoom(senderId, receiverId);
-        Long roomId = room.getId();
+        DmRoomDTO dmRoom = roomService.createDmRoom(senderId, receiverId);
+        Long roomId = dmRoom.getRoomId();
 
         //when
         RoomUserDTO result = roomService.findRoomUser(senderId, roomId, receiverId);
@@ -157,9 +157,9 @@ class RoomServiceTest {
         Long receiverAId = receiverA.getId();
         Long receiverBId = receiverB.getId();
         roomService.createDmRoom(senderId, receiverAId);
-        Room exitRoom = roomService.createDmRoom(senderId, receiverBId);
+        DmRoomDTO dmRoom = roomService.createDmRoom(senderId, receiverBId);
 
-        roomService.exitDmRoom(senderId, exitRoom.getId());
+        roomService.exitDmRoom(senderId, dmRoom.getRoomId());
 
         //when
         List<DmRoomDTO> result = roomService.getRoomList(senderId);
@@ -178,8 +178,8 @@ class RoomServiceTest {
         // given
         Long senderId = sender.getId();
         Long receiverId = receiverA.getId();
-        Room room = roomService.createDmRoom(senderId, receiverId);
-        Long roomId = room.getId();
+        DmRoomDTO dmRoom = roomService.createDmRoom(senderId, receiverId);
+        Long roomId = dmRoom.getRoomId();
 
         // when
         roomService.exitDmRoom(senderId, roomId);
@@ -195,8 +195,8 @@ class RoomServiceTest {
         // given
         Long senderId = sender.getId();
         Long receiverId = receiverA.getId();
-        Room room = roomService.createDmRoom(senderId, receiverId);
-        Long roomId = room.getId();
+        DmRoomDTO dmRoom = roomService.createDmRoom(senderId, receiverId);
+        Long roomId = dmRoom.getRoomId();
 
         // when
         roomService.exitDmRoom(senderId, roomId);

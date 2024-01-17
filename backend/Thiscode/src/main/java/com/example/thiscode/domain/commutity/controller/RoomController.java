@@ -1,6 +1,7 @@
 package com.example.thiscode.domain.commutity.controller;
 
 import com.example.thiscode.domain.commutity.controller.request.CreateDmRoomRequest;
+import com.example.thiscode.domain.commutity.dto.DmRoomDTO;
 import com.example.thiscode.domain.commutity.service.RoomService;
 import com.example.thiscode.domain.commutity.controller.request.FindRoomsResponse;
 import com.example.thiscode.domain.commutity.dto.RoomUserDTO;
@@ -24,10 +25,9 @@ public class RoomController {
     }
 
     @PostMapping("/rooms/dm-room")
-    public ResponseEntity<String> createDmRoom(@AuthenticationPrincipal JwtSubject jwtSubject,
+    public ResponseEntity<DmRoomDTO> createDmRoom(@AuthenticationPrincipal JwtSubject jwtSubject,
                                              @RequestBody CreateDmRoomRequest request) {
-        roomService.createDmRoom(jwtSubject.getId(), request.getOtherUserId());
-        return ResponseEntity.ok("상대방과의 새로운 방을 만들었습니다.");
+        return ResponseEntity.ok(roomService.createDmRoom(jwtSubject.getId(), request.getOtherUserId()));
     }
 
     @GetMapping("/rooms/dm-room/{roomId}/users/{userId}")

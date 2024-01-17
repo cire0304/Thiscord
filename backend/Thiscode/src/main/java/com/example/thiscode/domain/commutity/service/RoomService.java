@@ -28,7 +28,7 @@ public class RoomService {
 
     // TODO: return type is good to be DTO not Entity.
     @Transactional
-    public Room createDmRoom(Long senderId, Long receiverId) {
+    public DmRoomDTO createDmRoom(Long senderId, Long receiverId) {
         if (Objects.equals(senderId, receiverId)) {
             throw new IllegalArgumentException("자기 자신과의 방을 만들 수 없습니다.");
         }
@@ -36,14 +36,24 @@ public class RoomService {
         List<RoomUser> roomsOfSender = roomUserRepository.findAllByUserId(senderId);
         List<RoomUser> roomsOfReceiver = roomUserRepository.findAllByUserId(receiverId);
 
+        User receiveUser = userRepository.findById(receiverId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
         Optional<RoomUser> roomUserOptional = getRoomUserBetweenSenderAndReceiver(roomsOfSender, roomsOfReceiver);
         if (roomUserOptional.isPresent()) {
             RoomUser roomUser = roomUserOptional.get();
             roomUser.join();
-            return roomUser.getRoom();
+            return new DmRoomDTO(
+                    roomUser.getRoom().getId(),
+                    receiveUser.getId(),
+                    receiveUser.getNickname());
         }
 
-        return createRoom(senderId, receiverId);
+        Room room = createRoom(senderId, receiverId);
+        return new DmRoomDTO(
+                room.getId(),
+                receiveUser.getId(),
+                receiveUser.getNickname());
     }
 
     private Room createRoom(Long senderId, Long receiverId) {
