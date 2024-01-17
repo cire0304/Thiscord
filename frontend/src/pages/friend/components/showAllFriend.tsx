@@ -8,7 +8,8 @@ import { faComment } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch } from "react-redux";
 import FriendAPI, { GetFriendResponse } from "../../../api/friendAPI";
 import RoomAPI from "../../../api/roomAPI";
-import { setRoomInfoState } from "../../../store";
+import { setCurrentChatRoomId, setRoomInfoState } from "../../../store";
+import { useNavigate } from "react-router-dom";
 
 export default function ShowFriend() {
   const [getFriendResponse, setGetFriendResponse] =
@@ -28,6 +29,22 @@ export default function ShowFriend() {
     };
     getFriendListRequest();
   }, []);
+
+  const navigate = useNavigate();
+
+  const createRoomHandler = async (receiverId: number, dispatch: Dispatch<any>) => {
+    let res = await RoomAPI.createDmRoom(receiverId);
+    if (res.status !== 200) {
+      alert(res.data);
+    }
+    dispatch(setCurrentChatRoomId(res.data));
+    
+    let res2 = await RoomAPI.getRoomList();
+    dispatch(setRoomInfoState(res2.data));
+    navigate(`/workspace/rooms/${res.data.roomId}`);
+  }
+
+  
 
   return (
     <Container>
@@ -57,19 +74,6 @@ export default function ShowFriend() {
       </S.Body>
     </Container>
   );
-}
-
-async function createRoomHandler(receiverId: number, dispatch: Dispatch<any>) {
-  let res = await RoomAPI.createDmRoom(receiverId);
-  if (res.status !== 200) {
-    console.log(res);
-    alert(res.data);
-  }
-  res = await RoomAPI.getRoomList();
-
-  // Is this rigth way to use redux?
-  // replace with another way like socket.io
-  dispatch(setRoomInfoState(res.data));
 }
 
 const Container = styled.div`

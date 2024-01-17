@@ -29,7 +29,7 @@ const getDmRoomUser = async (roomId: number, userId: number) => {
 };
 
 const createDmRoom = async (otherUserId: number) => {
-  return await axiosInstance.post("/rooms/dm-room", { otherUserId });
+  return await axiosInstance.post<DmRoom>("/rooms/dm-room", { otherUserId });
 };
 
 const exitRoom = async (roomId: number) => {

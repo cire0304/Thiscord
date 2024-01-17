@@ -13,6 +13,7 @@ import ChatAPI, { ChatMessageHitory } from "../../api/ChatAPI";
 import { useNavigate } from "react-router-dom";
 import MessageHistory from "./components/MessageHistory";
 import { UserInfo } from "../../api/userAPI";
+import { getCurrentTime } from "../../utils/Dates";
 
 export default function ChatPage() {
   const room = useSelector(
@@ -22,6 +23,7 @@ export default function ChatPage() {
   const user = useSelector((state: any) => state.user) as UserInfo;
   const navigate = useNavigate();
 
+  //==================== fetch room user
   useEffect(() => {
     const fetchRoomUser = async () => {
       if (room.isLoading === false) {
@@ -38,7 +40,9 @@ export default function ChatPage() {
     fetchRoomUser();
   }, [room]);
 
-  //================================================================
+  //===================== connect to websocket
+  // TODO: This code has to be refactored.
+  // whenever room is changed, websocket is reconnected.
   const [chatHistory, setChatHistory] = useState<ChatMessageHitory[]>([]);
   const client = useRef<CompatClient | null>(null);
 
@@ -66,7 +70,9 @@ export default function ChatPage() {
     return () => {
       client.current?.deactivate();
     };
-  }, []);
+  }, [room]);
+
+  // ====================== send message
 
   const sendHandler = (message: string) => {
     if (client.current && client.current.connected) {
@@ -78,7 +84,7 @@ export default function ChatPage() {
           senderId: user.id,
           content: message,
           messageType: "TALK",
-          sentDateTime: new Date().toISOString(),
+          sentDateTime: getCurrentTime(),
         })
       );
     }
@@ -102,11 +108,9 @@ export default function ChatPage() {
         </Header>
 
         <Body>
-          {/* 스타일 고쳐라 */}
           <MessageHistory chatHistories={chatHistory}></MessageHistory>
-
-         
         </Body>
+        
       </Content>
       <Footer>
         <MessageInputTextarea
@@ -130,7 +134,7 @@ const Container = styled.div`
 
   position: relative;
 
-  ${({ theme }) => theme.color.backgroundTertiary}
+  background-color: #303338;
 `;
 
 const Content = styled.div`
@@ -157,14 +161,12 @@ const Header = styled.div`
 
   padding: 10px;
   border-bottom: 1px solid #3a3a3d;
-  ${({ theme }) => theme.color.backgroundTertiary};
+
 `;
 
 const Body = styled.div`
   width: 100%;
   flex-grow: 1;
-
-  background-color: white;
 `;
 
 const Footer = styled.div`
@@ -174,7 +176,7 @@ const Footer = styled.div`
 
   position: absolute;
   bottom: 0;
-  ${({ theme }) => theme.color.backgroundTertiary};
+
 `;
 
 // i think below code might be converted to component

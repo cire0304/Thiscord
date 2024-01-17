@@ -12,6 +12,8 @@ export default function DirectMessageRoom({ room }: { room: DmRoom }) {
   const [deleteButtonVisible, setDeleteButtonVisible] = useState(false);
   const navigate = useNavigate();
 
+  // this code is to set current chat room id and used in another component.
+  // TODO: So, this code should be refactored.
   const dispatch = useDispatch();
   const changeChatRoom = (room: DmRoom) => {
     dispatch(setCurrentChatRoomId(room));
