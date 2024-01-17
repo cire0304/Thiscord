@@ -52,8 +52,7 @@ public class Room extends BaseEntity {
         this.userCount = userCount;
     }
 
-    // this method is for relational convenience
-    void addRoomUser(RoomUser roomUser) {
+    public void addRoomUser(RoomUser roomUser) {
         this.roomUsers.add(roomUser);
     }
 

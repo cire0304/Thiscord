@@ -48,11 +48,11 @@ public class RoomService {
 
     private Room createRoom(Long senderId, Long receiverId) {
         Room room = Room.createDmRoom();
-        roomRepository.save(room);
         RoomUser senderRoomUser = new RoomUser(room, senderId);
         RoomUser receiverRoomUser = new RoomUser(room, receiverId);
-        roomUserRepository.save(senderRoomUser);
-        roomUserRepository.save(receiverRoomUser);
+        room.addRoomUser(senderRoomUser);
+        room.addRoomUser(receiverRoomUser);
+        roomRepository.save(room);
         return room;
     }
 

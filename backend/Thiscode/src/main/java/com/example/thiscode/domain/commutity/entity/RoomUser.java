@@ -43,7 +43,6 @@ public class RoomUser extends BaseEntity {
         this.state = RoomUserState.JOIN;
         this.joinedAt = LocalDateTime.now();
         this.lastReadAt = LocalDateTime.now();
-        room.addRoomUser(this);
     }
 
     public void join() {
