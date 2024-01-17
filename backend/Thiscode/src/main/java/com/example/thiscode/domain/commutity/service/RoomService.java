@@ -22,24 +22,20 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final RoomUserRepository roomUserRepository;
-
-    // TODO: consider replacing UserRepository with another interface repository for reduce dependency
     private final UserRepository userRepository;
 
-    // TODO: return type is good to be DTO not Entity.
     @Transactional
     public DmRoomDTO createDmRoom(Long senderId, Long receiverId) {
         if (Objects.equals(senderId, receiverId)) {
             throw new IllegalArgumentException("자기 자신과의 방을 만들 수 없습니다.");
         }
+        User receiveUser = userRepository.findById(receiverId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
         List<RoomUser> roomsOfSender = roomUserRepository.findAllByUserId(senderId);
         List<RoomUser> roomsOfReceiver = roomUserRepository.findAllByUserId(receiverId);
 
-        User receiveUser = userRepository.findById(receiverId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-
-        Optional<RoomUser> roomUserOptional = getRoomUserBetweenSenderAndReceiver(roomsOfSender, roomsOfReceiver);
+        Optional<RoomUser> roomUserOptional = getSenderRoomUserInRoomWithReceiver(roomsOfSender, roomsOfReceiver);
         if (roomUserOptional.isPresent()) {
             RoomUser roomUser = roomUserOptional.get();
             roomUser.join();
@@ -67,16 +63,15 @@ public class RoomService {
     }
 
     /**
-     * return Room Entity if exist room between sender and receiver.
+     * return RoomUser of sender Entity if exist room between sender and receiver.
      * if not exist, return Optional.empty()
      */
-    private Optional<RoomUser> getRoomUserBetweenSenderAndReceiver(List<RoomUser> roomsOfSender, List<RoomUser> roomsOfReceiver) {
-        // TODO: check this code occur N+1 problem
-        Map<Long, RoomUser> roomUserMapOfSender = roomsOfSender.stream()
+    private Optional<RoomUser> getSenderRoomUserInRoomWithReceiver(List<RoomUser> roomUsersOfSender, List<RoomUser> roomUsersOfReceiver) {
+        Map<Long, RoomUser> roomUserMapOfSender = roomUsersOfSender.stream()
                 .map(roomUser -> Map.entry(roomUser.getRoom().getId(), roomUser))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        for (RoomUser RoomUserOfReceiver : roomsOfReceiver) {
+        for (RoomUser RoomUserOfReceiver : roomUsersOfReceiver) {
             Long roomId = RoomUserOfReceiver.getRoom().getId();
             if (roomUserMapOfSender.containsKey(roomId))
                 return Optional.of(roomUserMapOfSender.get(roomId));
