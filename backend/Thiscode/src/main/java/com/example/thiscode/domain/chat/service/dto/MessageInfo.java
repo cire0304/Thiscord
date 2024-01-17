@@ -19,8 +19,6 @@ public class MessageInfo {
     private Long roomId;
     private String content;
     private MessageType messageType;
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime sentDateTime;
+    private String sentDateTime;
 
 }
