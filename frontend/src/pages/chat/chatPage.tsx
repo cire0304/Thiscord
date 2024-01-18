@@ -108,6 +108,7 @@ export default function ChatPage() {
         </Header>
 
         <Body>
+          {/* TODO: when message view is full and has scroll, it's better to show recent message to user */}
           <MessageHistory chatHistories={chatHistory}></MessageHistory>
         </Body>
         
@@ -115,7 +116,8 @@ export default function ChatPage() {
       <Footer>
         <MessageInputTextarea
           onMessageSend={sendHandler}
-          nickname={roomUser?.nickname}
+          room={room}
+          user={user}
         />
       </Footer>
     </Container>
