@@ -22,7 +22,12 @@ import java.util.Map;
 public class ChatService {
 
     private final ChatMessageRepository chatMessageRepository;
+    private final MessageSender messageSender;
     private final UserClient userClient;
+
+    public void sendMessage(ChatMessage message) {
+        messageSender.sendMessage(message);
+    }
 
     public List<ChatMessageDTO> getChatMessages(Long roomId, Integer page, Integer size) {
         Pageable paging = PageRequest.of(page,size, Sort.by("sentDateTime").descending());

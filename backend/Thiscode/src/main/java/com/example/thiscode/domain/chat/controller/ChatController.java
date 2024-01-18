@@ -18,12 +18,11 @@ import java.util.List;
 @Controller
 public class ChatController {
 
-    private final MessageSender messageSender;
     private final ChatService chatService;
 
     @MessageMapping("/chat/rooms")
     public void message(ChatMessage message) {
-        messageSender.sendMessage(message);
+        chatService.sendMessage(message);
     }
 
     @GetMapping("/chat/rooms/{roomId}")
