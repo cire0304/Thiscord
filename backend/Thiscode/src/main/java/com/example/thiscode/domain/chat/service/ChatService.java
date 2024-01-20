@@ -1,5 +1,6 @@
 package com.example.thiscode.domain.chat.service;
 
+import com.example.thiscode.domain.chat.client.NotificationClient;
 import com.example.thiscode.domain.chat.client.UserClient;
 import com.example.thiscode.domain.chat.dto.UserInfoDTO;
 import com.example.thiscode.domain.chat.entity.ChatMessage;
@@ -24,8 +25,10 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final MessageSender messageSender;
     private final UserClient userClient;
+    private final NotificationClient notificationClient;
 
     public void sendMessage(ChatMessage message) {
+        notificationClient.sendNotification(message);
         messageSender.sendMessage(message);
     }
 

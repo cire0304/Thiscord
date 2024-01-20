@@ -15,7 +15,7 @@ import java.util.Map;
 public class UserClient {
 
     @Value("${user.uri}")
-    private String BASE_URL = "http://localhost:8080";
+    private String BASE_URL;
     @Value("${user.cookie.jwt}")
     private String JWT_COOKIE_VALUE;
     private String REQUEST_URI = "/users";
