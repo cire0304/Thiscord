@@ -111,20 +111,18 @@ class RoomServiceTest {
         Long receiverId = receiverA.getId();
         Long receiverId2 = receiverB.getId();
 
-        roomService.createDmRoom(senderId, receiverId);
-        roomService.createDmRoom(senderId, receiverId2);
+        DmRoomDTO dmRoomA = roomService.createDmRoom(senderId, receiverId);
+        DmRoomDTO dmRoomB = roomService.createDmRoom(senderId, receiverId2);
 
         //when
         List<DmRoomDTO> result = roomService.getRoomList(senderId);
 
         //then
         assertThat(result.size()).isEqualTo(2);
-        assertThat(result.get(0).getRoomId()).isNotNull();
-        assertThat(result.get(0).getOtherUserId()).isEqualTo(receiverA.getId());
-        assertThat(result.get(0).getOtherUserNickname()).isEqualTo(receiverA.getNickname());
-        assertThat(result.get(1).getRoomId()).isNotNull();
-        assertThat(result.get(1).getOtherUserId()).isEqualTo(receiverB.getId());
-        assertThat(result.get(1).getOtherUserNickname()).isEqualTo(receiverB.getNickname());
+        assertThat(result).usingRecursiveComparison().isEqualTo(List.of(
+                dmRoomA,
+                dmRoomB
+        ));
     }
 
     @DisplayName("방에 참여한 사용자의 정보를 가져올 수 있다.")
