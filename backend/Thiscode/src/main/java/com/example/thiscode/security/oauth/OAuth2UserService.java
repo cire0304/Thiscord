@@ -2,6 +2,7 @@ package com.example.thiscode.security.oauth;
 
 import com.example.thiscode.domain.user.repository.UserRepository;
 import com.example.thiscode.domain.user.entity.User;
+import com.example.thiscode.domain.user.service.UserService;
 import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.model.ProviderUser;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,27 +22,21 @@ import java.util.Optional;
 public class OAuth2UserService implements org.springframework.security.oauth2.client.userinfo.OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
+    private final UserService userService;
     private final String DEFAULT_NICNAME = "사용자";
 
-    // OAuth2Provider 은 구글만 있으므로, 구글만 처리하도록 구현
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         org.springframework.security.oauth2.client.userinfo.OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        User user = null;
         String email = oAuth2User.getAttribute("email");
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isEmpty()) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseGet(() -> {
             log.debug("Processing registration...");
-            user = userRepository.save(new User(
-                    email,
-                    "",
-                    DEFAULT_NICNAME,
-                    oAuth2User.getAttribute("sub")));
-        } else {
-            user = userOptional.get();
-        }
+            return userService.singUp(email, UUID.randomUUID().toString(), DEFAULT_NICNAME);
+        });
 
         log.debug("User Login : {}", user);
 
