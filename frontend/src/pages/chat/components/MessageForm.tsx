@@ -97,6 +97,7 @@ function MessageInputTextarea({
     onMessageSend(textareaRef.current.value);
     textareaRef.current.value = "";
     setContent("");
+    remove(ref(db, `typing/${room.roomId}/${user.id}`));
   };
 
   return (

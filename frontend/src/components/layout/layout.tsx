@@ -11,50 +11,53 @@ import ProfileModal from "./modal/profileModal";
 import { Outlet, useNavigate } from "react-router-dom";
 import ControlBar from "./components/controlBar";
 import Span from "../span";
+import Notification from "../notification/Notification";
 
 const TestPage = () => {
   const [isProfileModalActive, setIsProfileModalActive] =
     React.useState<boolean>(false);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
-    <UserGuard>
-      <FetchRoomList>
-        <Container>
-          <Side>
-            <Header>
-              <Input placeholder="대화 상대 찾기 또는 시작하기"></Input>
-            </Header>
+    <Notification>
+      <UserGuard>
+        <FetchRoomList>
+          <Container>
+            <Side>
+              <Header>
+                <Input placeholder="대화 상대 찾기 또는 시작하기"></Input>
+              </Header>
 
-            <NavWrapper>
-              {/* TODO: Hard coding!!! refector by extracting as a constant */}
-              <Nav onClick={() => navigate("/workspace/me")}>
-                <ChannelIcon width="24" height="24" />
-                <NavSpan>친구</NavSpan>
-              </Nav>
-            </NavWrapper>
+              <NavWrapper>
+                {/* TODO: Hard coding!!! refector by extracting as a constant */}
+                <Nav onClick={() => navigate("/workspace/me")}>
+                  <ChannelIcon width="24" height="24" />
+                  <NavSpan>친구</NavSpan>
+                </Nav>
+              </NavWrapper>
 
-            <Body>
-              <MessageRooms />
-            </Body>
-            <Footer>
-              <ControlBar setIsProfileModalActive={setIsProfileModalActive} />
-            </Footer>
-          </Side>
+              <Body>
+                <MessageRooms />
+              </Body>
+              <Footer>
+                <ControlBar setIsProfileModalActive={setIsProfileModalActive} />
+              </Footer>
+            </Side>
 
-          {isProfileModalActive && (
-            <ProfileModal
-              setIsProfileModalActive={setIsProfileModalActive}
-              isProfileModalActive={isProfileModalActive}
-            />
-          )}
+            {isProfileModalActive && (
+              <ProfileModal
+                setIsProfileModalActive={setIsProfileModalActive}
+                isProfileModalActive={isProfileModalActive}
+              />
+            )}
 
-          <Main>
-            <Outlet />
-          </Main>
-        </Container>
-      </FetchRoomList>
-    </UserGuard>
+            <Main>
+              <Outlet />
+            </Main>
+          </Container>
+        </FetchRoomList>
+      </UserGuard>
+    </Notification>
   );
 };
 

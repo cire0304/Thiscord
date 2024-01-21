@@ -9,6 +9,7 @@ import Button from "../../components/button";
 import { GOOGLE_LOGIN_URL } from "../../constants/constants";
 import Utils from "../../utils/string";
 import UserAPI from "../../api/userAPI";
+import NotificationAPI from "../../api/NotificationAPI";
 
 const LoginPage = () => {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -58,6 +59,8 @@ const LoginPage = () => {
       setWarnPassword("이메일이 존재하지 않거나 비밀번호가 틀렸습니다.");
       setValidPassword(false);
     }
+
+    NotificationAPI.putProfile();
   };
 
   const handleOnKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {

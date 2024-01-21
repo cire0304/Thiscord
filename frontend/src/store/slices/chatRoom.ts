@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { DmRoom, GetRoomListResponse } from "../../api/roomAPI";
 
-interface ChatRoomState {
+export interface ChatRoomState {
   currentChatRoom: DmRoom;
 }
 

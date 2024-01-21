@@ -7,6 +7,7 @@ import ProfileImage from "../../profileImage";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentChatRoomId } from "../../../store";
 import { useNavigate } from "react-router-dom";
+import { ChatRoomState } from "../../../store/slices/chatRoom";
 
 export default function DirectMessageRoom({ room }: { room: DmRoom }) {
   const [deleteButtonVisible, setDeleteButtonVisible] = useState(false);
@@ -17,10 +18,11 @@ export default function DirectMessageRoom({ room }: { room: DmRoom }) {
   const dispatch = useDispatch();
   const changeChatRoom = (room: DmRoom) => {
     dispatch(setCurrentChatRoomId(room));
+    // TODO: extract url to .env file
     navigate(`/workspace/rooms/${room.roomId}`);
   };
 
-  const chatRoom = useSelector((state: any) => state.chatRoom);
+  const chatRoom = useSelector((state: any) => state.chatRoom) as ChatRoomState;
 
   return (
     <Container>

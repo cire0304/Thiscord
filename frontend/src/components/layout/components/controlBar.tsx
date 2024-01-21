@@ -26,6 +26,7 @@ export default function ControlBar({
 
   useEffect(() => {
     const getUserInfo = async () => {
+      // TODO: this code is called every time the page is loaded.
       const res = await UserAPI.getUserInfo();
       res.data && dispatch(setUserInfoState(res.data));
     };
