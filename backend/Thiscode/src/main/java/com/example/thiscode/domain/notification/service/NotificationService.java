@@ -6,10 +6,6 @@ import com.example.thiscode.domain.notification.dto.NotificationInfoDTO;
 import com.example.thiscode.domain.notification.entity.Profile;
 import com.example.thiscode.domain.notification.repository.ProfileRepository;
 import com.example.thiscode.domain.user.repository.UserRepository;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +23,10 @@ public class NotificationService {
     private final UserRepository userRepository;
     private final RoomUserRepository roomUserRepository;
     private final ProfileRepository profileRepository;
-    private final FirebaseMessaging firebaseMessaging;
+    private final NotificationSender notificationSender;
 
     // TODO: Write test code (How can i test firebaseMessaging.send(message)?)
+
     /**
      * Messgae send using user's FCM Token
      */
@@ -48,15 +45,8 @@ public class NotificationService {
 
         profileRepository.findAllByUserIdIn(userIds)
                 .forEach(profile -> {
-                    String content = notificationInfoDTO.getContent();
                     String fcmToken = profile.getFcmToken();
-                    Message message = getMessage(content, fcmToken, senderNickname);
-                    try {
-                        firebaseMessaging.send(message);
-                    } catch (FirebaseMessagingException e) {
-                        log.error("FCM message send error", e);
-                        throw new RuntimeException(e);
-                    }
+                    notificationSender.sendNotification(notificationInfoDTO, fcmToken, senderNickname);
                 });
     }
 
@@ -75,18 +65,6 @@ public class NotificationService {
                     return profileRepository.save(profile);
                 });
         userProfile.updateLastAccessAt(now);
-    }
-
-    private Message getMessage(String content, String fcmToken, String senderNickname) {
-        Notification notification = Notification.builder()
-                .setTitle(String.format("%s님이 메시지를 보냈습니다.", senderNickname))
-                .setBody(content)
-                .build();
-
-        return Message.builder()
-                .setToken(fcmToken)
-                .setNotification(notification)
-                .build();
     }
 
 }
