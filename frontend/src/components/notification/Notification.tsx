@@ -3,14 +3,7 @@ import { getMessaging, onMessage } from "@firebase/messaging";
 import { useNavigate, useParams } from "react-router";
 import styled, { keyframes } from "styled-components";
 import { useState } from "react";
-import sound from "../../assets/sounds/notification.mp3";
-
-
-
-
-function playSound() {
-  new Audio(sound).play();
-}
+import { Notify } from "../../utils/Alarm";
 
 enum NotificationType {
   Message = "message",
@@ -68,24 +61,27 @@ export default function Notification({
     if (roomId && roomId.roomId === messageBody.roomId.toString()) {
       return;
     }
-    
+
     setNotificationOption({
-        ...notificationOption,
-        title: title,
-        body: messageBody,
-      });
+      ...notificationOption,
+      title: title,
+      body: messageBody,
+    });
     setIsActivated(true);
-    playSound();
+    Notify.play();
   });
   return (
     <>
       {children}
       {
         // TODO: extract url to .env file
-        <Container $isActived={isActivated} onClick={() => {
-          setIsActivated(false);
-          navigate(`/workspace/rooms/${notificationOption?.body.roomId}`);
-        }}>
+        <Container
+          $isActived={isActivated}
+          onClick={() => {
+            setIsActivated(false);
+            navigate(`/workspace/rooms/${notificationOption?.body.roomId}`);
+          }}
+        >
           <NotificationModal notificationOption={notificationOption} />
           <CancleButton onClick={() => setIsActivated(false)}>X</CancleButton>
         </Container>
