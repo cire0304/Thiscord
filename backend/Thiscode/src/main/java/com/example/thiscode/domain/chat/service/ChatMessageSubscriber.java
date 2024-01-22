@@ -1,4 +1,4 @@
-package com.example.thiscode.domain.chat;
+package com.example.thiscode.domain.chat.service;
 
 import com.example.thiscode.domain.chat.dto.ChatMessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class RedisSubscriber implements MessageListener {
+public class ChatMessageSubscriber implements MessageListener {
 
     private final ObjectMapper objectMapper;
     private final RedisTemplate<String, Object> redisTemplate;

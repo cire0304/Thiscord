@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+// TODO: if room is created, send notification to all users in the room
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -20,44 +21,48 @@ public class NotificationSender {
     private final FirebaseMessaging firebaseMessaging;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Messgae send using user's FCM Token
+     */
     public void sendNotification(NotificationInfoDTO notificationInfoDTO, String fcmToken, String senderNickname) {
         try {
-            Message message = getMessage(notificationInfoDTO, fcmToken, senderNickname);
+            MessageResponse messageResponse = MessageResponse.builder()
+                    .roomId(notificationInfoDTO.getRoomId())
+                    .senderId(notificationInfoDTO.getSenderId())
+                    .senderNickname(senderNickname)
+                    .content(notificationInfoDTO.getContent())
+                    .build();
+
+            Notification notification = Notification.builder()
+                    .setTitle("새로운 메시지가 도착했습니다.")
+                    .setBody(objectMapper.writeValueAsString(messageResponse))
+                    .build();
+
+            Message message = Message.builder()
+                    .setToken(fcmToken)
+                    .setNotification(notification)
+                    .build();
+
             firebaseMessaging.send(message);
         } catch (JsonProcessingException e) {
             log.error("JsonProcessingException: {}", e.getMessage());
             log.error("Fail to send notification: {}", notificationInfoDTO);
+            throw new RuntimeException(e);
         } catch (Exception e) {
             log.error("FCM message send error", e);
             throw new RuntimeException(e);
         }
     }
 
-    private Message getMessage(NotificationInfoDTO notificationInfoDTO, String fcmToken, String senderNickname) throws JsonProcessingException {
-        MessageResponse messageResponse = new MessageResponse(notificationInfoDTO, senderNickname);
-        Notification notification = Notification.builder()
-                .setTitle("새로운 메시지가 도착했습니다.")
-                .setBody(objectMapper.writeValueAsString(messageResponse))
-                .build();
-        return Message.builder()
-                .setToken(fcmToken)
-                .setNotification(notification)
-                .build();
-    }
-
+    @Builder
     @Getter
-    protected class MessageResponse {
+    protected static class MessageResponse {
+
         Long roomId;
         Long senderId;
         String senderNickname;
         String content;
 
-        public MessageResponse(NotificationInfoDTO notificationInfoDTO, String senderNickname) {
-            this.roomId = notificationInfoDTO.getRoomId();
-            this.senderId = notificationInfoDTO.getSenderId();
-            this.senderNickname = senderNickname;
-            this.content = notificationInfoDTO.getContent();
-        }
     }
 
 }

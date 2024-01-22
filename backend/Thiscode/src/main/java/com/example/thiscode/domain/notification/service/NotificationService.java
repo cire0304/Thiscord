@@ -20,34 +20,40 @@ import java.util.List;
 @Service
 public class NotificationService {
 
+    private final NotificationSender notificationSender;
     private final UserRepository userRepository;
     private final RoomUserRepository roomUserRepository;
     private final ProfileRepository profileRepository;
-    private final NotificationSender notificationSender;
 
     // TODO: Write test code (How can i test firebaseMessaging.send(message)?)
 
-    /**
-     * Messgae send using user's FCM Token
-     */
+    // TODO: If receiver is offline, save notification to database and send notification when receiver is online
     @Transactional
     public void sendNotification(NotificationInfoDTO notificationInfoDTO) {
+        Long senderId = notificationInfoDTO.getSenderId();
         String senderNickname = userRepository.findById(notificationInfoDTO.getSenderId())
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자입니다."))
+                .orElseThrow(() -> {
+                    log.error("User not found. userId: {}", notificationInfoDTO.getSenderId());
+                    return new EntityNotFoundException("User not found");
+                })
                 .getNickname();
 
-        // TODO: If receiver is offline, save notification to database and send notification when receiver is online
-        List<Long> userIds = roomUserRepository.findAllByRoomId(notificationInfoDTO.getRoomId())
+        getProfileByRoomId(notificationInfoDTO.getRoomId())
                 .stream()
-                .map(RoomUser::getUserId)
-                .filter(userId -> !userId.equals(notificationInfoDTO.getSenderId()))
-                .toList();
-
-        profileRepository.findAllByUserIdIn(userIds)
+                .filter(profile -> !profile.getUserId().equals(senderId))
                 .forEach(profile -> {
                     String fcmToken = profile.getFcmToken();
                     notificationSender.sendNotification(notificationInfoDTO, fcmToken, senderNickname);
                 });
+    }
+
+    @Transactional
+    public List<Profile> getProfileByRoomId(Long roomId) {
+        List<Long> userIds = roomUserRepository.findAllByRoomId(roomId)
+                .stream()
+                .map(RoomUser::getUserId)
+                .toList();
+        return profileRepository.findAllByUserIdIn(userIds);
     }
 
     /**

@@ -13,15 +13,21 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static com.example.thiscode.config.chat.ChatRedisConfig.CHAT_CHANNEL_TOPIC;
+
 @RequiredArgsConstructor
 @Component
-public class MessageSender {
+public class ChatMessagePublisher {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ChannelTopic channelTopic;
+    private final ChannelTopic channelTopic = new ChannelTopic(CHAT_CHANNEL_TOPIC);
     private final ChatMessageRepository chatMessageRepository;
     private final UserClient userClient;
 
+
+    /**
+     * publish chat message to redis. This message will be consumed by ChatMessageSubscriber.
+     */
     public void sendMessage(ChatMessage message) {
         ChatMessage savedMessage = chatMessageRepository.save(message);
         ChatMessageDTO chatMessageDTO = convertToChatMessageDTO(savedMessage);
@@ -29,6 +35,7 @@ public class MessageSender {
     }
 
     private ChatMessageDTO convertToChatMessageDTO(ChatMessage message) {
+        // TODO: check i need to get user Nickname. this code use http communication. it's not good.
         UserInfoDTO userInfo = userClient.getUserMap(List.of(message.getSenderId()))
                 .get(message.getSenderId());
         MessageInfoDTO messageInfo = new MessageInfoDTO(message.getRoomId(), message.getContent(), message.getMessageType(), message.getSentDateTime());

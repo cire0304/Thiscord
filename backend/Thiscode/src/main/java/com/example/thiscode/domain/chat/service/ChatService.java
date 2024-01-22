@@ -1,9 +1,9 @@
 package com.example.thiscode.domain.chat.service;
 
-import com.example.thiscode.domain.chat.client.NotificationClient;
 import com.example.thiscode.domain.chat.client.UserClient;
 import com.example.thiscode.domain.chat.dto.UserInfoDTO;
 import com.example.thiscode.domain.chat.entity.ChatMessage;
+import com.example.thiscode.domain.chat.event.ChatEventPublisher;
 import com.example.thiscode.domain.chat.repository.ChatMessageRepository;
 import com.example.thiscode.domain.chat.dto.ChatMessageDTO;
 import com.example.thiscode.domain.chat.dto.MessageInfoDTO;
@@ -23,13 +23,13 @@ import java.util.Map;
 public class ChatService {
 
     private final ChatMessageRepository chatMessageRepository;
-    private final MessageSender messageSender;
+    private final ChatMessagePublisher chatMessagePublisher;
     private final UserClient userClient;
-    private final NotificationClient notificationClient;
+    private final ChatEventPublisher chatEventPublisher;
 
     public void sendMessage(ChatMessage message) {
-        notificationClient.sendNotification(message);
-        messageSender.sendMessage(message);
+        chatEventPublisher.publish(message);
+        chatMessagePublisher.sendMessage(message);
     }
 
     public List<ChatMessageDTO> getChatMessages(Long roomId, Integer page, Integer size) {
@@ -40,7 +40,6 @@ public class ChatService {
                 .map(ChatMessage::getSenderId)
                 .toList();
 
-        // TODO: check if user not found
         Map<Long, UserInfoDTO> userMap = userClient.getUserMap(userIds);
 
         return messages.stream()

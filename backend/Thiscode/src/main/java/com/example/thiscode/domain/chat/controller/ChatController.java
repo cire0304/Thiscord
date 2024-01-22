@@ -2,7 +2,6 @@ package com.example.thiscode.domain.chat.controller;
 
 import com.example.thiscode.domain.chat.entity.ChatMessage;
 import com.example.thiscode.domain.chat.service.ChatService;
-import com.example.thiscode.domain.chat.service.MessageSender;
 import com.example.thiscode.domain.chat.dto.ChatMessageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

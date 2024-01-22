@@ -1,4 +1,4 @@
-package com.example.thiscode.config.chat;
+package com.example.thiscode.config.local;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
