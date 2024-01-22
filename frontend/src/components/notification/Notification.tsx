@@ -4,6 +4,9 @@ import { useNavigate, useParams } from "react-router";
 import styled, { keyframes } from "styled-components";
 import { useState } from "react";
 import { Notify } from "../../utils/Alarm";
+import { setCurrentChatRoomId } from "../../store";
+import { DmRoom } from "../../api/roomAPI";
+import { useDispatch } from "react-redux";
 
 enum NotificationType {
   Message = "message",
@@ -70,16 +73,27 @@ export default function Notification({
     setIsActivated(true);
     Notify.play();
   });
+
+  const dispatch = useDispatch();
+  const changeChatRoom = (room: DmRoom) => {
+    dispatch(setCurrentChatRoomId(room));
+    navigate(`/workspace/rooms/${room.roomId}`);
+  };
   return (
     <>
       {children}
       {
-        // TODO: extract url to .env file
         <Container
           $isActived={isActivated}
           onClick={() => {
+            if (!notificationOption?.body) return;
             setIsActivated(false);
-            navigate(`/workspace/rooms/${notificationOption?.body.roomId}`);
+            changeChatRoom({
+              roomId: notificationOption.body.roomId,
+              otherUserId: notificationOption.body.senderId,
+              otherUserNickname: notificationOption.body.senderNickname,
+              isLoading: true,
+            });
           }}
         >
           <NotificationModal notificationOption={notificationOption} />

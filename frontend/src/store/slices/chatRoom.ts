@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DmRoom, GetRoomListResponse } from "../../api/roomAPI";
+import { DmRoom } from "../../api/roomAPI";
 
 export interface ChatRoomState {
   currentChatRoom: DmRoom;
@@ -15,7 +15,6 @@ const initialState:ChatRoomState = {
         isLoading: false,
     }
 };
-
 const chatRoomSlice = createSlice({
   name: "chatRoom",
   initialState,
