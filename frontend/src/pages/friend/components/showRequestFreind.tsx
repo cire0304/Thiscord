@@ -4,8 +4,39 @@ import * as S from "./styles";
 import FriendAPI, { GetFriendRequestResponse } from "../../../api/friendAPI";
 
 export default function RequestFreind() {
-  const { friendRequestResponse, requestCount } = useFriendRequest();
-  const [reRender, setReRender] = useState<boolean>(false);
+  const [friendRequestResponse, setFriendRequestResponse] =
+    useState<GetFriendRequestResponse>();
+  const [requestCount, setRequestCount] = useState<number>(0);
+
+  useEffect(() => {
+    friendRequest();
+  }, []);
+
+  const acceptFriendRequest = async (id: number) => {
+    const res = await FriendAPI.acceptFriend(id);
+    if (res.status !== 200) return null;
+    friendRequest();
+  };
+
+  const rejectFriendRequest = async (id: number) => {
+    const rejectRes = await FriendAPI.rejectFriend(id);
+    if (rejectRes.status !== 200) return null;
+    friendRequest();
+  };
+
+  const friendRequest = async () => {
+    const res = await FriendAPI.getFriendRequestList();
+      if (res.status !== 200) {
+        alert(res.data);
+        return;
+      }
+      setFriendRequestResponse(res.data);
+
+      let count =
+        res.data.receivedFriendRequests.length +
+        res.data.sentFriendRequests.length;
+      setRequestCount(count);
+  }
 
   return (
     <S.Container>
@@ -61,41 +92,3 @@ export default function RequestFreind() {
     </S.Container>
   );
 }
-
-function useFriendRequest(): {
-  friendRequestResponse?: GetFriendRequestResponse;
-  requestCount?: number;
-} {
-  const [friendRequestResponse, setFriendRequestResponse] =
-    useState<GetFriendRequestResponse>();
-  const [requestCount, setRequestCount] = useState<number>(0);
-
-  useEffect(() => {
-    const getFriendListRequest = async () => {
-      const res = await FriendAPI.getFriendRequestList();
-      if (res.status !== 200) {
-        alert(res.data);
-        return;
-      }
-      setFriendRequestResponse(res.data);
-
-      let count =
-        res.data.receivedFriendRequests.length +
-        res.data.sentFriendRequests.length;
-      setRequestCount(count);
-    };
-    getFriendListRequest();
-  }, []);
-
-  return { friendRequestResponse, requestCount };
-}
-
-const acceptFriendRequest = async (id: number) => {
-  const res = await FriendAPI.acceptFriend(id);
-  res.status === 200 && window.location.reload();
-};
-
-const rejectFriendRequest = async (id: number) => {
-  const res = await FriendAPI.rejectFriend(id);
-  res.status === 200 && window.location.reload();
-};
