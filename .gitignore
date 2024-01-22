@@ -24,3 +24,6 @@ frontend/yarn-error.log*
 frontend/.env
 *.yml
 backend/Thiscode/src/main/resources/application.yml
+frontend/src/pages/test/*
+frontend/src/pages/test
+frontend/src/pages/test
