@@ -51,6 +51,7 @@ public class NotificationService {
     public List<Profile> getProfileByRoomId(Long roomId) {
         List<Long> userIds = roomUserRepository.findAllByRoomId(roomId)
                 .stream()
+                .filter(RoomUser::isJoin)
                 .map(RoomUser::getUserId)
                 .toList();
         return profileRepository.findAllByUserIdIn(userIds);
