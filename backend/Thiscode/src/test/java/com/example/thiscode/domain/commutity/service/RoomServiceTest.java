@@ -3,6 +3,7 @@ package com.example.thiscode.domain.commutity.service;
 import com.example.thiscode.domain.commutity.entity.Room;
 import com.example.thiscode.domain.commutity.entity.RoomUser;
 import com.example.thiscode.domain.commutity.entity.type.RoomUserState;
+import com.example.thiscode.domain.commutity.event.CommunityEventPublisher;
 import com.example.thiscode.domain.commutity.repository.RoomRepository;
 import com.example.thiscode.domain.commutity.repository.RoomUserRepository;
 import com.example.thiscode.domain.commutity.dto.DmRoomDTO;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -38,6 +40,8 @@ class RoomServiceTest {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @MockBean
+    CommunityEventPublisher communityEventPublisher;
 
     @BeforeEach
     public void setUp() {

@@ -37,9 +37,9 @@ class ChatControllerTest extends CustomControllerTestSupport {
         Cookie tokenCookie = getDefaultJwtCookie();
 
         List<ChatMessageDTO> chatMessages = new ArrayList<>();
-        MessageInfoDTO messageInfoA = new MessageInfoDTO(1L, "First chat", MessageType.TALK, LocalDateTime.now().toString());
+        MessageInfoDTO messageInfoA = new MessageInfoDTO(1L, "First chat", MessageType.TALK, LocalDateTime.now());
         UserInfoDTO UserInfoA = new UserInfoDTO(1L, "First nickname", "123456");
-        MessageInfoDTO messageInfoB = new MessageInfoDTO(1L, "Second chat", MessageType.TALK, LocalDateTime.now().toString());
+        MessageInfoDTO messageInfoB = new MessageInfoDTO(1L, "Second chat", MessageType.TALK, LocalDateTime.now());
         UserInfoDTO UserInfoB = new UserInfoDTO(2L, "Second nickname", "654321");
         chatMessages.add(new ChatMessageDTO(messageInfoA, UserInfoA));
         chatMessages.add(new ChatMessageDTO(messageInfoB, UserInfoB));

@@ -17,19 +17,17 @@ public class ChatEventPublisher {
 
 
     /**
-     * publish chat event to redis. This event will be consumed by NotificationService.
+     * publish chat event to redis. This event will be consumed by NotificationSubscriber.
      */
     public void publish(ChatMessage chatMessage) {
-        ChatData chatData = new ChatData(
-                chatMessage.getRoomId(),
-                chatMessage.getSenderId(),
-                chatMessage.getContent());
-
         LocalDateTime occurrenceDateTime = LocalDateTime.now();
-        ChatEvent chatEvent = new ChatEvent(
-                EVENT_TYPE,
-                chatData,
-                occurrenceDateTime);
+        ChatEvent chatEvent = ChatEvent.builder()
+                .eventType(EVENT_TYPE)
+                .roomId(chatMessage.getRoomId())
+                .senderId(chatMessage.getSenderId())
+                .content(chatMessage.getContent())
+                .occurrenceDateTime(occurrenceDateTime)
+                .build();
 
         redisTemplate.convertAndSend(CHAT_EVENT_CHANNEL, chatEvent);
     }

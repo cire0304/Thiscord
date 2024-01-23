@@ -3,7 +3,6 @@ package com.example.thiscode.domain.chat.service;
 import com.example.thiscode.domain.chat.client.UserClient;
 import com.example.thiscode.domain.chat.dto.UserInfoDTO;
 import com.example.thiscode.domain.chat.entity.ChatMessage;
-import com.example.thiscode.domain.chat.repository.ChatMessageRepository;
 import com.example.thiscode.domain.chat.dto.ChatMessageDTO;
 import com.example.thiscode.domain.chat.dto.MessageInfoDTO;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ public class ChatMessagePublisher {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final ChannelTopic channelTopic = new ChannelTopic(CHAT_CHANNEL_TOPIC);
-    private final ChatMessageRepository chatMessageRepository;
+
     private final UserClient userClient;
 
 
@@ -29,8 +28,7 @@ public class ChatMessagePublisher {
      * publish chat message to redis. This message will be consumed by ChatMessageSubscriber.
      */
     public void sendMessage(ChatMessage message) {
-        ChatMessage savedMessage = chatMessageRepository.save(message);
-        ChatMessageDTO chatMessageDTO = convertToChatMessageDTO(savedMessage);
+        ChatMessageDTO chatMessageDTO = convertToChatMessageDTO(message);
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageDTO);
     }
 

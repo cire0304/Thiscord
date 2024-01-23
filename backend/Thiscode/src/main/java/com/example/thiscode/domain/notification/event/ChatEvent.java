@@ -11,7 +11,9 @@ public class ChatEvent {
 
 //    private Long eventId;
     private String eventType;
-    private ChatData chatData;
+    private Long roomId;
+    private Long senderId;
+    private String content;
     private LocalDateTime occurrenceDateTime;
 
 }

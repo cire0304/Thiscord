@@ -29,7 +29,13 @@ public class ChatService {
 
     public void sendMessage(ChatMessage message) {
         chatEventPublisher.publish(message);
-        chatMessagePublisher.sendMessage(message);
+        ChatMessage savedMessage = chatMessageRepository.save(message);
+        chatMessagePublisher.sendMessage(savedMessage);
+    }
+
+    public void sendExitMessage(ChatMessage message) {
+        ChatMessage savedMessage = chatMessageRepository.save(message);
+        chatMessagePublisher.sendMessage(savedMessage);
     }
 
     public List<ChatMessageDTO> getChatMessages(Long roomId, Integer page, Integer size) {

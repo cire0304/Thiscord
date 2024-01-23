@@ -56,8 +56,8 @@ class ChatServiceTest {
         LocalDateTime timeB = timeA.plusMinutes(1L);
         Long senderIdB = 2L;
 
-        ChatMessage chatMessageA = ChatMessage.builder().roomId(roomId).senderId(senderIdA).content("First Chat").messageType(MessageType.TALK).sentDateTime(timeA.toString()).build();
-        ChatMessage chatMessageB = ChatMessage.builder().roomId(roomId).senderId(senderIdB).content("Second Chat").messageType(MessageType.TALK).sentDateTime(timeB.toString()).build();
+        ChatMessage chatMessageA = ChatMessage.builder().roomId(roomId).senderId(senderIdA).content("First Chat").messageType(MessageType.TALK).sentDateTime(timeA).build();
+        ChatMessage chatMessageB = ChatMessage.builder().roomId(roomId).senderId(senderIdB).content("Second Chat").messageType(MessageType.TALK).sentDateTime(timeB).build();
 
         chatMessageRepository.save(chatMessageA);
         chatMessageRepository.save(chatMessageB);

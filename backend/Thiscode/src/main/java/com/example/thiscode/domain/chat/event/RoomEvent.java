@@ -1,20 +1,20 @@
 package com.example.thiscode.domain.chat.event;
 
+import com.example.thiscode.domain.commutity.event.RoomEventType;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Builder
-public class ChatEvent {
+@Data
+public class RoomEvent {
 
     // TODO This property will be used after persistence is available.
 //    private Long eventId;
-    private String eventType;
+    private RoomEventType eventType;
     private Long roomId;
-    private Long senderId;
-    private String content;
+    private Long userId;
     private LocalDateTime occurrenceDateTime;
 
 }

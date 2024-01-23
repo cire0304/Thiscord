@@ -2,6 +2,8 @@ package com.example.thiscode.domain.commutity.service;
 
 import com.example.thiscode.domain.commutity.entity.Room;
 import com.example.thiscode.domain.commutity.entity.RoomUser;
+import com.example.thiscode.domain.commutity.event.CommunityEventPublisher;
+import com.example.thiscode.domain.commutity.event.RoomEventType;
 import com.example.thiscode.domain.commutity.repository.RoomRepository;
 import com.example.thiscode.domain.commutity.repository.RoomUserRepository;
 import com.example.thiscode.domain.commutity.dto.DmRoomDTO;
@@ -22,6 +24,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomUserRepository roomUserRepository;
     private final UserRepository userRepository;
+    private final CommunityEventPublisher communityventPublisher;
 
     @Transactional
     public DmRoomDTO createDmRoom(Long senderId, Long receiverId) {
@@ -133,11 +136,9 @@ public class RoomService {
         room.onUserExit();
         if (room.isEmptyMember()) {
             roomRepository.delete(room);
-
-            // TODO: Do i really need to use deleteAll??
             roomUserRepository.deleteAll(roomUserRepository.findAllByRoomId(roomId));
         }
-        // TODO: if you develop state server later, you should send message to other user that this user exit room here
+        communityventPublisher.publish(roomUser, RoomEventType.EXIT_ROOM);
     }
 
     @Transactional

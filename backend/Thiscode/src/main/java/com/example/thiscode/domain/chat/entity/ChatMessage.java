@@ -5,6 +5,8 @@ import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @ToString
 @Getter
 @Setter
@@ -20,6 +22,7 @@ public class ChatMessage {
     private Long senderId;
     private String content;
     private MessageType messageType;
-    private String sentDateTime;
+    private LocalDateTime sentDateTime;
+//    private String sentDateTime;
 
 }
