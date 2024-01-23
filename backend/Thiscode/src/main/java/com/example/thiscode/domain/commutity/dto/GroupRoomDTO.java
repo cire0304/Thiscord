@@ -4,12 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DmRoomDTO {
+public class GroupRoomDTO {
 
     private Long roomId;
-    private RoomUserDTO otherUser;
+    private String groupName;
+    private List<RoomUserDTO> roomUserList;
 
 }

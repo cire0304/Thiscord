@@ -1,5 +1,7 @@
 package com.example.thiscode.domain.commutity.service;
 
+import com.example.thiscode.domain.commutity.dto.GroupRoomDTO;
+import com.example.thiscode.domain.commutity.dto.RoomListDTO;
 import com.example.thiscode.domain.commutity.entity.Room;
 import com.example.thiscode.domain.commutity.entity.RoomUser;
 import com.example.thiscode.domain.commutity.entity.type.RoomUserState;
@@ -11,7 +13,6 @@ import com.example.thiscode.domain.commutity.dto.RoomUserDTO;
 import com.example.thiscode.domain.user.entity.User;
 import com.example.thiscode.domain.user.repository.UserRepository;
 import com.example.thiscode.domain.user.service.UserService;
-import jakarta.persistence.EntityExistsException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -94,6 +95,33 @@ class RoomServiceTest {
         assertThat(roomUsers.get(1).getUserId()).isEqualTo(receiverId);
     }
 
+    @Transactional
+    @DisplayName("Group 방을 생성할 수 있다.")
+    @Test
+    public void createGroupRoom () {
+        //given
+        Long userAId = sender.getId();
+        Long userBId = receiverA.getId();
+        Long userCId = receiverB.getId();
+        String groupName = "groupName";
+
+        //when
+        GroupRoomDTO groupRoom = roomService.createGroupRoom(userAId, groupName, List.of(userBId, userCId));
+
+        //then
+        Room result = roomRepository.findById(groupRoom.getRoomId())
+                .orElseThrow(IllegalArgumentException::new);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo(groupName);
+
+        List<RoomUser> roomUsers = result.getRoomUsers();
+        assertThat(roomUsers.size()).isEqualTo(3);
+        assertThat(roomUsers).extracting("userId")
+                .contains(userAId, userBId, userCId);
+    }
+
+
     @DisplayName("자기 자신과의 방을 생성할 수 없다.")
     @Test
     public void createDmRoomInError2() {
@@ -109,7 +137,7 @@ class RoomServiceTest {
 
     @DisplayName("DM 방 목록을 가져올 수 있다.")
     @Test
-    public void getRoomList() {
+    public void getDmRoomList() {
         //given
         Long senderId = sender.getId();
         Long receiverId = receiverA.getId();
@@ -119,14 +147,44 @@ class RoomServiceTest {
         DmRoomDTO dmRoomB = roomService.createDmRoom(senderId, receiverId2);
 
         //when
-        List<DmRoomDTO> result = roomService.getRoomList(senderId);
+        RoomListDTO roomList = roomService.getRoomListByUserId(senderId);
 
         //then
+        List<DmRoomDTO> result = roomList.getDmRoomList();
         assertThat(result.size()).isEqualTo(2);
         assertThat(result).usingRecursiveComparison().isEqualTo(List.of(
                 dmRoomA,
                 dmRoomB
         ));
+    }
+
+    @DisplayName("Group 방 목록을 가져올 수 있다.")
+    @Test
+    public void getGroupRoomList() {
+        //given
+        Long userAId = sender.getId();
+        Long userBId = receiverA.getId();
+        Long userCId = receiverB.getId();
+        String groupName = "groupName";
+
+        GroupRoomDTO groupRoom = roomService.createGroupRoom(userAId, groupName, List.of(userBId, userCId));
+
+        //when
+        RoomListDTO roomList = roomService.getRoomListByUserId(userAId);
+
+        //then
+        List<GroupRoomDTO> groupRoomList = roomList.getGroupRoomList();
+        assertThat(groupRoomList.size()).isEqualTo(1);
+        assertThat(groupRoomList.get(0).getRoomId()).isEqualTo(groupRoom.getRoomId());
+        assertThat(groupRoomList.get(0).getGroupName()).isEqualTo(groupName);
+        assertThat(groupRoomList.get(0).getRoomUserList()).extracting("userId")
+                .contains(userAId, userBId, userCId);
+    }
+
+    @DisplayName("Group 방에 유저를 초대할 수 있다.")
+    @Test
+    public void inviteUserToGroupRoom() {
+
     }
 
     @DisplayName("방에 참여한 사용자의 정보를 가져올 수 있다.")
@@ -164,15 +222,14 @@ class RoomServiceTest {
         roomService.exitDmRoom(senderId, dmRoom.getRoomId());
 
         //when
-        List<DmRoomDTO> result = roomService.getRoomList(senderId);
+        RoomListDTO roomList = roomService.getRoomListByUserId(senderId);
+        List<DmRoomDTO> result = roomList.getDmRoomList();
 
         //then
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.get(0).getRoomId()).isNotNull();
-        assertThat(result.get(0).getOtherUserNickname()).isEqualTo(receiverA.getNickname());
+        assertThat(result.get(0).getOtherUser().getNickname()).isEqualTo(receiverA.getNickname());
     }
-
-
 
     @DisplayName("DM 방을 나갈 수 있다.")
     @Test

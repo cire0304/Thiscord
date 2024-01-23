@@ -1,6 +1,7 @@
 package com.example.thiscode.domain.commutity.controller;
 
 import com.example.thiscode.domain.commutity.controller.request.CreateDmRoomRequest;
+import com.example.thiscode.domain.commutity.controller.request.CreateGroupRoomRequest;
 import com.example.thiscode.domain.commutity.dto.DmRoomDTO;
 import com.example.thiscode.domain.commutity.service.RoomService;
 import com.example.thiscode.domain.commutity.controller.request.FindRoomsResponse;
@@ -20,7 +21,7 @@ public class RoomController {
 
     @GetMapping("/rooms")
     public ResponseEntity<FindRoomsResponse> findRooms(@AuthenticationPrincipal JwtSubject jwtSubject) {
-        FindRoomsResponse response = new FindRoomsResponse(roomService.getRoomList(jwtSubject.getId()));
+        FindRoomsResponse response = new FindRoomsResponse(roomService.getRoomListByUserId(jwtSubject.getId()));
         return ResponseEntity.ok(response);
     }
 
@@ -28,6 +29,16 @@ public class RoomController {
     public ResponseEntity<DmRoomDTO> createDmRoom(@AuthenticationPrincipal JwtSubject jwtSubject,
                                              @RequestBody CreateDmRoomRequest request) {
         return ResponseEntity.ok(roomService.createDmRoom(jwtSubject.getId(), request.getOtherUserId()));
+    }
+
+    @PostMapping("/rooms/group-room")
+    public ResponseEntity<DmRoomDTO> createGroupRoom(@AuthenticationPrincipal JwtSubject jwtSubject,
+                                                     @RequestBody CreateGroupRoomRequest request) {
+        roomService.createGroupRoom(
+                jwtSubject.getId(),
+                request.getGroupName(),
+                request.getOtherUserIds());
+        return ResponseEntity.ok(null);
     }
 
     @GetMapping("/rooms/dm-room/{roomId}/users/{userId}")

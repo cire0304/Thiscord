@@ -2,6 +2,8 @@ package com.example.thiscode.domain.commutity.controller;
 
 import com.example.thiscode.CustomControllerTestSupport;
 import com.example.thiscode.domain.commutity.controller.request.CreateDmRoomRequest;
+import com.example.thiscode.domain.commutity.dto.GroupRoomDTO;
+import com.example.thiscode.domain.commutity.dto.RoomListDTO;
 import com.example.thiscode.domain.commutity.entity.type.RoomUserState;
 import com.example.thiscode.domain.commutity.service.RoomService;
 import com.example.thiscode.domain.commutity.dto.DmRoomDTO;
@@ -37,14 +39,30 @@ class RoomControllerTest extends CustomControllerTestSupport {
         Long RoomUserAId = 1L;
         Long RoomUserBId = 2L;
 
+        RoomUserDTO roomUserDTOA = RoomUserDTO.builder()
+                .userId(RoomUserAId)
+                .userCode("123456")
+                .email("test@mail.com")
+                .nickname("user nickname A")
+                .introduction("user introduction A")
+                .state(RoomUserState.JOIN)
+                .build();
+        RoomUserDTO roomUserDTOB = RoomUserDTO.builder()
+                .userId(RoomUserBId)
+                .userCode("654321")
+                .email("test@mail.com")
+                .nickname("user nickname B")
+                .introduction("user introduction B")
+                .state(RoomUserState.JOIN)
+                .build();
 
-        DmRoomDTO roomDmInfoA = new DmRoomDTO(roomAId, RoomUserAId, "user nickname A");
-        DmRoomDTO roomDmInfoB = new DmRoomDTO(roomBId, RoomUserBId, "user nickname B");
+        List<DmRoomDTO> dmRoomDTOS = List.of(new DmRoomDTO(roomAId, roomUserDTOA));
+        List<GroupRoomDTO> groupRoomDTOS = List.of(new GroupRoomDTO(roomBId, "Group name", List.of(roomUserDTOA, roomUserDTOB)));
+        RoomListDTO roomListDTO = new RoomListDTO(dmRoomDTOS, groupRoomDTOS);
 
-        List<DmRoomDTO> roomDmInfoList = List.of(roomDmInfoA, roomDmInfoB);
-        given(roomService.getRoomList(any())).willReturn(roomDmInfoList);
+        given(roomService.getRoomListByUserId(any())).willReturn(roomListDTO);
 
-        FindRoomsResponse response = new FindRoomsResponse(roomDmInfoList);
+        FindRoomsResponse response = new FindRoomsResponse(roomListDTO);
         //when //then
         mockMvc.perform(get("/rooms")
                         .contentType("application/json")
@@ -53,7 +71,7 @@ class RoomControllerTest extends CustomControllerTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(response)))
                 .andDo(
-                        document("room-get",
+                        document("room-list-get",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint())
                         )
