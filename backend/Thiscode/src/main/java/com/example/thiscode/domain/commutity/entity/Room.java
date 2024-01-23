@@ -65,4 +65,8 @@ public class Room extends BaseEntity {
         return userCount == 0;
     }
 
+    public void increaseUserCount() {
+        userCount++;
+    }
+
 }

@@ -48,6 +48,7 @@ public class RoomUser extends BaseEntity {
 
     public void join() {
         this.state = RoomUserState.JOIN;
+        room.increaseUserCount();
     }
 
     public boolean isJoin() {
