@@ -32,19 +32,20 @@ export default function ShowFriend() {
 
   const navigate = useNavigate();
 
-  const createRoomHandler = async (receiverId: number, dispatch: Dispatch<any>) => {
+  const createRoomHandler = async (
+    receiverId: number,
+    dispatch: Dispatch<any>
+  ) => {
     let res = await RoomAPI.createDmRoom(receiverId);
     if (res.status !== 200) {
       alert(res.data);
     }
     dispatch(setCurrentChatRoomId(res.data));
-    
+
     let res2 = await RoomAPI.getRoomList();
     dispatch(setRoomInfoState(res2.data));
     navigate(`/workspace/rooms/${res.data.roomId}`);
-  }
-
-  
+  };
 
   return (
     <Container>

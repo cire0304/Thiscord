@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import MessageHistory from "./components/MessageHistory";
 import { UserInfo } from "../../api/userAPI";
 import { getCurrentTime } from "../../utils/Dates";
+import { CHAT_SERVER_END_POINT } from "../../constants/constants";
+
 
 export default function ChatPage() {
   const room = useSelector(
@@ -46,8 +48,8 @@ export default function ChatPage() {
   const [chatHistory, setChatHistory] = useState<ChatMessageHitory[]>([]);
   const client = useRef<CompatClient | null>(null);
 
-  const connectHandler = () => {
-    const socket = new SockJS("http://localhost:8080/ws");
+  const connectHandler = () => {    
+    const socket = new SockJS(CHAT_SERVER_END_POINT as string);
     client.current = Stomp.over(socket);
 
     // SockJS 연결
@@ -72,9 +74,11 @@ export default function ChatPage() {
     };
   }, [room]);
 
+  
   // ====================== send message
-
+  // TODO: move from here to MessageInputTextarea.tsx
   const sendHandler = (message: string) => {
+    const temp = new Date();
     if (client.current && client.current.connected) {
       client.current.send(
         `/pub/chat/rooms`,
