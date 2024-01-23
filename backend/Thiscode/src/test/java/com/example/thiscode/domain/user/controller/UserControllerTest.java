@@ -93,37 +93,6 @@ class UserControllerTest extends CustomControllerTestSupport {
                 );
     }
 
-    @DisplayName("자신의 자세한 정보를 조회한다.")
-    @Test
-    @Deprecated
-    public void getUserDetailInfo() throws Exception {
-        //given
-        Long userId = 1L;
-        String email = "email";
-        String password = "password";
-        String nickname = "nickname";
-        String introduction = "introduction";
-        LocalDateTime now = LocalDateTime.now();
-
-        User user = new User(email, password, nickname, introduction);
-        ProviderUser providerUser = new ProviderUser(user);
-        PrincipalUser principalUser = new PrincipalUser(providerUser);
-        String token = jwtTokenProvider.createJwtToken(principalUser);
-        Cookie tokenCookie = new Cookie("TOKEN", token);
-
-        UserDTO userDetailInfoDto = new UserDTO(userId, email, password, nickname, introduction, now);
-        given(userService.getUserDetailInfo(any())).willReturn(userDetailInfoDto);
-
-        //when then
-        mockMvc.perform(get("/users/me/detail")
-                        .cookie(tokenCookie))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(userDetailInfoDto.getId()))
-                .andExpect(jsonPath("$.email").value(userDetailInfoDto.getEmail()))
-                .andExpect(jsonPath("$.nickname").value(userDetailInfoDto.getNickname()))
-                .andExpect(jsonPath("$.introduction").value(userDetailInfoDto.getIntroduction()));
-    }
-
     @DisplayName("자신의 정보를 수정한다.")
     @Test
     public void updateUser() throws Exception {
