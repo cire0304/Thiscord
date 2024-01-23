@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { GetRoomListResponse } from "../../api/roomAPI";
+import { RoomService } from "../../services/RoomService";
 
 // below code is not complete yet.
 // Group Room info is not included.

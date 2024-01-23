@@ -6,11 +6,12 @@ import { ReactComponent as MuteMike } from "../../../assets/icons/muteMike.svg";
 import { ReactComponent as ActiveMike } from "../../../assets/icons/activeMike.svg";
 
 import Span from "../../span";
-import { useDispatch, useSelector } from "react-redux";
-import UserAPI, { UserInfo } from "../../../api/userAPI";
-import { setUserInfoState } from "../../../store";
+import { useSelector } from "react-redux";
+import { UserInfo } from "../../../api/userAPI";
 import theme from "../../../styles/theme";
 import ProfileImage from "../../profileImage";
+import { UserService } from "../../../services/UserService";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 
 export default function ControlBar({
   setIsProfileModalActive,
@@ -22,18 +23,17 @@ export default function ControlBar({
     setIsProfileModalActive(true);
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const getUserInfo = async () => {
-      // TODO: this code is called every time the page is loaded.
-      const res = await UserAPI.getUserInfo();
-      res.data && dispatch(setUserInfoState(res.data));
-    };
-    getUserInfo();
+      const temp = async () => {
+        await dispatch(UserService.getMyInfo());
+      }
+      temp();
+      // dispatch(UserService.getMyInfo());
   }, []);
 
-  const user = useSelector((state: any) => state.user) as UserInfo;
+  const user = useAppSelector((state) => state.user);
 
   return (
     <Container>

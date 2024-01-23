@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { styled } from "styled-components";
-import { ViewState } from "../../store/slices/viewState";
+import { ViewState } from "../../store/slices/viewStateSlice";
 import ShowOnlineFriend from "./components/showOnlineFriend";
 import ShowFriend from "./components/showAllFriend";
 import RequestFreind from "./components/showRequestFreind";

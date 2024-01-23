@@ -1,20 +1,14 @@
-import { ReactNode, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import UserAPI, { UserInfo } from "../api/userAPI";
-import { setUserInfoState } from "../store";
+import { ReactNode } from "react";
+
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../hooks/redux";
 
 export default function UserGuard({ children }: { children: ReactNode }) {
-  const dispatch = useDispatch();
+  const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
-  useEffect(() => {
-    const getUserInfo = async () => {
-      const res = await UserAPI.getUserInfo();
-      res.data ? dispatch(setUserInfoState(res.data)) : navigate("/login");
-    };
-
-    getUserInfo();
-  }, []);
+  if (user.id === 0) {
+    navigate("/login");
+  }
 
   return <>{children}</>;
 }

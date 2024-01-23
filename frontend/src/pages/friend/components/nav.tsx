@@ -2,7 +2,7 @@ import { ReactComponent as ChannelIcon } from "../../../assets/icons/channel.svg
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { activeById } from "../../../store";
-import { ViewState } from "../../../store/slices/viewState";
+import { ViewState } from "../../../store/slices/viewStateSlice";
 
 const Nav = () => {
   const dispatch = useDispatch();

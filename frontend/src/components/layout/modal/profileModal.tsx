@@ -1,10 +1,12 @@
 import React, { useRef, Dispatch, SetStateAction } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
 import { styled } from "styled-components";
-import UserAPI, { UserInfo } from "../../../api/userAPI";
-import { setUserInfoState } from "../../../store";
+import { UserInfo } from "../../../api/userAPI";
+
 import Span from "../../span";
 import theme from "../../../styles/theme";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { UserService } from "../../../services/UserService";
 
 interface ProfileModalProps {
   isProfileModalActive: boolean;
@@ -17,8 +19,8 @@ export default function ProfileModal({
 }: ProfileModalProps) {
   const backgroundRef = useRef<HTMLDivElement>(null);
 
-  const user = useSelector((state: any) => state.user) as UserInfo;
-  const dispatch = useDispatch();
+  const user = useAppSelector((state: any) => state.user);
+  const dispatch = useAppDispatch();
 
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const intoductionTextAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -37,9 +39,8 @@ export default function ProfileModal({
       return;
     const nickname = nicknameInputRef.current.value;
     const introduction = intoductionTextAreaRef.current.value;
-    await UserAPI.updateUserInfo(nickname, introduction);
-    const res = await UserAPI.getUserInfo();
-    dispatch(setUserInfoState(res.data));
+    
+    dispatch(UserService.updateMyInfo({nickname, introduction}));
   };
 
   const handlerChangeUserInfo = (
