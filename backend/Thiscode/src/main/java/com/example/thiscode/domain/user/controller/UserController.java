@@ -50,17 +50,8 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Use {@link #getUserInfos(JwtSubject)} instead.
-     */
-    @GetMapping("/users/me/detail")
-    @Deprecated(since = "2021-08-01", forRemoval = true)
-    public ResponseEntity<UserDTO> getUserDetailInfo(@AuthenticationPrincipal JwtSubject subject) {
-        return ResponseEntity.ok(userService.getUserDetailInfo(subject.getId()));
-    }
-
     @PutMapping("/users/me")
-    public ResponseEntity<String> updateUser(@AuthenticationPrincipal JwtSubject subject,
+    public ResponseEntity<JwtSubject> updateUser(@AuthenticationPrincipal JwtSubject subject,
                                              @RequestBody @Valid UpdateUserRequest request,
                                              HttpServletResponse response) {
         User user = userService.updateUser(subject.getId(), request.getNickname(), request.getIntroduction());
@@ -71,7 +62,7 @@ public class UserController {
 
         Cookie jwtCookie = CookieUtils.createJwtCookie(jwtToken);
         response.addCookie(jwtCookie);
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok(new JwtSubject(principalUser));
     }
 
 }

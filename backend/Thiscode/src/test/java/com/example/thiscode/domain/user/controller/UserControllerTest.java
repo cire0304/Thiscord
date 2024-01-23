@@ -130,7 +130,11 @@ class UserControllerTest extends CustomControllerTestSupport {
         //given
         Cookie tokenCookie = getDefaultJwtCookie();
 
-        given(userService.updateUser(any(), any(), any())).willReturn(getDefaultUser());
+        User user = getDefaultUser();
+        given(userService.updateUser(any(), any(), any())).willReturn(user);
+        ProviderUser providerUser = new ProviderUser(user);
+        PrincipalUser principalUser = new PrincipalUser(providerUser);
+
 
         //when then
         mockMvc.perform(put("/users/me")
@@ -138,7 +142,7 @@ class UserControllerTest extends CustomControllerTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new UpdateUserRequest("updateNickname", "updateIntroduction"))))
                 .andExpect(status().isOk())
-                .andExpect(content().string("success"))
+                .andExpect(content().string(objectMapper.writeValueAsString(new JwtSubject(principalUser))))
                 .andDo(
                         document("user-update",
                                 preprocessRequest(prettyPrint()),
