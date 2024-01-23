@@ -18,11 +18,20 @@ export default function DirectMessageRoom({ room }: { room: DmRoom }) {
   const dispatch = useAppDispatch();
   const changeChatRoom = (room: DmRoom) => {
     dispatch(setCurrentChatRoomId(room));
-    // TODO: extract url to .env file
     navigate(`/workspace/rooms/${room.roomId}`);
   };
 
-  const chatRoom = useSelector((state: any) => state.chatRoom) as ChatRoomState;
+  const chatRoom = useAppSelector((state: any) => state.chatRoom);
+
+  const exitRoom = async (roomId: number) => {
+    const res = await RoomAPI.exitRoom(roomId);
+    if (res.status !== 200) {
+      alert(res.data);
+    } else if (chatRoom.currentChatRoom.roomId === room.roomId) {
+      dispatch(RoomService.getRoomList());
+      navigate(`/workspace/me`);
+    }
+  };
 
   return (
     <Container>
@@ -44,15 +53,6 @@ export default function DirectMessageRoom({ room }: { room: DmRoom }) {
       </OuterWrapper>
     </Container>
   );
-}
-
-async function exitRoom(roomId: number) {
-  const res = await RoomAPI.exitRoom(roomId);
-  if (res.status === 200) {
-    window.location.reload();
-  } else {
-    alert(res.data);
-  }
 }
 
 const Container = styled.div`

@@ -17,11 +17,18 @@ const roomSlice = createSlice({
       action: { payload: GetRoomListResponse; type: string }
     ) {
       state.rooms = [];
-
       action.payload.rooms.forEach((dmRoom) => {
         state.rooms.push(dmRoom);
       });
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(RoomService.getRoomList.fulfilled, (state, { payload }) => {
+      state.rooms = [];
+      payload.rooms.forEach((dmRoom) => {
+        state.rooms.push(dmRoom);
+      });
+    });
   },
 });
 
