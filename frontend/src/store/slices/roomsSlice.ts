@@ -11,17 +11,7 @@ const initialState: GetRoomListResponse = {
 const roomSlice = createSlice({
   name: "room",
   initialState,
-  reducers: {
-    setRoomInfoState(
-      state,
-      action: { payload: GetRoomListResponse; type: string }
-    ) {
-      state.rooms = [];
-      action.payload.rooms.forEach((dmRoom) => {
-        state.rooms.push(dmRoom);
-      });
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(RoomService.getRoomList.fulfilled, (state, { payload }) => {
       state.rooms = [];

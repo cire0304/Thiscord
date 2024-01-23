@@ -1,16 +1,15 @@
 import { ReactComponent as ChannelIcon } from "../../../assets/icons/channel.svg";
-import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { activeById } from "../../../store";
-import { ViewState } from "../../../store/slices/viewStateSlice";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 
 const Nav = () => {
-  const dispatch = useDispatch();
-  const viewState = useSelector((state: any) => state.viewState) as ViewState;
+  const dispatch = useAppDispatch();
+  const viewState = useAppSelector((state) => state.viewState);
 
   return (
     <Container>
-      <ChannelIcon width="30" height="30"/>
+      <ChannelIcon width="30" height="30" />
       <Text>친구</Text>
 
       <Navigates>

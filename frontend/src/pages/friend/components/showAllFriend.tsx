@@ -5,17 +5,18 @@ import * as S from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
 
-import { useDispatch } from "react-redux";
 import FriendAPI, { GetFriendResponse } from "../../../api/friendAPI";
 import RoomAPI from "../../../api/roomAPI";
-import { setCurrentChatRoomId, setRoomInfoState } from "../../../store";
+import { setCurrentChatRoomId } from "../../../store";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../../hooks/redux";
+import { RoomService } from "../../../services/RoomService";
 
 export default function ShowFriend() {
   const [getFriendResponse, setGetFriendResponse] =
     useState<GetFriendResponse>();
   const [requestCount, setRequestCount] = useState<number>(0);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getFriendListRequest = async () => {
@@ -42,8 +43,7 @@ export default function ShowFriend() {
     }
     dispatch(setCurrentChatRoomId(res.data));
 
-    let res2 = await RoomAPI.getRoomList();
-    dispatch(setRoomInfoState(res2.data));
+    dispatch(RoomService.getRoomList());
     navigate(`/workspace/rooms/${res.data.roomId}`);
   };
 

@@ -16,7 +16,6 @@ export const store = configureStore({
 export default store;
 
 export const { activeById } = viewStateSlice.actions;
-export const { setRoomInfoState } = roomSlice.actions;
 export const { setCurrentChatRoomId } = chatRoomSlice.actions;
 
 export type RootState = ReturnType<typeof store.getState>

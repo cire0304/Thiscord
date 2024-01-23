@@ -3,9 +3,8 @@ import { css, styled } from "styled-components";
 import RoomAPI, { DmRoom } from "../../../api/roomAPI";
 import Span from "../../span";
 import ProfileImage from "../../profileImage";
-import { setCurrentChatRoomId, setRoomInfoState } from "../../../store";
+import { setCurrentChatRoomId } from "../../../store";
 import { useNavigate } from "react-router-dom";
-import { ChatRoomState } from "../../../store/slices/chatRoomSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { RoomService } from "../../../services/RoomService";
 
@@ -13,8 +12,6 @@ export default function DirectMessageRoom({ room }: { room: DmRoom }) {
   const [deleteButtonVisible, setDeleteButtonVisible] = useState(false);
   const navigate = useNavigate();
 
-  // this code is to set current chat room id and used in another component.
-  // TODO: So, this code should be refactored.
   const dispatch = useAppDispatch();
   const changeChatRoom = (room: DmRoom) => {
     dispatch(setCurrentChatRoomId(room));

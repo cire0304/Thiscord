@@ -4,9 +4,10 @@ import { useNavigate, useParams } from "react-router";
 import styled, { keyframes } from "styled-components";
 import { useState } from "react";
 import { Notify } from "../../utils/Alarm";
-import { setCurrentChatRoomId, setRoomInfoState } from "../../store";
-import RoomAPI, { DmRoom, GetRoomListResponse } from "../../api/roomAPI";
-import { useDispatch, useSelector } from "react-redux";
+import { setCurrentChatRoomId } from "../../store";
+import { DmRoom } from "../../api/roomAPI";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { RoomService } from "../../services/RoomService";
 
 enum NotificationType {
   Message = "message",
@@ -39,12 +40,12 @@ export default function Notification({
   const [notificationOption, setNotificationOption] =
     useState<NotificationOption>();
 
-  const roomList = useSelector((state: any) => state.room) as GetRoomListResponse;
+  const roomList = useAppSelector((state) => state.room);
 
   const roomId = useParams();
   const navigate = useNavigate();
   
-  const dispatch =  useDispatch();
+  const dispatch =  useAppDispatch();
   const messaging = getMessaging();
   onMessage(messaging, (payload) => {
     if (
@@ -67,11 +68,7 @@ export default function Notification({
     }
 
     if (!roomList?.rooms.find((room) => room.roomId === messageBody.roomId)) {
-      const fetchRoomList = async () => {
-        const res = await RoomAPI.getRoomList();
-        dispatch(setRoomInfoState(res.data));
-      };
-      fetchRoomList();
+      dispatch(RoomService.getRoomList())
     }
 
     setNotificationOption({
