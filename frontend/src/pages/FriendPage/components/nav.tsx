@@ -2,6 +2,10 @@ import { ReactComponent as ChannelIcon } from "../../../assets/icons/channel.svg
 import { styled } from "styled-components";
 import { activeById } from "../../../store";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import Span from "../../../components/span";
+import GroupButton from "./groupAddButton";
+
+
 
 const Nav = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +31,7 @@ const Nav = () => {
           );
         })}
       </Navigates>
+      <GroupButton></GroupButton>
     </Container>
   );
 };
@@ -40,24 +45,20 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  
+  position: relative;
 
   flex-grow: 1;
   border-bottom: 1px solid ${({ theme }) => theme.color.border};
-  ${({ theme }) => theme.color.backgroundTertiary}
+  ${({ theme }) => theme.color.backgroundTertiary};
+
 `;
 
-export const Text = styled.span`
+export const Text = styled(Span)`
   color: white;
   margin: 0px 5px;
   padding: 0px 10px;
   border-right: 1px solid white;
-
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 `;
 
 export const Navigates = styled.div`

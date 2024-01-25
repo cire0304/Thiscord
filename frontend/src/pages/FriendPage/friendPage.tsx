@@ -1,14 +1,14 @@
-import { useSelector } from "react-redux";
 import { styled } from "styled-components";
-import { ViewState } from "../../store/slices/viewStateSlice";
 import ShowOnlineFriend from "./components/showOnlineFriend";
 import ShowFriend from "./components/showAllFriend";
 import RequestFreind from "./components/showRequestFreind";
 import AddFriend from "./components/addFreind";
+
+import { useAppSelector } from "../../hooks/redux";
 import Nav from "./components/nav";
 
 export default function FriendPage() {
-  const viewState = useSelector((state: any) => state.viewState) as ViewState;
+  const viewState = useAppSelector((state) => state.viewState);
 
   return (
     <Container>
