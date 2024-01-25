@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GetRoomListResponse } from "../../api/roomAPI";
-import { RoomService } from "../../services/RoomService";
+import { GetRoomListResponse, RoomService } from "../../services/RoomService";
 
-// below code is not complete yet.
-// Group Room info is not included.
 const initialState: GetRoomListResponse = {
-  rooms: [],
+  rooms: {
+    dmRooms: [],
+    groupRooms: [],
+  }
 };
 
 const roomSlice = createSlice({
@@ -14,10 +14,17 @@ const roomSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(RoomService.getRoomList.fulfilled, (state, { payload }) => {
-      state.rooms = [];
-      payload.rooms.forEach((dmRoom) => {
-        state.rooms.push(dmRoom);
+      state.rooms.dmRooms = [];
+      state.rooms.groupRooms = [];
+
+      payload.rooms.dmRooms.forEach((dmRoom) => {
+        state.rooms.dmRooms.push(dmRoom);
       });
+
+      payload.rooms.groupRooms.forEach((groupRoom) => {
+        state.rooms.groupRooms.push(groupRoom);
+      });
+      
     });
   },
 });

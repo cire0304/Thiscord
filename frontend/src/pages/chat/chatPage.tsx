@@ -1,127 +1,37 @@
-import { useEffect, useRef, useState } from "react";
 import { styled } from "styled-components";
-import Nav from "./components/nav";
-import ProfileImage from "../../components/profileImage";
-import Span from "../../components/span";
-import { useSelector } from "react-redux";
-import RoomAPI, { DmRoom, RoomUser } from "../../api/roomAPI";
+
 import MessageInputTextarea from "./components/MessageForm";
-
-import SockJS from "sockjs-client";
-import { Stomp, CompatClient } from "@stomp/stompjs";
-import ChatAPI, { ChatMessageHitory } from "../../api/ChatAPI";
-import { useNavigate } from "react-router-dom";
 import MessageHistory from "./components/MessageHistory";
-import { UserInfo } from "../../api/userAPI";
-import { getCurrentTime } from "../../utils/Dates";
-import { CHAT_SERVER_END_POINT } from "../../constants/constants";
+import { useAppSelector } from "../../hooks/redux";
 
+import DirectChatHeader from "./DirectChatHeader";
+import GroupChatHeader from "./GroupChatHeader";
+import { useChatRoom } from "../../hooks/useChatRoom";
 
 export default function ChatPage() {
-  const room = useSelector(
-    (state: any) => state.chatRoom.currentChatRoom
-  ) as DmRoom;
-  const [roomUser, setRoomUser] = useState<RoomUser>();
-  const user = useSelector((state: any) => state.user) as UserInfo;
-  const navigate = useNavigate();
-
-  //==================== fetch room user
-  useEffect(() => {
-    const fetchRoomUser = async () => {
-      if (room.isLoading === false) {
-        navigate("/workspace/me");
-        return;
-      }
-      const res = await RoomAPI.getDmRoomUser(room.roomId, room.otherUserId);
-      if (res.status !== 200) {
-        alert(res.data);
-        return;
-      }
-      setRoomUser(res.data);
-    };
-    fetchRoomUser();
-  }, [room]);
-
-  //===================== connect to websocket
-  // TODO: This code has to be refactored.
-  // whenever room is changed, websocket is reconnected.
-  const [chatHistory, setChatHistory] = useState<ChatMessageHitory[]>([]);
-  const client = useRef<CompatClient | null>(null);
-
-  const connectHandler = () => {    
-    const socket = new SockJS(CHAT_SERVER_END_POINT as string);
-    client.current = Stomp.over(socket);
-
-    // SockJS 연결
-    client.current.connect({}, () => {
-      // 채팅방 입장
-      ChatAPI.getChatHistories(room.roomId).then((res) => {
-        res.data && setChatHistory(res.data);
-      });
-
-      // 채팅방 구독
-      client.current?.subscribe(`/sub/chat/rooms/${room.roomId}`, (message) => {
-        message.body &&
-          setChatHistory((prev) => [...prev, JSON.parse(message.body)]);
-      });
-    });
-  };
-
-  useEffect(() => {
-    connectHandler();
-    return () => {
-      client.current?.deactivate();
-    };
-  }, [room]);
-
-  
-  // ====================== send message
-  // TODO: move from here to MessageInputTextarea.tsx
-  const sendHandler = (message: string) => {
-    const temp = new Date();
-    if (client.current && client.current.connected) {
-      client.current.send(
-        `/pub/chat/rooms`,
-        {},
-        JSON.stringify({
-          roomId: room.roomId,
-          senderId: user.id,
-          content: message,
-          messageType: "TALK",
-          sentDateTime: getCurrentTime(),
-        })
-      );
-    }
-  };
-
-  //================================================================
+  const room = useAppSelector((state) => state.chatRoom);
+  const myUserInfo = useAppSelector((state) => state.user);
+  const {chatHistory, sendHandler} = useChatRoom();
 
   return (
     <Container>
-      <Nav room={room}></Nav>
       <Content>
-        <Header>
-          <Profile>
-            <ProfileImage
-              src={`https://gravatar.com/avatar/${roomUser?.userId}?d=identicon`}
-              size="60px"
-            />
-            <Nickname>{roomUser?.nickname}</Nickname>
-            <NicknameAndCode>{`${roomUser?.nickname}#${roomUser?.userCode}`}</NicknameAndCode>
-          </Profile>
-        </Header>
+         {room.currentRoomType === "LODING" ? <></> :
+          room.currentRoomType === "DM" ?
+          <DirectChatHeader room={room.currentDmChatRoom}></DirectChatHeader> :
+          <GroupChatHeader room={room.currentGroupChatRoom}></GroupChatHeader>
+         }
 
         <Body>
-          {/* TODO: when message view is full and has scroll, it's better to show recent message to user */}
           <MessageHistory chatHistories={chatHistory}></MessageHistory>
         </Body>
-        
+
       </Content>
       <Footer>
         <MessageInputTextarea
           onMessageSend={sendHandler}
-          room={room}
-          user={user}
+          roomId={room.currentRoomId}
+          user={myUserInfo}
         />
       </Footer>
     </Container>
@@ -161,15 +71,6 @@ const Content = styled.div`
   }
 `;
 
-const Header = styled.div`
-  height: auto;
-  width: 100%;
-
-  padding: 10px;
-  border-bottom: 1px solid #3a3a3d;
-
-`;
-
 const Body = styled.div`
   width: 100%;
   flex-grow: 1;
@@ -182,33 +83,4 @@ const Footer = styled.div`
 
   position: absolute;
   bottom: 0;
-
 `;
-
-// i think below code might be converted to component
-const Profile = styled.div`
-  width: 100%;
-  height: auto;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 10px;
-`;
-
-const Nickname = styled(Span)`
-  font-size: 24px;
-  color: white;
-`;
-
-const NicknameAndCode = styled(Span)`
-  font-size: 20px;
-  color: white;
-`;
-
-const Description = styled(Span)`
-  font-size: 16px;
-  ${({ theme }) => theme.color.secondary};
-`;
-// ===================================================

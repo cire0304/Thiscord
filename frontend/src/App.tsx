@@ -21,7 +21,7 @@ function App() {
             <Route path="/" element={<LoginPage />} />
             <Route path="/register" element={<RegistgerPage />} />
 
-            <Route path="/workspace" element={<Layout />} >
+            <Route path="/workspace" element={<Layout />}>
               <Route path="me" element={<FriendPage />} />
               <Route path="rooms/:roomId" element={<ChatPage />} />
             </Route>

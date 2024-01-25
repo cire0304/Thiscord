@@ -7,7 +7,7 @@ import { faComment } from "@fortawesome/free-regular-svg-icons";
 
 import FriendAPI, { GetFriendResponse } from "../../../api/friendAPI";
 import RoomAPI from "../../../api/roomAPI";
-import { setCurrentChatRoomId } from "../../../store";
+import { setCurrentDmChatRoom } from "../../../store";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../hooks/redux";
 import { RoomService } from "../../../services/RoomService";
@@ -41,7 +41,7 @@ export default function ShowFriend() {
     if (res.status !== 200) {
       alert(res.data);
     }
-    dispatch(setCurrentChatRoomId(res.data));
+    dispatch(setCurrentDmChatRoom(res.data));
 
     dispatch(RoomService.getRoomList());
     navigate(`/workspace/rooms/${res.data.roomId}`);

@@ -16,7 +16,7 @@ export const store = configureStore({
 export default store;
 
 export const { activeById } = viewStateSlice.actions;
-export const { setCurrentChatRoomId } = chatRoomSlice.actions;
+export const { setCurrentDmChatRoom, setCurrentGroupChatRoom } = chatRoomSlice.actions;
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

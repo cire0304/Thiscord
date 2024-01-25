@@ -23,12 +23,11 @@ import Span from "../../../components/span";
 // import { ref, set, remove, push, child, serverTimestamp } from "firebase/database";
 
 function MessageInputTextarea({
-  room,
+  roomId,
   user,
   onMessageSend,
 }: {
-  // TODO: room type can be GroupRoom or DmRoom later
-  room: DmRoom;
+  roomId?: number;
   user: UserInfo;
   onMessageSend: (message: string) => void;
 }) {
@@ -41,9 +40,9 @@ function MessageInputTextarea({
   >([]);
 
   useEffect(() => {
-    if (!room.roomId) return;
-    addTypeingLiteners(room.roomId);
-  }, [room.roomId]);
+    if (!roomId) return;
+    addTypeingLiteners(roomId);
+  }, [roomId]);
 
   const addTypeingLiteners = (chatRoomId: number) => {
     let typingUsers: { id: string | null; name: string }[] = [];
@@ -74,11 +73,11 @@ function MessageInputTextarea({
   const handleChatWriteState = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
     if (e.target.value) {
-      set(ref(db, `typing/${room.roomId}/${user.id}`), {
+      set(ref(db, `typing/${roomId}/${user.id}`), {
         userUid: user.nickname,
       });
     } else {
-      remove(ref(db, `typing/${room.roomId}/${user.id}`));
+      remove(ref(db, `typing/${roomId}/${user.id}`));
     }
   };
 
@@ -97,7 +96,7 @@ function MessageInputTextarea({
     onMessageSend(textareaRef.current.value);
     textareaRef.current.value = "";
     setContent("");
-    remove(ref(db, `typing/${room.roomId}/${user.id}`));
+    remove(ref(db, `typing/${roomId}/${user.id}`));
   };
 
   return (

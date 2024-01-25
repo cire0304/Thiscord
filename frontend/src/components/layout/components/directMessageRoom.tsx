@@ -1,34 +1,36 @@
 import { useState } from "react";
 import { css, styled } from "styled-components";
-import RoomAPI, { DmRoom } from "../../../api/roomAPI";
+import RoomAPI from "../../../api/roomAPI";
 import Span from "../../span";
 import ProfileImage from "../../profileImage";
-import { setCurrentChatRoomId } from "../../../store";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { RoomService } from "../../../services/RoomService";
+import { DmRoom, RoomService } from "../../../services/RoomService";
+import { setCurrentDmChatRoom } from "../../../store";
 
 export default function DirectMessageRoom({ room }: { room: DmRoom }) {
-  const [deleteButtonVisible, setDeleteButtonVisible] = useState(false);
   const navigate = useNavigate();
-
   const dispatch = useAppDispatch();
+  
+  const [deleteButtonVisible, setDeleteButtonVisible] = useState(false);
+  const chatRoom = useAppSelector((state) => state.chatRoom);
+  
+
   const changeChatRoom = (room: DmRoom) => {
-    dispatch(setCurrentChatRoomId(room));
+    dispatch(setCurrentDmChatRoom(room));
     navigate(`/workspace/rooms/${room.roomId}`);
   };
-
-  const chatRoom = useAppSelector((state: any) => state.chatRoom);
 
   const exitRoom = async (roomId: number) => {
     const res = await RoomAPI.exitRoom(roomId);
     if (res.status !== 200) {
       alert(res.data);
-    } else if (chatRoom.currentChatRoom.roomId === room.roomId) {
+    } else if (chatRoom.currentDmChatRoom?.roomId === room.roomId) {
       dispatch(RoomService.getRoomList());
       navigate(`/workspace/me`);
     }
   };
+
 
   return (
     <Container>
@@ -36,13 +38,14 @@ export default function DirectMessageRoom({ room }: { room: DmRoom }) {
         onMouseOver={() => setDeleteButtonVisible(true)}
         onMouseLeave={() => setDeleteButtonVisible(false)}
         onClick={() => changeChatRoom(room)}
-        $active={chatRoom.currentChatRoom.roomId === room.roomId}
+        $active={chatRoom.currentDmChatRoom?.roomId === room.roomId}
+
       >
         <ProfileImage
-          src={`https://gravatar.com/avatar/${room.otherUserId}?d=identicon`}
+          src={`https://gravatar.com/avatar/${room.otherUser.userId}?d=identicon`}
         />
         <InfoWrapper>
-          <Nickname>{room.otherUserNickname}</Nickname>
+          <Nickname>{room.otherUser.nickname}</Nickname>
         </InfoWrapper>
         {deleteButtonVisible && (
           <Button onClick={() => exitRoom(room.roomId)}>X</Button>

@@ -1,29 +1,36 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DmRoom } from "../../api/roomAPI";
+import { DmRoom, GroupRoom } from "../../services/RoomService";
 
-export interface ChatRoomState {
-  currentChatRoom: DmRoom;
+export enum Roomtype {
+  DM = "DM",
+  GROUP = "GROUP",
+  LODING = "LODING",
 }
 
-// TODO:  below code is not complete yet.
-// Group Room info is not included.
-const initialState:ChatRoomState = {
-    currentChatRoom: {
-        roomId: 0,
-        otherUserId: 0,
-        otherUserNickname: "",
-        isLoading: false,
-    }
+export interface ChatRoomState {
+  currentRoomId: number;
+  currentRoomType: Roomtype;
+  currentDmChatRoom?: DmRoom;
+  currentGroupChatRoom?: GroupRoom;
+}
+
+const initialState: ChatRoomState = {
+  currentRoomId: 0,
+  currentRoomType: Roomtype.LODING,
 };
 const chatRoomSlice = createSlice({
   name: "chatRoom",
   initialState,
   reducers: {
-    setCurrentChatRoomId(
-      state,
-      action: { payload: DmRoom; type: string }
-    ) {
-      state.currentChatRoom = {...action.payload, isLoading: true};
+    setCurrentDmChatRoom(state, { payload }) {
+      state.currentRoomId = payload.roomId;
+      state.currentRoomType = Roomtype.DM;
+      state.currentDmChatRoom = { ...payload };
+    },
+    setCurrentGroupChatRoom(state, { payload }) {
+      state.currentRoomId = payload.roomId;
+      state.currentRoomType = Roomtype.GROUP;
+      state.currentGroupChatRoom = { ...payload };
     },
   },
 });

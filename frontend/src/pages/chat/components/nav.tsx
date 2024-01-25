@@ -1,18 +1,17 @@
 import { styled } from "styled-components";
 import ProfileImage from "../../../components/profileImage";
 import Span from "../../../components/span";
-import { DmRoom } from "../../../api/roomAPI";
+import { DmRoom } from "../../../services/RoomService";
+
 
 const Nav = ({ room }: { room: DmRoom }) => {
-  // TODO: status user info code would be here
-
   return (
     <Container>
       <ProfileImage
-        src={`https://gravatar.com/avatar/${room.otherUserId}?d=identicon`}
+        src={`https://gravatar.com/avatar/${room.otherUser.userId}?d=identicon`}
         size="25px"
       />
-      <Nickname>{room.otherUserNickname}</Nickname>
+      <Nickname>{room.otherUser.nickname}</Nickname>
     </Container>
   );
 };

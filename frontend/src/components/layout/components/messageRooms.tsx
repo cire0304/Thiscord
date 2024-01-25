@@ -1,20 +1,17 @@
-import { useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { GetRoomListResponse } from "../../../api/roomAPI";
 import DirectMessageRoom from "./directMessageRoom";
 import Span from "../../span";
+import { useAppSelector } from "../../../hooks/redux";
 
 export default function MessageRooms() {
-  const roomList = useSelector(
-    (state: any) => state.room
-  ) as GetRoomListResponse;
-  //TODO: 방 리덕스 스토어 사용해서 업데이트하는 코드 개발하기
+  const rooms = useAppSelector( (state) => state.room.rooms);
 
   return (
     <Container>
       <Title>그룹 및 메세지</Title>
       <RoomsWrapper>
-        {roomList?.rooms.map((room, index) => {
+        {rooms?.dmRooms.map((room, index) => {
           // TODO: add GroupRoom component here later
           return (
             <DirectMessageRoom

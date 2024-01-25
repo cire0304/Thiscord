@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import styled, { keyframes } from "styled-components";
 import { useState } from "react";
 import { Notify } from "../../utils/Alarm";
-import { setCurrentChatRoomId } from "../../store";
+import { setCurrentDmChatRoom } from "../../store";
 import { DmRoom } from "../../api/roomAPI";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { RoomService } from "../../services/RoomService";
@@ -67,7 +67,10 @@ export default function Notification({
       return;
     }
 
-    if (!roomList?.rooms.find((room) => room.roomId === messageBody.roomId)) {
+    if (!roomList?.rooms.dmRooms.find((room) => room.roomId === messageBody.roomId)) {
+      dispatch(RoomService.getRoomList())
+    }
+    if (!roomList?.rooms.groupRooms.find((room) => room.roomId === messageBody.roomId)) {
       dispatch(RoomService.getRoomList())
     }
 
@@ -81,9 +84,11 @@ export default function Notification({
   });
 
 
-  const changeChatRoom = (room: DmRoom) => {
-    dispatch(setCurrentChatRoomId(room));
-    navigate(`/workspace/rooms/${room.roomId}`);
+  const changeChatRoom = ( option : NotificationOption) => {
+    const room = roomList.rooms.dmRooms.find((room) => room.roomId === option.body.roomId);
+
+    dispatch(setCurrentDmChatRoom(room));
+    navigate(`/workspace/rooms/${room?.roomId}`);
   };
   return (
     <>
@@ -94,12 +99,7 @@ export default function Notification({
           onClick={() => {
             if (!notificationOption?.body) return;
             setIsActivated(false);
-            changeChatRoom({
-              roomId: notificationOption.body.roomId,
-              otherUserId: notificationOption.body.senderId,
-              otherUserNickname: notificationOption.body.senderNickname,
-              isLoading: true,
-            });
+            changeChatRoom(notificationOption);
           }}
         >
           <NotificationModal notificationOption={notificationOption} />
