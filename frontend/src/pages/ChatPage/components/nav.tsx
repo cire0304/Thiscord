@@ -28,7 +28,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
 
-  border-bottom: 1px solid ${({ theme }) => theme.color.border};
+  border-bottom: 1px solid;
   ${({ theme }) => theme.color.backgroundTertiary}
 `;
 

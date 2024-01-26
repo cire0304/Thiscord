@@ -4,8 +4,8 @@ import MessageInputTextarea from "./components/MessageForm";
 import MessageHistory from "./components/MessageHistory";
 import { useAppSelector } from "../../hooks/redux";
 
-import DirectChatHeader from "./DirectChatHeader";
-import GroupChatHeader from "./GroupChatHeader";
+import DirectChatHeader from "./components/DirectChatHeader";
+import GroupChatHeader from "./components/GroupChatHeader";
 import { useChatRoom } from "../../hooks/useChatRoom";
 
 export default function ChatPage() {

@@ -1,9 +1,9 @@
 import { styled } from "styled-components";
-import Nav from "./components/nav";
-import ProfileImage from "../../components/profileImage";
-import Span from "../../components/span";
+import Nav from "./nav";
+import ProfileImage from "../../../components/profileImage";
+import Span from "../../../components/span";
 
-import { DmRoom } from "../../services/RoomService";
+import { DmRoom } from "../../../services/RoomService";
 
 export default function DirectChatHeader({room}: {room?:DmRoom}) {
   if (!room) return (<></>);  
@@ -16,7 +16,6 @@ export default function DirectChatHeader({room}: {room?:DmRoom}) {
               src={`https://gravatar.com/avatar/${room.otherUser.userId}?d=identicon`}
               size="60px"
             />
-            <Nickname>{room.otherUser.nickname}</Nickname>
             <Nickname>{room.otherUser.nickname}</Nickname>
             <NicknameAndCode>{`${room.otherUser.nickname}#${room.otherUser.userCode}`}</NicknameAndCode>
           </Profile>
