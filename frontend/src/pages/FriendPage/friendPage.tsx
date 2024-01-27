@@ -5,7 +5,7 @@ import RequestFreind from "./components/showRequestFreind";
 import AddFriend from "./components/addFreind";
 
 import { useAppSelector } from "../../hooks/redux";
-import Nav from "./components/nav";
+import Nav from "./container/nav";
 
 export default function FriendPage() {
   const viewState = useAppSelector((state) => state.viewState);

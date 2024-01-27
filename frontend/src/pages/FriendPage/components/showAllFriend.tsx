@@ -5,33 +5,23 @@ import * as S from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
 
-import FriendAPI, { GetFriendResponse } from "../../../api/friendAPI";
 import RoomAPI from "../../../api/roomAPI";
 import { setCurrentDmChatRoom } from "../../../store";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { RoomService } from "../../../services/RoomService";
+import { FriendService } from "../../../services/FriendService";
 
 export default function ShowFriend() {
-  const [getFriendResponse, setGetFriendResponse] =
-    useState<GetFriendResponse>();
   const [requestCount, setRequestCount] = useState<number>(0);
   const dispatch = useAppDispatch();
+  const friends = useAppSelector((state) => state.friend.friends);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const getFriendListRequest = async () => {
-      const res = await FriendAPI.getFriendList();
-      if (res.status !== 200) {
-        alert(res.data);
-        return;
-      }
-      setGetFriendResponse(res.data);
-      setRequestCount(res.data.friends.length);
-    };
-    getFriendListRequest();
+    dispatch(FriendService.getFriends());
+    setRequestCount(friends.length);
   }, []);
-
-  const navigate = useNavigate();
 
   const createRoomHandler = async (
     receiverId: number,
@@ -54,17 +44,17 @@ export default function ShowFriend() {
       </S.Header>
 
       <S.Body>
-        {getFriendResponse &&
-          getFriendResponse.friends?.map((element) => {
+        {
+          friends.map((friend) => {
             return (
               <S.Friend>
                 <S.Info>
-                  <S.Nickname>{element.nickname}</S.Nickname>
+                  <S.Nickname>{friend.nickname}</S.Nickname>
                   <S.Type>현재 로그인 상태를 출력해야 함(개발 예정)</S.Type>
                 </S.Info>
                 <S.Button
                   onClick={() => {
-                    createRoomHandler(element.userId, dispatch);
+                    createRoomHandler(friend.userId, dispatch);
                   }}
                 >
                   <FontAwesomeIcon icon={faComment} />

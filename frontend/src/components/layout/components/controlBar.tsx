@@ -6,8 +6,6 @@ import { ReactComponent as MuteMike } from "../../../assets/icons/muteMike.svg";
 import { ReactComponent as ActiveMike } from "../../../assets/icons/activeMike.svg";
 
 import Span from "../../span";
-import { useSelector } from "react-redux";
-import { UserInfo } from "../../../api/userAPI";
 import theme from "../../../styles/theme";
 import ProfileImage from "../../profileImage";
 import { UserService } from "../../../services/UserService";
@@ -26,11 +24,10 @@ export default function ControlBar({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-      const temp = async () => {
+      const fetch = async () => {
         await dispatch(UserService.getMyInfo());
       }
-      temp();
-      // dispatch(UserService.getMyInfo());
+      fetch();
   }, []);
 
   const user = useAppSelector((state) => state.user);

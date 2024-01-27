@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import { activeById } from "../../../store";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import Span from "../../../components/span";
-import GroupButton from "./groupAddButton";
+import GroupButton from "../components/groupAddButton";
 
 
 
@@ -49,7 +49,7 @@ export const Container = styled.div`
   position: relative;
 
   flex-grow: 1;
-  border-bottom: 1px solid ${({ theme }) => theme.color.border};
+  border-bottom: 1px solid;
   ${({ theme }) => theme.color.backgroundTertiary};
 
 `;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useState } from "react";
 import { ReactComponent as ChannelIcon } from "../../assets/icons/channel.svg";
 import UserGuard from "../../utils/userGuard";
 import FetchRoomList from "../../utils/fetchRoomList";
@@ -13,54 +13,57 @@ import ControlBar from "./components/controlBar";
 import Span from "../span";
 import Notification from "../notification/Notification";
 import AudioAccess from "../access/AudioAccess";
+import InitFetch from "../../hooks/initFetch";
 
 const Layout = () => {
   const [isProfileModalActive, setIsProfileModalActive] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
   const navigate = useNavigate();
 
   return (
     <AudioAccess>
       <Notification>
-        <UserGuard>
-          <FetchRoomList>
-            <Container>
-              <Side>
-                <Header>
-                  <Input placeholder="대화 상대 찾기 또는 시작하기"></Input>
-                </Header>
+        <InitFetch>
+          <UserGuard>
+            <FetchRoomList>
+              <Container>
+                <Side>
+                  <Header>
+                    <Input placeholder="대화 상대 찾기 또는 시작하기"></Input>
+                  </Header>
 
-                <NavWrapper>
-                  {/* TODO: Hard coding!!! refector by extracting as a constant */}
-                  <Nav onClick={() => navigate("/workspace/me")}>
-                    <ChannelIcon width="24" height="24" />
-                    <NavSpan>친구</NavSpan>
-                  </Nav>
-                </NavWrapper>
+                  <NavWrapper>
+                    {/* TODO: Hard coding!!! refector by extracting as a constant */}
+                    <Nav onClick={() => navigate("/workspace/me")}>
+                      <ChannelIcon width="24" height="24" />
+                      <NavSpan>친구</NavSpan>
+                    </Nav>
+                  </NavWrapper>
 
-                <Body>
-                  <MessageRooms />
-                </Body>
-                <Footer>
-                  <ControlBar
+                  <Body>
+                    <MessageRooms />
+                  </Body>
+                  <Footer>
+                    <ControlBar
+                      setIsProfileModalActive={setIsProfileModalActive}
+                    />
+                  </Footer>
+                </Side>
+
+                {isProfileModalActive && (
+                  <ProfileModal
                     setIsProfileModalActive={setIsProfileModalActive}
+                    isProfileModalActive={isProfileModalActive}
                   />
-                </Footer>
-              </Side>
+                )}
 
-              {isProfileModalActive && (
-                <ProfileModal
-                  setIsProfileModalActive={setIsProfileModalActive}
-                  isProfileModalActive={isProfileModalActive}
-                />
-              )}
-
-              <Main>
-                <Outlet />
-              </Main>
-            </Container>
-          </FetchRoomList>
-        </UserGuard>
+                <Main>
+                  <Outlet />
+                </Main>
+              </Container>
+            </FetchRoomList>
+          </UserGuard>
+        </InitFetch>
       </Notification>
     </AudioAccess>
   );
@@ -127,7 +130,7 @@ export const Header = styled.header`
   padding: 10px;
 
   ${({ theme }) => theme.color.backgroundPrimary}
-  border-bottom: 1px solid ${({ theme }) => theme.color.border};
+  border-bottom: 1px solid;
 `;
 
 export const Body = styled.body`

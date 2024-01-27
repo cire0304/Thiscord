@@ -1,20 +1,22 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import LoginPage from "./pages/login";
+import LoginPage from "./pages/LoginPage";
 import { ThemeProvider } from "styled-components";
 import theme from "./styles/theme";
-import RegistgerPage from "./pages/register";
+import RegistgerPage from "./pages/RegisterPage";
 
 import { Provider } from "react-redux";
-import store from "./store";
+import store, { persistor } from "./store";
 import Layout from "./components/layout/layout";
-import FriendPage from "./pages/friend/friendPage";
-import ChatPage from "./pages/chat/chatPage";
+import FriendPage from "./pages/FriendPage/friendPage";
+import ChatPage from "./pages/ChatPage/chatPage";
+import { PersistGate } from "redux-persist/integration/react";
 
 function App() {
   return (
     <div className="App">
       <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider theme={theme}>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
@@ -27,6 +29,7 @@ function App() {
             </Route>
           </Routes>
         </ThemeProvider>
+        </PersistGate>
       </Provider>
     </div>
   );

@@ -36,6 +36,11 @@ export interface GetRoomListResponse {
     };
 }
 
+// create group room
+export interface CreateGroupRoomRequest {
+    groupName : string;
+    otherUserIds: number[];
+}
 
 export const RoomService = {
 
@@ -43,6 +48,16 @@ export const RoomService = {
         'room/getRoomList',
         async () => {
             const response = await axiosInstance.get<GetRoomListResponse>("/rooms");
+            return response.data;
+        }
+    ),
+
+    createGroupRoom: createAsyncThunk(
+        'room/createGroupRoom',
+        async (createGroupRoomRequest : CreateGroupRoomRequest) => {
+            const response = await axiosInstance.post("/rooms/group-room", {
+                ...createGroupRoomRequest
+            });
             return response.data;
         }
     ),
