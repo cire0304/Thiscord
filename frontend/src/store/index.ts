@@ -34,7 +34,7 @@ export default store;
 export const persistor = persistStore(store);
 
 export const { activeById } = viewStateSlice.actions;
-export const { setCurrentDmChatRoom, setCurrentGroupChatRoom } = chatRoomSlice.actions;
+export const { setCurrentDmChatRoom, setCurrentGroupChatRoom, setCurrentChatRoom } = chatRoomSlice.actions;
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

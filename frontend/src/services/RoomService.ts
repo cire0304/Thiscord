@@ -17,6 +17,11 @@ export interface UserInfo {
     state : state,
 }
 
+export enum RoomType {
+    DM = "DM",
+    GROUP = "GROUP"
+}
+
 export interface DmRoom {
     roomId: number;
     otherUser : UserInfo;

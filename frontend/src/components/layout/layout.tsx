@@ -5,7 +5,7 @@ import FetchRoomList from "../../utils/fetchRoomList";
 import styled from "styled-components";
 import { Input } from "../input";
 
-import MessageRooms from "./components/messageRooms";
+import MessageRoomSide from "./components/messageRoomSideBar";
 import ProfileModal from "./modal/profileModal";
 
 import { Outlet, useNavigate } from "react-router-dom";
@@ -41,7 +41,7 @@ const Layout = () => {
                   </NavWrapper>
 
                   <Body>
-                    <MessageRooms />
+                    <MessageRoomSide />
                   </Body>
                   <Footer>
                     <ControlBar

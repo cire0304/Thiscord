@@ -1,22 +1,33 @@
-import { useState } from "react";
-import { css, styled } from "styled-components";
-import RoomAPI from "../../../api/roomAPI";
-import Span from "../../span";
-import ProfileImage from "../../profileImage";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { DmRoom, RoomService } from "../../../services/RoomService";
-import { setCurrentDmChatRoom } from "../../../store";
+import {
+  DmRoom,
+  GroupRoom,
+  RoomService,
+  RoomType,
+} from "../../../services/RoomService";
+import RoomAPI from "../../../api/roomAPI";
+import { setCurrentChatRoom, setCurrentDmChatRoom } from "../../../store";
+import { css, styled } from "styled-components";
+import Span from "../../span";
+import ProfileImage from "../../profileImage";
 
-export default function DirectMessageRoom({ room }: { room: DmRoom }) {
+function MessageRoom({
+  room,
+  roomType,
+}: {
+  room: DmRoom | GroupRoom;
+  roomType: RoomType;
+}) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  
+
   const [deleteButtonVisible, setDeleteButtonVisible] = useState(false);
   const chatRoom = useAppSelector((state) => state.chatRoom);
 
-  const changeChatRoom = (room: DmRoom) => {
-    dispatch(setCurrentDmChatRoom(room));
+  const changeChatRoom = (room: DmRoom | GroupRoom) => {
+    dispatch(setCurrentChatRoom({room, roomType}));
     navigate(`/workspace/rooms/${room.roomId}`);
   };
 
@@ -30,6 +41,31 @@ export default function DirectMessageRoom({ room }: { room: DmRoom }) {
     }
   };
 
+  if (roomType === RoomType.GROUP) {
+    room = room as GroupRoom;
+    return (
+      <Container>
+        <OuterWrapper
+          onMouseOver={() => setDeleteButtonVisible(true)}
+          onMouseLeave={() => setDeleteButtonVisible(false)}
+          onClick={() => changeChatRoom(room)}
+          $active={chatRoom.currentDmChatRoom?.roomId === room.roomId}
+        >
+          <ProfileImage
+            src={`https://gravatar.com/avatar/${room.roomId}?d=identicon`}
+          />
+          <InfoWrapper>
+            <Nickname>{room.groupName}</Nickname>
+          </InfoWrapper>
+          {deleteButtonVisible && (
+            <Button onClick={() => exitRoom(room.roomId)}>X</Button>
+          )}
+        </OuterWrapper>
+      </Container>
+    );
+  }
+  
+  room = room as DmRoom;
   return (
     <Container>
       <OuterWrapper
@@ -37,7 +73,6 @@ export default function DirectMessageRoom({ room }: { room: DmRoom }) {
         onMouseLeave={() => setDeleteButtonVisible(false)}
         onClick={() => changeChatRoom(room)}
         $active={chatRoom.currentDmChatRoom?.roomId === room.roomId}
-
       >
         <ProfileImage
           src={`https://gravatar.com/avatar/${room.otherUser.userId}?d=identicon`}
@@ -52,6 +87,8 @@ export default function DirectMessageRoom({ room }: { room: DmRoom }) {
     </Container>
   );
 }
+
+export default MessageRoom;
 
 const Container = styled.div`
   width: 100%;

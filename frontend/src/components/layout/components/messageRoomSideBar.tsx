@@ -3,21 +3,32 @@ import { GetRoomListResponse } from "../../../api/roomAPI";
 import DirectMessageRoom from "./directMessageRoom";
 import Span from "../../span";
 import { useAppSelector } from "../../../hooks/redux";
+import MessageRoom from "./messageRoom";
+import { RoomType } from "../../../services/RoomService";
 
-export default function MessageRooms() {
-  const rooms = useAppSelector( (state) => state.room.rooms);
+export default function MessageRoomSide() {
+  const rooms = useAppSelector((state) => state.room.rooms);
 
   return (
     <Container>
       <Title>그룹 및 메세지</Title>
       <RoomsWrapper>
-        {rooms?.dmRooms.map((room, index) => {
-          // TODO: add GroupRoom component here later
+        {rooms?.groupRooms.map((room, index) => {
           return (
-            <DirectMessageRoom
+            <MessageRoom
               key={index}
               room={room}
-            ></DirectMessageRoom>
+              roomType={RoomType.GROUP}
+            ></MessageRoom>
+          );
+        })}
+        {rooms?.dmRooms.map((room, index) => {
+          return (
+            <MessageRoom
+              key={index}
+              room={room}
+              roomType={RoomType.DM}
+            ></MessageRoom>
           );
         })}
         {/* TODO: develop for groupRoom */}
