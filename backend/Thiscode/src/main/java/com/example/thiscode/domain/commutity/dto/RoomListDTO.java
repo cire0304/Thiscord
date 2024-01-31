@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RoomListDTO {
 
-    List<DmRoomDTO> dmRoomList;
-    List<GroupRoomDTO> groupRoomList;
+    List<DmRoomDTO> dmRooms;
+    List<GroupRoomDTO> groupRooms;
 
 }

@@ -142,7 +142,7 @@ class FriendControllerTest extends CustomControllerTestSupport {
                         .content(objectMapper.writeValueAsString(friendRequest))
                 )
                 .andExpect(status().isOk())
-                .andExpect(content().string("친구 요청을 수락했습니다."))
+                .andExpect(content().string("요청을 처리했습니다."))
                 .andDo(
                         document("friend-accept",
                                 preprocessRequest(prettyPrint()),

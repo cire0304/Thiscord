@@ -2,11 +2,13 @@ package com.example.thiscode.domain.notification.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ChatEvent {
 
 //    private Long eventId;

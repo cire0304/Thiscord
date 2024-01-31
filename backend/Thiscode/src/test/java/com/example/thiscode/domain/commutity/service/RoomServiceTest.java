@@ -98,7 +98,7 @@ class RoomServiceTest {
     @Transactional
     @DisplayName("Group 방을 생성할 수 있다.")
     @Test
-    public void createGroupRoom () {
+    public void createGroupRoom() {
         //given
         Long userAId = sender.getId();
         Long userBId = receiverA.getId();
@@ -150,7 +150,7 @@ class RoomServiceTest {
         RoomListDTO roomList = roomService.getRoomListByUserId(senderId);
 
         //then
-        List<DmRoomDTO> result = roomList.getDmRoomList();
+        List<DmRoomDTO> result = roomList.getDmRooms();
         assertThat(result.size()).isEqualTo(2);
         assertThat(result).usingRecursiveComparison().isEqualTo(List.of(
                 dmRoomA,
@@ -173,11 +173,11 @@ class RoomServiceTest {
         RoomListDTO roomList = roomService.getRoomListByUserId(userAId);
 
         //then
-        List<GroupRoomDTO> groupRoomList = roomList.getGroupRoomList();
+        List<GroupRoomDTO> groupRoomList = roomList.getGroupRooms();
         assertThat(groupRoomList.size()).isEqualTo(1);
         assertThat(groupRoomList.get(0).getRoomId()).isEqualTo(groupRoom.getRoomId());
         assertThat(groupRoomList.get(0).getGroupName()).isEqualTo(groupName);
-        assertThat(groupRoomList.get(0).getRoomUserList()).extracting("userId")
+        assertThat(groupRoomList.get(0).getRoomUsers()).extracting("userId")
                 .contains(userAId, userBId, userCId);
     }
 
@@ -197,7 +197,7 @@ class RoomServiceTest {
         Long roomId = dmRoom.getRoomId();
 
         //when
-        RoomUserDTO result = roomService.findRoomUser(senderId, roomId, receiverId);
+        RoomUserDTO result = roomService.findRoomUser(receiverId, roomId);
 
         //then
         assertThat(result.getUserId()).isEqualTo(receiverId);
@@ -219,11 +219,11 @@ class RoomServiceTest {
         roomService.createDmRoom(senderId, receiverAId);
         DmRoomDTO dmRoom = roomService.createDmRoom(senderId, receiverBId);
 
-        roomService.exitDmRoom(senderId, dmRoom.getRoomId());
+        roomService.exitRoom(senderId, dmRoom.getRoomId());
 
         //when
         RoomListDTO roomList = roomService.getRoomListByUserId(senderId);
-        List<DmRoomDTO> result = roomList.getDmRoomList();
+        List<DmRoomDTO> result = roomList.getDmRooms();
 
         //then
         assertThat(result.size()).isEqualTo(1);
@@ -241,7 +241,7 @@ class RoomServiceTest {
         Long roomId = dmRoom.getRoomId();
 
         // when
-        roomService.exitDmRoom(senderId, roomId);
+        roomService.exitRoom(senderId, roomId);
 
         // then
         assertThat(roomUserRepository.findByRoomIdAndUserId(roomId, senderId).get().getState())
@@ -258,11 +258,30 @@ class RoomServiceTest {
         Long roomId = dmRoom.getRoomId();
 
         // when
-        roomService.exitDmRoom(senderId, roomId);
-        roomService.exitDmRoom(receiverId, roomId);
+        roomService.exitRoom(senderId, roomId);
+        roomService.exitRoom(receiverId, roomId);
 
         // then
         assertThat(roomRepository.findById(roomId).isEmpty()).isTrue();
+    }
+
+    @DisplayName("Group 방에 유저를 초대할 수 있다.")
+    @Test
+    public void inviteUser() {
+        // given
+        Long senderAId = sender.getId();
+        Long userBId = receiverA.getId();
+        Long receiverId = receiverB.getId();
+        GroupRoomDTO groupRoom = roomService.createGroupRoom(senderAId, "group name", List.of(userBId));
+        Long roomId = groupRoom.getRoomId();
+
+        // when
+        roomService.inviteUserToRoom(senderAId, receiverId, roomId);
+
+        // then
+        RoomUser roomUser = roomUserRepository.findByRoomIdAndUserId(roomId, receiverId)
+                .orElseThrow(IllegalArgumentException::new);
+        assertThat(roomUser.getState()).isEqualTo(RoomUserState.INVITE);
     }
 
 }

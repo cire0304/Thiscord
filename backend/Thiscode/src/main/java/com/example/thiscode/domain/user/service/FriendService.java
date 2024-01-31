@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 // TODO: Valid 클래스를 따로 만들어도 좋을 것 같다.
 @RequiredArgsConstructor
@@ -41,14 +42,15 @@ public class FriendService {
                 .stream()
                 .filter(friend -> friend.getReceiver().equals(receiver))
                 .findFirst()
-                .ifPresent(friend -> {
+                .ifPresentOrElse(friend -> {
                     if (friend.getFriendState().equals(State.ACCEPT))
                         throw new IllegalArgumentException("이미 친구입니다.");
-                    if (friend.getFriendState().equals(State.REQUEST))
+                    else if (friend.getFriendState().equals(State.REQUEST))
                         throw new IllegalArgumentException("이미 친구 요청을 보냈습니다.");
-                });
-
-        friendRepository.save(new Friend(sender, receiver));
+                    else if(friend.getFriendState().equals(State.REJECT))
+                        friend.updateState(State.REQUEST);
+                    else throw new IllegalArgumentException("데이터 무결성 오류");
+                }, () -> friendRepository.save(new Friend(sender, receiver)));
     }
 
     @Transactional
@@ -103,4 +105,6 @@ public class FriendService {
 
         friend.updateState(state);
     }
+
+    // TODO: develop remove friend method
 }

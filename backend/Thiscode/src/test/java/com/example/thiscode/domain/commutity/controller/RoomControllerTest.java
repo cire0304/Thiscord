@@ -85,6 +85,17 @@ class RoomControllerTest extends CustomControllerTestSupport {
         Cookie defaultJwtCookie = getDefaultJwtCookie();
         CreateDmRoomRequest request = new CreateDmRoomRequest(1L);
 
+        RoomUserDTO roomUserDTO = RoomUserDTO.builder()
+                .userId(20L)
+                .nickname("userNickname")
+                .email("userEmail")
+                .userCode("userCode")
+                .introduction("userIntroduction")
+                .state(RoomUserState.JOIN)
+                .build();
+        DmRoomDTO dmRoomDTO = new DmRoomDTO(1L, roomUserDTO);
+        given(roomService.createDmRoom(any(), any())).willReturn(dmRoomDTO);
+
         //when //then
         mockMvc.perform(post("/rooms/dm-room")
                         .contentType("application/json")
@@ -92,8 +103,51 @@ class RoomControllerTest extends CustomControllerTestSupport {
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
+                .andExpect(content().string(objectMapper.writeValueAsString(dmRoomDTO)))
                 .andDo(
-                        document("room-create",
+                        document("room-dm-create",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );
+    }
+
+    @DisplayName("Group 방을 생성한다.")
+    @Test
+    public void createGroupRoom() throws Exception {
+        //given
+        Cookie defaultJwtCookie = getDefaultJwtCookie();
+        CreateDmRoomRequest request = new CreateDmRoomRequest(1L);
+        RoomUserDTO roomUserDTOA = RoomUserDTO.builder()
+                .userId(20L)
+                .nickname("userNickname A")
+                .email("userEmail")
+                .userCode("userCode")
+                .introduction("userIntroduction")
+                .state(RoomUserState.JOIN)
+                .build();
+
+        RoomUserDTO roomUserDTOB = RoomUserDTO.builder()
+                .userId(20L)
+                .nickname("userNickname B")
+                .email("userEmail")
+                .userCode("userCode")
+                .introduction("userIntroduction")
+                .state(RoomUserState.JOIN)
+                .build();
+        GroupRoomDTO groupRoomDTO = new GroupRoomDTO(1L, "Group name", List.of(roomUserDTOA, roomUserDTOB));
+        given(roomService.createGroupRoom(any(), any(), any())).willReturn(groupRoomDTO);
+
+        //when //then
+        mockMvc.perform(post("/rooms/group-room")
+                        .contentType("application/json")
+                        .cookie(defaultJwtCookie)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().string(objectMapper.writeValueAsString(groupRoomDTO)))
+                .andDo(
+                        document("room-group-create",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint())
                         )
@@ -113,10 +167,10 @@ class RoomControllerTest extends CustomControllerTestSupport {
                 .introduction("userIntroduction")
                 .state(RoomUserState.JOIN)
                 .build();
-        given(roomService.findRoomUser(any(), any(), any())).willReturn(roomUserDTO);
+        given(roomService.findRoomUser(any(), any())).willReturn(roomUserDTO);
 
         //when //then
-        mockMvc.perform(get("/rooms/dm-room/{roomId}/users/{userId}", 1, 20)
+        mockMvc.perform(get("/rooms/{roomId}/users/{userId}", 1, 20)
                         .contentType("application/json")
                         .cookie(defaultJwtCookie)
                 )
@@ -133,15 +187,12 @@ class RoomControllerTest extends CustomControllerTestSupport {
     @DisplayName("DM 방을 나간다.")
     @Test
     public void exitDmRoom() throws Exception {
-
-        StringBuilder sb = new StringBuilder();
-
         //given
         Cookie defaultJwtCookie = getDefaultJwtCookie();
         long roomId = 1L;
 
         //when //then
-        mockMvc.perform(delete("/rooms/dm-room/{roomId}/users/me", roomId)
+        mockMvc.perform(delete("/rooms/{roomId}/users/me", roomId)
                         .contentType("application/json")
                         .cookie(defaultJwtCookie)
                 )
@@ -154,5 +205,28 @@ class RoomControllerTest extends CustomControllerTestSupport {
                         )
                 );
     }
+
+    @DisplayName("유저를 방에 초대한다.")
+    @Test
+    public void inviteUserToRoom () throws Exception {
+        //given
+        Cookie defaultJwtCookie = getDefaultJwtCookie();
+        Long roomId = 1L;
+        Long userId = 1L;
+
+        //when
+        mockMvc.perform(post("/rooms/{roomId}/users/{userId}", roomId, userId)
+                        .contentType("application/json")
+                        .cookie(defaultJwtCookie)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().string("유저를 초대했습니다."))
+                .andDo(
+                        document("room-invite",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                );
+     }
 
 }

@@ -199,7 +199,7 @@ public class RoomService {
     }
 
     @Transactional
-    public void exitDmRoom(Long userId, Long roomId) {
+    public void exitRoom(Long userId, Long roomId) {
         RoomUser roomUser = roomUserRepository.findByRoomIdAndUserId(roomId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("방에 참여한 사용자가 아닙니다."));
         roomUser.exit();
@@ -214,15 +214,12 @@ public class RoomService {
     }
 
     @Transactional
-    public RoomUserDTO findRoomUser(Long userIdRequestBy, Long roomId, Long userId) {
-        roomUserRepository.findByRoomIdAndUserId(roomId, userIdRequestBy)
-                .orElseThrow(() -> new IllegalArgumentException("방에 참여한 사용자가 아닙니다."));
-
+    public RoomUserDTO findRoomUser(Long userId, Long roomId) {
         RoomUser roomUser = roomUserRepository.findByRoomIdAndUserId(roomId, userId)
-                .orElseThrow(() -> new IllegalArgumentException("방에 참여한 사용자가 아닙니다."));
+                .orElseThrow(() -> new EntityNotFoundException("방에 참여한 사용자가 아닙니다."));
 
         User user = userRepository.findById(roomUser.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자입니다."));
 
         return RoomUserDTO.builder()
                 .userId(user.getId())

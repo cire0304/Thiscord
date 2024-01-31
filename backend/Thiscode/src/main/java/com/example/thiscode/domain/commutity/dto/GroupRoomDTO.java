@@ -13,6 +13,6 @@ public class GroupRoomDTO {
 
     private Long roomId;
     private String groupName;
-    private List<RoomUserDTO> roomUserList;
+    private List<RoomUserDTO> roomUsers;
 
 }

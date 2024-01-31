@@ -38,8 +38,8 @@ public class FriendController {
     }
 
     @PostMapping("/users/me/friends")
-    public ResponseEntity<String> addFriend(@RequestBody @Valid AddFriendRequest request,
-                                            @AuthenticationPrincipal JwtSubject subject) {
+    public ResponseEntity<String> requestFriend(@RequestBody @Valid AddFriendRequest request,
+                                                @AuthenticationPrincipal JwtSubject subject) {
         friendService.requestFriend(subject.getId(), request.getNickname(), request.getUserCode());
         return ResponseEntity.ok("친구 요청을 보냈습니다.");
     }
@@ -48,7 +48,7 @@ public class FriendController {
     public ResponseEntity<String> updateFriendState(@RequestBody UpdateFriendStateRequest request,
                                                     @AuthenticationPrincipal JwtSubject subject) {
         friendService.updateFriendState(subject.getId(), request.getId(), request.getState());
-        return ResponseEntity.ok("친구 요청을 수락했습니다.");
+        return ResponseEntity.ok("요청을 처리했습니다.");
     }
 
 }
