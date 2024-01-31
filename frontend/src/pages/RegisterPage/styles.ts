@@ -10,7 +10,7 @@ export const Container = styled.div`
 
 export const Modal = styled.div`
   width: 343px;
-  height: 400px;
+  padding-bottom: 20px;
 
   border-radius: 5px;
   ${({ theme }) => theme.color.backgroundPrimary}
