@@ -5,7 +5,6 @@ import com.example.thiscode.domain.user.controller.request.UpdateUserRequest;
 import com.example.thiscode.domain.user.controller.response.UserInfosResponse;
 import com.example.thiscode.domain.user.entity.User;
 import com.example.thiscode.domain.user.service.UserService;
-import com.example.thiscode.domain.user.service.dto.UserDTO;
 import com.example.thiscode.security.jwt.JwtSubject;
 import com.example.thiscode.security.jwt.JwtTokenProvider;
 import com.example.thiscode.security.model.PrincipalUser;
@@ -32,11 +31,11 @@ public class UserController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid SignUpRequest request) {
-        userService.singUp(request.getEmail(), request.getPassword(), request.getNickname());
-        return ResponseEntity.ok("success");
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequest request) {
+//        userService.singUp(request.getEmail(), request.getPassword(), request.getNickname());
+//        return ResponseEntity.ok("success");
+//    }
 
     @GetMapping("/users/me")
     public ResponseEntity<JwtSubject> getUserInfos(@AuthenticationPrincipal JwtSubject subject) {

@@ -22,7 +22,7 @@ public class UserService {
     @Transactional
     public User singUp(String email, String password, String nickname) {
         if (userRepository.existsByEmail(email)) {
-            throw new DuplicateKeyException("이미 사용중인 이메일입니다.");
+            throw new DuplicateKeyException("이미 회원가입한 이메일입니다.");
         }
 
         User user = new User(email, password, nickname, "introduction");
