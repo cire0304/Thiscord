@@ -14,6 +14,7 @@ import com.example.thiscode.domain.commutity.dto.DmRoomDTO;
 import com.example.thiscode.domain.commutity.dto.RoomUserDTO;
 import com.example.thiscode.domain.user.entity.User;
 import com.example.thiscode.domain.user.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -167,27 +168,17 @@ public class RoomService {
                 .toList();
 
         // <RoomId, List<RoomUser>>
-        Map<Long, List<RoomUser>> collect = roomUserRepository.findAllByRoomIdIn(roomIds).stream()
-                .filter(RoomUser::isJoin)
-                .collect(Collectors.groupingBy(roomUser -> roomUser.getRoom().getId()));
-
-        List<Long> userIds = collect.values().stream()
-                .flatMap(Collection::stream)
-                .map(RoomUser::getUserId)
-                .toList();
+        Map<Long, List<RoomUser>> roomUserListMap = getRoomUserListMap(roomIds);
 
         // <UserId, User>
-        Map<Long, User> usersMap = userRepository.findAllById(userIds)
-                .stream()
-                .map(user -> Map.entry(user.getId(), user))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<Long, User> usersMap = getUserMap(roomUserListMap);
 
         List<GroupRoomDTO> groupRoomDTOs = new ArrayList<>();
         for (Room room : groupRooms) {
             Long roomId = room.getId();
             String roomName = room.getName();
-            List<RoomUser> roomUsers = collect.get(roomId);
 
+            List<RoomUser> roomUsers = roomUserListMap.get(roomId);
             List<RoomUserDTO> roomUserDTOS = roomUsers.stream()
                     .map(roomUser -> usersMap.get(roomUser.getUserId()))
                     .map(RoomService::getRoomUserDTO)
@@ -196,6 +187,24 @@ public class RoomService {
             groupRoomDTOs.add(new GroupRoomDTO(roomId, roomName, roomUserDTOS));
         }
         return groupRoomDTOs;
+    }
+
+    private Map<Long, User> getUserMap(Map<Long, List<RoomUser>> roomUserListMap) {
+        List<Long> userIds = roomUserListMap.values().stream()
+                .flatMap(Collection::stream)
+                .map(RoomUser::getUserId)
+                .toList();
+
+        return userRepository.findAllById(userIds)
+                .stream()
+                .map(user -> Map.entry(user.getId(), user))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private Map<Long, List<RoomUser>> getRoomUserListMap(List<Long> roomIds) {
+        return roomUserRepository.findAllByRoomIdIn(roomIds).stream()
+                .filter(RoomUser::isJoin)
+                .collect(Collectors.groupingBy(roomUser -> roomUser.getRoom().getId()));
     }
 
     @Transactional

@@ -4,7 +4,6 @@ import com.example.thiscode.domain.common.BaseEntity;
 import com.example.thiscode.domain.commutity.entity.type.RoomUserState;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 
@@ -46,13 +45,33 @@ public class RoomUser extends BaseEntity {
         this.lastReadAt = LocalDateTime.now();
     }
 
+    private RoomUser(Room room, Long userId, RoomUserState state, LocalDateTime joinedAt, LocalDateTime lastReadAt) {
+        this.room = room;
+        this.userId = userId;
+        this.state = state;
+        this.joinedAt = joinedAt;
+        this.lastReadAt = lastReadAt;
+    }
+
+    public static RoomUser invitedRoomUser(Room room, Long userId) {
+        return new RoomUser(room, userId, RoomUserState.INVITE, LocalDateTime.now(), LocalDateTime.now());
+    }
+
     public void join() {
         this.state = RoomUserState.JOIN;
         room.increaseUserCount();
     }
 
+    public void reject() {
+        this.state = RoomUserState.REJECT;
+    }
+
     public boolean isJoin() {
         return this.state == RoomUserState.JOIN;
+    }
+
+    public boolean isInivte() {
+        return this.state == RoomUserState.INVITE;
     }
 
     public void exit() {
