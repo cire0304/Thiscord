@@ -33,7 +33,6 @@ export interface GroupRoom {
     roomUsers : UserInfo[];
 }
 
-
 export interface GetRoomListResponse {
     rooms: {
         dmRooms: DmRoom[],

@@ -25,7 +25,7 @@ export interface RoomUser {
   state: "JOIN" | "EXIT";
 }
 const getDmRoomUser = async (roomId: number, userId: number) => {
-  return await axiosInstance.get<RoomUser>(`/rooms/dm-room/${roomId}/users/${userId}`);
+  return await axiosInstance.get<RoomUser>(`/rooms/${roomId}/users/${userId}`);
 };
 
 const createDmRoom = async (otherUserId: number) => {
@@ -33,7 +33,7 @@ const createDmRoom = async (otherUserId: number) => {
 };
 
 const exitRoom = async (roomId: number) => {
-  return await axiosInstance.delete(`/rooms/dm-room/${roomId}/users/me`);
+  return await axiosInstance.delete(`/rooms/${roomId}/users/me`);
 };
 
 const RoomAPI = {

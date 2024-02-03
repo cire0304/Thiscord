@@ -1,36 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { FriendService } from '../../services/FriendService';
+import { createSlice } from "@reduxjs/toolkit";
+import { FriendService } from "../../services/FriendService";
 
 export interface FriendDTO {
-    id: number,
-    userId: number;
-    email: string;
-    nickname: string;
-    userCode: number;
+  id: number;
+  userId: number;
+  email: string;
+  nickname: string;
+  userCode: number;
 }
 
 export interface FriendState {
-    friends: FriendDTO[]
-};
-
-const initialState: FriendState = {
-    friends: []
+  friends: FriendDTO[];
 }
 
+const initialState: FriendState = {
+  friends: [],
+};
+
 const friendSlice = createSlice({
-    name: 'friend',
-    initialState,
-    reducers: {
-        clearFriend() {
-            return initialState
-        }
+  name: "friend",
+  initialState,
+  reducers: {
+    clearFriend() {
+      return initialState;
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(FriendService.getFriends.fulfilled, (state, { payload }) => {  
-                state.friends = payload.friends;
-            })
-        }
-    });
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      FriendService.getFriends.fulfilled,
+      (state, { payload }) => {
+        state.friends = payload.friends;
+      }
+    );
+  },
+});
 
 export default friendSlice;

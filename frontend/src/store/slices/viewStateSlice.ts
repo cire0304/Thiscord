@@ -11,26 +11,21 @@ const initialState: ViewState = {
     infos: [
         {
             id: 0,
-            name: "온라인",
+            name: "모두",
             active: true,
         },
         {
             id: 1,
-            name: "모두",
-            active: false,
-        },
-        {
-            id: 2,
             name: "대기중",
             active: false,
         },
         {
-            id: 3,
+            id: 2,
             name: "차단 목록",
             active: false,
         },
         {
-            id: 4,
+            id: 3,
             name: "친구 추가하기",
             active: false,
         },

@@ -16,7 +16,7 @@ const roomSlice = createSlice({
     builder.addCase(RoomService.getRoomList.fulfilled, (state, { payload }) => {
       state.rooms.dmRooms = [];
       state.rooms.groupRooms = [];
-
+      
       payload.rooms.dmRooms.forEach((dmRoom) => {
         state.rooms.dmRooms.push(dmRoom);
       });
