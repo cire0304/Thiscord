@@ -31,12 +31,6 @@ public class UserController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-//    @PostMapping("/register")
-//    public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequest request) {
-//        userService.singUp(request.getEmail(), request.getPassword(), request.getNickname());
-//        return ResponseEntity.ok("success");
-//    }
-
     @GetMapping("/users/me")
     public ResponseEntity<JwtSubject> getUserInfos(@AuthenticationPrincipal JwtSubject subject) {
         return ResponseEntity.ok(subject);
