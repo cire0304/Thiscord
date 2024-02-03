@@ -14,10 +14,11 @@ export default function FriendPage() {
     <Container>
       <Nav></Nav>
       <Content>
-        {viewState.infos[0].active && <ShowOnlineFriend></ShowOnlineFriend>}
-        {viewState.infos[1].active && <ShowFriend></ShowFriend>}
-        {viewState.infos[2].active && <RequestFreind></RequestFreind>}
-        {viewState.infos[4].active && <AddFriend></AddFriend>}
+        {/* {viewState.infos[0].active && <ShowOnlineFriend></ShowOnlineFriend>} */}
+        {viewState.infos[0].active && <ShowFriend></ShowFriend>}
+        {viewState.infos[1].active && <RequestFreind></RequestFreind>}
+        {/* 차단 목록 */}
+        {viewState.infos[3].active && <AddFriend></AddFriend>}
       </Content>
     </Container>
   );

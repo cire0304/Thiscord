@@ -20,8 +20,11 @@ export default function ShowFriend() {
 
   useEffect(() => {
     dispatch(FriendService.getFriends());
-    setRequestCount(friends.length);
   }, []);
+
+  useEffect(() => {
+    setRequestCount(friends.length);
+  }, [friends]);
 
   const createRoomHandler = async (
     receiverId: number,
@@ -50,7 +53,7 @@ export default function ShowFriend() {
               <S.Friend>
                 <S.Info>
                   <S.Nickname>{friend.nickname}</S.Nickname>
-                  <S.Type>현재 로그인 상태를 출력해야 함(개발 예정)</S.Type>
+                  {/* <S.Type>현재 로그인 상태를 출력해야 함(개발 예정)</S.Type> */}
                 </S.Info>
                 <S.Button
                   onClick={() => {

@@ -88,7 +88,8 @@ const RegisterPage = () => {
     const res = await UserAPI.registerUser({ email, password, nickname });
 
     if (res.status === 200) {
-      navigate("/login");
+      await UserAPI.login(email, password);
+      navigate("/workspace/me");
     } else if (res.status === 409) {
       setWarnEmail("이미 존재하는 이메일입니다.");
       setValidEmail(false);
@@ -191,7 +192,7 @@ const RegisterPage = () => {
           <Span styles={[theme.fontFormat.subhead, theme.color.neutral]}>
             비밀번호
           </Span>
-          <Input placeholder="12345678" ref={passwordRef}></Input>
+          <Input placeholder="12345678" ref={passwordRef} type="password"></Input>
           <Span
             styles={[theme.fontFormat.footnote, theme.color.systemWarning]}
             hidden={isValidPassword}

@@ -12,6 +12,9 @@ export default function AddFriend() {
   const [hidden, setHidden] = useState(true);
   const [warningMessage, setWarningMessage] = useState("");
 
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("친구 초대 요청을 보냈어요!");
+
   const nicknameAnduserCodeRef = useRef<HTMLInputElement>(null);
 
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +52,7 @@ export default function AddFriend() {
       }
     };
     addFreindRequest();
+    setIsSuccess(true);
   };
 
   return (
@@ -72,7 +76,8 @@ export default function AddFriend() {
             친구 요청 보내기
           </InputButton>
         </InputWrapper>
-        <WarningMessage hidden={hidden}>{warningMessage}</WarningMessage>
+        <SuccessMessage hidden={!isSuccess}>{successMessage}</SuccessMessage>
+        <WarningMessage hidden={hidden}>{warningMessage}</WarningMessage>         
       </Body>
     </Container>
   );
@@ -117,6 +122,12 @@ const WarningMessage = styled(Span)`
   font-size: 12px;
   ${({ theme }) => theme.color.systemWarning}
 `;
+
+const SuccessMessage = styled(Span)`
+  margin-top: 5px;
+  font-size: 12px;
+  color: #00b87c;
+`
 
 const InputWrapper = styled.div`
   position: relative;

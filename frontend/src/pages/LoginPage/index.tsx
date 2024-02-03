@@ -74,7 +74,7 @@ const LoginPage = () => {
       <S.Modal>
         <S.Title>
           <S.MainTitle>Thiscord에 오신걸 환영해요!</S.MainTitle>
-          <S.SubTitle>열심히 만들었어요 (˙ ˘ ˙)</S.SubTitle>
+          <S.SubTitle>다시 만나다니 반가워요! (˙ ˘ ˙)</S.SubTitle>
         </S.Title>
 
         <S.InputWrapper>
@@ -99,8 +99,10 @@ const LoginPage = () => {
           </Span>
           <Input
             placeholder="12345678"
+            type="password"
             ref={passwordRef}
             onKeyUp={handleOnKeyPress}
+          
           ></Input>
 
           <Span
