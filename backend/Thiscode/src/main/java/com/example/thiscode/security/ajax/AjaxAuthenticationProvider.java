@@ -8,6 +8,8 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class AjaxAuthenticationProvider implements AuthenticationProvider {
 
     private final AjaxUserDetailsService ajaxUserDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -23,7 +26,7 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
 
         PrincipalUser providerUser = (PrincipalUser) ajaxUserDetailsService.loadUserByUsername(email);
 
-        if (!providerUser.getPassword().equals(password)) {
+        if (!passwordEncoder.matches(password, providerUser.getPassword())) {
             throw new BadCredentialsException("Password is not correct");
         }
 
