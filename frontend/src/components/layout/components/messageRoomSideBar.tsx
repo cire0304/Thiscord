@@ -1,6 +1,4 @@
 import { styled } from "styled-components";
-import { GetRoomListResponse } from "../../../api/roomAPI";
-import DirectMessageRoom from "./directMessageRoom";
 import Span from "../../span";
 import { useAppSelector } from "../../../hooks/redux";
 import MessageRoom from "./messageRoom";
@@ -31,8 +29,6 @@ export default function MessageRoomSide() {
             ></MessageRoom>
           );
         })}
-        {/* TODO: develop for groupRoom */}
-        {/* <GroupRoom nickname="이동준" userCount={1}></GroupRoom> */}
       </RoomsWrapper>
     </Container>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import {
@@ -8,7 +8,7 @@ import {
   RoomType,
 } from "../../../services/RoomService";
 import RoomAPI from "../../../api/roomAPI";
-import { setCurrentChatRoom, setCurrentDmChatRoom } from "../../../store";
+import { setCurrentChatRoom } from "../../../store";
 import { css, styled } from "styled-components";
 import Span from "../../span";
 import ProfileImage from "../../profileImage";
@@ -27,7 +27,7 @@ function MessageRoom({
   const chatRoom = useAppSelector((state) => state.chatRoom);
 
   const changeChatRoom = (room: DmRoom | GroupRoom) => {
-    dispatch(setCurrentChatRoom({room, roomType}));
+    dispatch(setCurrentChatRoom({ room, roomType }));
     navigate(`/workspace/rooms/${room.roomId}`);
   };
 
@@ -64,7 +64,7 @@ function MessageRoom({
       </Container>
     );
   }
-  
+
   room = room as DmRoom;
   return (
     <Container>
