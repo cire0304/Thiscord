@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-@Profile({"local"})
 @Configuration
 public class RedisConfig {
 

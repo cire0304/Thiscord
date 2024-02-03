@@ -11,7 +11,6 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 /**
  * Redis configuration of chat server for community event.
  */
-@Profile({"local"})
 @Configuration
 public class CommunityRedisConfig {
 
