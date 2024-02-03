@@ -239,4 +239,33 @@ public class RoomService {
                 .state(roomUser.getState())
                 .build();
     }
+
+    @Transactional
+    public void inviteUserToRoom(Long senderId, Long receiverId, Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 방입니다."));
+
+        room.getRoomUsers().stream().filter(roomUser -> Objects.equals(roomUser.getUserId(), senderId))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("초대를 사용자는 방에 참여한 사용자가 아닙니다."));
+
+        room.getRoomUsers().stream()
+                .filter(roomUser -> roomUser.getUserId().equals(receiverId))
+                .findAny()
+                .ifPresentOrElse(
+                        roomUser -> {
+                            if (roomUser.isJoin()) {
+                                throw new IllegalArgumentException("이미 방에 참여한 사용자입니다.");
+                            }
+                            roomUser.join();
+                            communityEventPublisher.publish(roomUser, RoomEventType.INVITE_ROOM);
+                        },
+                        () -> {
+                            RoomUser roomUser = RoomUser.invitedRoomUser(room, receiverId);
+                            room.addRoomUser(roomUser);
+                            communityEventPublisher.publish(roomUser, RoomEventType.INVITE_ROOM);
+                        }
+                );
+    }
+
 }
