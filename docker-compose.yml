@@ -1,0 +1,84 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    container_name: myweb-web
+    networks:
+      - test-networks
+
+  redis: 
+    image: redis:6
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    networks:
+      - test-networks
+
+  mysql:
+    container_name: mysql_container
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: thiscode_db
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: 1234
+      TZ: Asia/Seoul
+    command: ["--character-set-server=utf8mb4","--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - 3306:3306
+    networks:
+      - test-networks
+
+  database-adminer:
+      container_name: database-adminer
+      image: adminer:latest
+      ports:
+        - "18080:8080"
+      environment:
+        - ADMINER_DEFAULT_SERVER=mysql
+        - ADMINER_DESIGN=hydra
+        - ADMINER_PLUGINS=tables-filter tinymce
+
+  api:
+    depends_on:
+      - mysql
+      - redis
+    build:
+      context: ./backend/Thiscode
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/thiscode_db?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: "1234"
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    ports:
+      - 8080:8080
+    networks:
+      - test-networks
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  # nginx:
+  #   image: nginx:1.21.5-alpine
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+  #   container_name: myweb-proxy
+  #   depends_on:
+  #     - web
+  #     - api
+  
+volumes:
+  db: {}
+
+networks:
+  test-networks:
+    driver: bridge
