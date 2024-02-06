@@ -22,7 +22,7 @@ frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
 frontend/.env
-*.yml
+# *.yml
 backend/Thiscode/src/main/resources/application.yml
 frontend/src/pages/test/*
 frontend/src/pages/test
