@@ -25,7 +25,8 @@ public class ChatMessageSubscriber implements MessageListener {
             String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
             ChatMessageDTO chatMessageDTO = objectMapper.readValue(publishMessage, ChatMessageDTO.class);
             Long roomId = chatMessageDTO.getMessage().getRoomId();
-            messagingTemplate.convertAndSend("/sub/chat/rooms/" + roomId, chatMessageDTO);
+            // TODO: this is hard coded. need to change to dynamic.
+            messagingTemplate.convertAndSend("/chat/sub/chat/rooms/" + roomId, chatMessageDTO);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

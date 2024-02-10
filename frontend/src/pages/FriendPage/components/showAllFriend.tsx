@@ -48,9 +48,9 @@ export default function ShowFriend() {
 
       <S.Body>
         {
-          friends.map((friend) => {
+          friends.map((friend, index) => {
             return (
-              <S.Friend>
+              <S.Friend key={index}>
                 <S.Info>
                   <S.Nickname>{friend.nickname}</S.Nickname>
                   {/* <S.Type>현재 로그인 상태를 출력해야 함(개발 예정)</S.Type> */}

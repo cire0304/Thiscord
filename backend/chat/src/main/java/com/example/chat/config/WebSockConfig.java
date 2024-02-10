@@ -17,13 +17,13 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/sub");
-        config.setApplicationDestinationPrefixes("/pub");
+        config.enableSimpleBroker("/chat/sub");
+        config.setApplicationDestinationPrefixes("/chat/pub");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")
+        registry.addEndpoint("/chat/ws")
                 .setAllowedOrigins("http://localhost:3000", "https://localhost:3000")
                 .withSockJS();
     }

@@ -41,7 +41,7 @@ export interface ChatMessageHitory {
 }
 
 const getChatHistories = async (roomId: number) => {
-  return await axiosInstance.get<ChatMessageHitory[]>(`/chat/rooms/${roomId}`);
+  return await axiosInstance.get<ChatMessageHitory[]>(`/rooms/${roomId}`);
 };
 
 const ChatAPI = { getChatHistories };

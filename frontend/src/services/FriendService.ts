@@ -12,6 +12,5 @@ export const FriendService = {
             return response.data;
         }
     ),
-    
 
 }
