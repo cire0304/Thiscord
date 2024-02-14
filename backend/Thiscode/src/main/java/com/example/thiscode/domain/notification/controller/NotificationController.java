@@ -20,7 +20,7 @@ public class NotificationController {
     private final NotificationService notificationService;
 
 
-    @PutMapping("/notifications/profiles/me")
+    @PutMapping("/api/notifications/profiles/me")
     public ResponseEntity<String> updateNotification(
             @AuthenticationPrincipal JwtSubject subject,
             @RequestBody @Valid ProfileInfoDTO request) {

@@ -1,6 +1,5 @@
 package com.example.thiscode.domain.user.controller;
 
-import com.example.thiscode.domain.user.controller.request.SignUpRequest;
 import com.example.thiscode.domain.user.controller.request.UpdateUserRequest;
 import com.example.thiscode.domain.user.controller.response.UserInfosResponse;
 import com.example.thiscode.domain.user.entity.User;
@@ -31,19 +30,19 @@ public class UserController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @GetMapping("/users/me")
+    @GetMapping("/api/users/me")
     public ResponseEntity<JwtSubject> getUserInfos(@AuthenticationPrincipal JwtSubject subject) {
         return ResponseEntity.ok(subject);
     }
 
     // TODO: Write test code
-    @PostMapping("/users")
+    @PostMapping("/api/users")
     public ResponseEntity<UserInfosResponse> getUserInfos(@RequestBody List<Long> userId) {
         UserInfosResponse response = new UserInfosResponse(userService.getUserInfos(userId));
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/users/me")
+    @PutMapping("/api/users/me")
     public ResponseEntity<JwtSubject> updateUser(@AuthenticationPrincipal JwtSubject subject,
                                              @RequestBody @Valid UpdateUserRequest request,
                                              HttpServletResponse response) {

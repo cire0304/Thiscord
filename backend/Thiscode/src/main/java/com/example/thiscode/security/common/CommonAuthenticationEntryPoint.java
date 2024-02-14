@@ -15,12 +15,11 @@ import java.io.IOException;
 public class CommonAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     // TODO: 나중에 환경 변수값으로 빼내기
-    private final String REDIRECT_URL = "http://localhost:3000/login";
+    private final String REDIRECT_URL = "http://localhost:80/login";
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         log.debug("error message : {}", authException.getMessage());
-
         response.sendRedirect(REDIRECT_URL);
     }
 }

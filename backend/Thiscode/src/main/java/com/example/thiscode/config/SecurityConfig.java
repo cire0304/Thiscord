@@ -68,7 +68,7 @@ public class SecurityConfig {
     SecurityFilterChain oAuth2securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/register", "/login").permitAll()
+                        .requestMatchers("/api/register", "/api/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(config -> config

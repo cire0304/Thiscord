@@ -41,7 +41,7 @@ class FriendControllerTest extends CustomControllerTestSupport {
         AddFriendRequest friendRequest = new AddFriendRequest("receiver-nickname", "receiver-user-code");
 
         //when then
-        mockMvc.perform(post("/users/me/friends")
+        mockMvc.perform(post("/api/users/me/friends")
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie)
                         .content(objectMapper.writeValueAsString(friendRequest))
@@ -72,7 +72,7 @@ class FriendControllerTest extends CustomControllerTestSupport {
         FriendsResponse expect = new FriendsResponse(List.of(friendInfoDto));
 
         //when then
-        mockMvc.perform(get("/users/me/friends")
+        mockMvc.perform(get("/api/users/me/friends")
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie)
                 )
@@ -107,7 +107,7 @@ class FriendControllerTest extends CustomControllerTestSupport {
         FriendRequestsDTO expect = friendRequestsDto;
 
         //when then
-        mockMvc.perform(get("/users/me/friend-requests")
+        mockMvc.perform(get("/api/users/me/friend-requests")
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie)
                 )
@@ -136,7 +136,7 @@ class FriendControllerTest extends CustomControllerTestSupport {
         UpdateFriendStateRequest friendRequest = new UpdateFriendStateRequest(friendInfoDto.getId(), State.ACCEPT);
 
         //when then
-        mockMvc.perform(put("/users/me/friends", friend.getId())
+        mockMvc.perform(put("/api/users/me/friends", friend.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie)
                         .content(objectMapper.writeValueAsString(friendRequest))

@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
-@Configuration
+//@Configuration
 @EnableRedisRepositories
 public class TestRedisConfig {
 

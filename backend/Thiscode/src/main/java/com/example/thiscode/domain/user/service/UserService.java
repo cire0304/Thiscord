@@ -3,11 +3,9 @@ package com.example.thiscode.domain.user.service;
 import com.example.thiscode.domain.user.repository.UserRepository;
 import com.example.thiscode.domain.user.entity.User;
 import com.example.thiscode.domain.user.service.dto.UserDTO;
-import com.example.thiscode.domain.user.service.dto.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +17,6 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional

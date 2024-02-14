@@ -5,7 +5,7 @@ import jakarta.annotation.PreDestroy;
 import org.springframework.boot.test.context.TestConfiguration;
 import redis.embedded.RedisServer;
 
-@TestConfiguration
+//@TestConfiguration
 public class TestRedisServerConfig {
 
     private RedisServer redisServer;

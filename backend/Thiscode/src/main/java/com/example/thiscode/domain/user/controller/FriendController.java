@@ -25,26 +25,26 @@ public class FriendController {
 
     private final FriendService friendService;
 
-    @GetMapping("/users/me/friends")
+    @GetMapping("/api/users/me/friends")
     public ResponseEntity<FriendsResponse> getFriends(@AuthenticationPrincipal JwtSubject subject) {
         List<FriendDTO> friends = friendService.getFriends(subject.getId());
         return ResponseEntity.ok(new FriendsResponse(friends));
     }
 
-    @GetMapping("/users/me/friend-requests")
+    @GetMapping("/api/users/me/friend-requests")
     public ResponseEntity<FriendRequestsDTO> getFriendRequests(@AuthenticationPrincipal JwtSubject subject) {
         FriendRequestsDTO friendRequests = friendService.getFriendRequests(subject.getId());
         return ResponseEntity.ok(friendRequests);
     }
 
-    @PostMapping("/users/me/friends")
+    @PostMapping("/api/users/me/friends")
     public ResponseEntity<String> requestFriend(@RequestBody @Valid AddFriendRequest request,
                                                 @AuthenticationPrincipal JwtSubject subject) {
         friendService.requestFriend(subject.getId(), request.getNickname(), request.getUserCode());
         return ResponseEntity.ok("친구 요청을 보냈습니다.");
     }
 
-    @PutMapping("/users/me/friends")
+    @PutMapping("/api/users/me/friends")
     public ResponseEntity<String> updateFriendState(@RequestBody UpdateFriendStateRequest request,
                                                     @AuthenticationPrincipal JwtSubject subject) {
         friendService.updateFriendState(subject.getId(), request.getId(), request.getState());

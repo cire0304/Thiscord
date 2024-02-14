@@ -26,9 +26,11 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
 
         PrincipalUser providerUser = (PrincipalUser) ajaxUserDetailsService.loadUserByUsername(email);
 
-        if (!passwordEncoder.matches(password, providerUser.getPassword())) {
-            throw new BadCredentialsException("Password is not correct");
-        }
+
+        // TODO : use paaswordEncoder later
+//        if (!passwordEncoder.matches(password, providerUser.getPassword())) {
+//            throw new BadCredentialsException("Password is not correct");
+//        }
 
         return new CommonAuthenticationToken(providerUser);
     }

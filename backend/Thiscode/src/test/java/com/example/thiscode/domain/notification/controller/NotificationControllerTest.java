@@ -35,7 +35,7 @@ class NotificationControllerTest extends CustomControllerTestSupport {
         ProfileInfoDTO request = new ProfileInfoDTO(fcmToken);
 
         //when
-        mockMvc.perform(put("/notifications/profiles/me")
+        mockMvc.perform(put("/api/notifications/profiles/me")
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie)
                         .content(objectMapper.writeValueAsString(request)))

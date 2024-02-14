@@ -24,18 +24,18 @@ public class AuthController {
     private final UserService userService;
     private final AuthService authService;
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequest request) {
         userService.singUp(request.getEmail(), request.getPassword(), request.getNickname());
         return ResponseEntity.ok("success");
     }
 
-    @PostMapping("/send-email")
+    @PostMapping("/api/send-email")
     public ResponseEntity<String> sendEmail(@RequestBody SendEmailCodeRequest request) {
         return ResponseEntity.ok(authService.sendAuthEmail(request.getEmail()));
     }
 
-    @PostMapping("/check-email")
+    @PostMapping("/api/check-email")
     public ResponseEntity<String> checkEmail(@RequestBody CheckEmailCodeRequest request) {
         authService.checkEmail(request.getEmailCode());
         return ResponseEntity.ok("인증에 성공했습니다.");

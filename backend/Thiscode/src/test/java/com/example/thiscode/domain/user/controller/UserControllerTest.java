@@ -35,7 +35,7 @@ class UserControllerTest extends CustomControllerTestSupport {
         SignUpRequest request = new SignUpRequest(email, password, nickname);
 
         //when then
-        mockMvc.perform(post("/register")
+        mockMvc.perform(post("/api/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -59,7 +59,7 @@ class UserControllerTest extends CustomControllerTestSupport {
         SignUpRequest requestWithoutEmail = new SignUpRequest(null, password, nickname);
 
         //when then
-        mockMvc.perform(post("/register")
+        mockMvc.perform(post("/api/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestWithoutEmail)))
                 .andExpect(status().isBadRequest())
@@ -81,7 +81,7 @@ class UserControllerTest extends CustomControllerTestSupport {
         Cookie tokenCookie = new Cookie("TOKEN", token);
 
         //when then
-        mockMvc.perform(get("/users/me")
+        mockMvc.perform(get("/api/users/me")
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(new JwtSubject(principalUser))))
@@ -106,7 +106,7 @@ class UserControllerTest extends CustomControllerTestSupport {
 
 
         //when then
-        mockMvc.perform(put("/users/me")
+        mockMvc.perform(put("/api/users/me")
                         .cookie(tokenCookie)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new UpdateUserRequest("updateNickname", "updateIntroduction"))))

@@ -64,7 +64,7 @@ class RoomControllerTest extends CustomControllerTestSupport {
 
         FindRoomsResponse response = new FindRoomsResponse(roomListDTO);
         //when //then
-        mockMvc.perform(get("/rooms")
+        mockMvc.perform(get("/api/rooms")
                         .contentType("application/json")
                         .cookie(defaultJwtCookie)
                 )
@@ -97,7 +97,7 @@ class RoomControllerTest extends CustomControllerTestSupport {
         given(roomService.createDmRoom(any(), any())).willReturn(dmRoomDTO);
 
         //when //then
-        mockMvc.perform(post("/rooms/dm-room")
+        mockMvc.perform(post("/api/rooms/dm-room")
                         .contentType("application/json")
                         .cookie(defaultJwtCookie)
                         .content(objectMapper.writeValueAsString(request))
@@ -139,7 +139,7 @@ class RoomControllerTest extends CustomControllerTestSupport {
         given(roomService.createGroupRoom(any(), any(), any())).willReturn(groupRoomDTO);
 
         //when //then
-        mockMvc.perform(post("/rooms/group-room")
+        mockMvc.perform(post("/api/rooms/group-room")
                         .contentType("application/json")
                         .cookie(defaultJwtCookie)
                         .content(objectMapper.writeValueAsString(request))
@@ -170,7 +170,7 @@ class RoomControllerTest extends CustomControllerTestSupport {
         given(roomService.findRoomUser(any(), any())).willReturn(roomUserDTO);
 
         //when //then
-        mockMvc.perform(get("/rooms/{roomId}/users/{userId}", 1, 20)
+        mockMvc.perform(get("/api/rooms/{roomId}/users/{userId}", 1, 20)
                         .contentType("application/json")
                         .cookie(defaultJwtCookie)
                 )
@@ -192,7 +192,7 @@ class RoomControllerTest extends CustomControllerTestSupport {
         long roomId = 1L;
 
         //when //then
-        mockMvc.perform(delete("/rooms/{roomId}/users/me", roomId)
+        mockMvc.perform(delete("/api/rooms/{roomId}/users/me", roomId)
                         .contentType("application/json")
                         .cookie(defaultJwtCookie)
                 )
@@ -215,7 +215,7 @@ class RoomControllerTest extends CustomControllerTestSupport {
         Long userId = 1L;
 
         //when
-        mockMvc.perform(post("/rooms/{roomId}/users/{userId}", roomId, userId)
+        mockMvc.perform(post("/api/rooms/{roomId}/users/{userId}", roomId, userId)
                         .contentType("application/json")
                         .cookie(defaultJwtCookie)
                 )

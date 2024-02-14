@@ -33,8 +33,6 @@ public class JwtTokenProvider {
     private long tokenTime = 100 * 14 * 24 * 60 * 60 * 1000L;
     private Key key;
 
-
-    // TODO: 나중에 수정
     @PostConstruct
     protected void init() {
         byte[] keyBytes = Decoders.BASE64.decode("secretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKey");
