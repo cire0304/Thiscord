@@ -1,0 +1,16 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  data:
+    mongodb:
+      uri: mongodb+srv://cire:QrW97rORugCJ6snc@cluster0.b2k8fhk.mongodb.net/chat?retryWrites=true&w=majority
+
+# for UserClient class
+user:
+  uri: http://api:8080/api
+  cookie:
+    jwt: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKV1QgVG9rZW4iLCJTVUJKRUNUIjp7ImlkIjpudWxsLCJ1c2VyQ29kZSI6IjM4MDg2NSIsIm5pY2tuYW1lIjoibmlja25hbWUiLCJlbWFpbCI6ImVtYWlsIiwiaW50cm9kdWN0aW9uIjoiaW50cm9kdWN0aW9uIn0sImlhdCI6MTcwNTI4Nzc3MywiZXhwIjoxODI2MjQ3NzczfQ.WDgy7Ln167W3b-g1G1G5ut7QkrHwCl58Gxn7VBtNrxV2pMheoNfLTSGKS1Aljx0YvUBitHdaaaG5lyUcohqZkA
+
+server:
+  port: 8081

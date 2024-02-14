@@ -21,7 +21,7 @@ frontend/.env.production.local
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
-frontend/.env
+
 # *.yml
 backend/Thiscode/src/main/resources/application.yml
 frontend/src/pages/test/*
