@@ -10,6 +10,10 @@
 $ sudo ./demo.sh
 ```
 
+데모용 아이디 및 페스워드는 아래와 같아요.  
+Id : demo@demo.com  
+password : demo  
+
 ### 의존성
 - Java17
 - npm 9.5.0
