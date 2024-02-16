@@ -7,11 +7,13 @@ spring:
 
   security:
     oauth2:
+      redirect-uri: http://localhost:80/workspace/me
       client:
         registration:
           google:
             client-id: 833958086342-8qnk6sqc3vqhkbmnsnjpv67qslcnv7a9.apps.googleusercontent.com
             client-secret: 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
+            redirect-uri: http://localhost:80/api/login/oauth2/code/{registrationId}
             scope: profile,email
 
   sql:

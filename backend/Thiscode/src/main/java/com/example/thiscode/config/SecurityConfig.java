@@ -73,6 +73,8 @@ public class SecurityConfig {
                 )
                 .oauth2Login(config -> config
                         .successHandler(oauth2AuthenticationSuccessHandler)
+                        .loginProcessingUrl("/api/login/oauth2/code/*")
+                        .authorizationEndpoint(config1 -> config1.baseUri("/api/oauth2/authorization"))
                 )
                 .sessionManagement(config -> config
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
