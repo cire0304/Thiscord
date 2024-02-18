@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-
 @RequiredArgsConstructor
 @Component
 public class CommunityEventPublisher {

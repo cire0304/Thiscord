@@ -38,4 +38,5 @@ public class UserService {
         user.updateNicknameAndIntroduction(nickname, introduction);
         return user;
     }
+
 }

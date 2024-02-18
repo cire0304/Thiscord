@@ -19,7 +19,6 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-
     @PutMapping("/api/notifications/profiles/me")
     public ResponseEntity<String> updateNotification(
             @AuthenticationPrincipal JwtSubject subject,

@@ -43,4 +43,5 @@ public class RoomEventSubscriber implements MessageListener {
             throw new RuntimeException(e);
         }
     }
+
 }

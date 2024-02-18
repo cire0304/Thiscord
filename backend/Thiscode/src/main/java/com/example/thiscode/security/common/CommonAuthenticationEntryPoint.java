@@ -22,4 +22,5 @@ public class CommonAuthenticationEntryPoint implements AuthenticationEntryPoint 
         log.debug("error message : {}", authException.getMessage());
         response.sendRedirect(REDIRECT_URL);
     }
+
 }

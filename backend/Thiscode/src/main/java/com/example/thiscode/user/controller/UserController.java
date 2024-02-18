@@ -49,4 +49,5 @@ public class UserController {
         response.addCookie(jwtCookie);
         return ResponseEntity.ok(new JwtSubject(principalUser));
     }
+
 }

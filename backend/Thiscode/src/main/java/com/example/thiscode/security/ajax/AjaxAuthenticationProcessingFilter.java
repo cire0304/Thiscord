@@ -35,4 +35,5 @@ public class AjaxAuthenticationProcessingFilter extends AbstractAuthenticationPr
         CommonAuthenticationToken commonAuthenticationToken = new CommonAuthenticationToken(ajaxUserDto.getEmail(), ajaxUserDto.getPassword());
         return getAuthenticationManager().authenticate(commonAuthenticationToken);
     }
+
 }

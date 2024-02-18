@@ -26,7 +26,6 @@ public class Friend extends BaseEntity {
     @BatchSize(size = 100)
     private User sender;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_user_id")
     @BatchSize(size = 100)
