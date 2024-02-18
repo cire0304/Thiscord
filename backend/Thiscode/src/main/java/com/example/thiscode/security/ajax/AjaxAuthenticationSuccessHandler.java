@@ -23,7 +23,7 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         log.debug("User login successes : {}", authentication.getPrincipal());
 
         String token = jwtTokenProvider.createJwtToken((PrincipalUser) authentication.getPrincipal());
