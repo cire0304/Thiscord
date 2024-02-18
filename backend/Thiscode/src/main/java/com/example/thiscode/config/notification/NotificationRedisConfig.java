@@ -1,6 +1,6 @@
 package com.example.thiscode.config.notification;
 
-import com.example.thiscode.domain.notification.event.ChatEventSubscriber;
+import com.example.thiscode.notification.event.ChatEventSubscriber;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.listener.ChannelTopic;

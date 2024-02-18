@@ -1,10 +1,10 @@
 package com.example.thiscode;
 
-import com.example.thiscode.domain.commutity.repository.RoomRepository;
-import com.example.thiscode.domain.user.entity.Friend;
-import com.example.thiscode.domain.user.entity.User;
-import com.example.thiscode.domain.user.repository.FriendRepository;
-import com.example.thiscode.domain.user.repository.UserRepository;
+import com.example.thiscode.commutity.repository.RoomRepository;
+import com.example.thiscode.user.entity.Friend;
+import com.example.thiscode.user.entity.User;
+import com.example.thiscode.user.repository.FriendRepository;
+import com.example.thiscode.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;

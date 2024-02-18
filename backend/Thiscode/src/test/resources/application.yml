@@ -7,17 +7,18 @@ spring:
 
   security:
     oauth2:
+      redirect-uri: http://localhost:8080/api/login/oauth2/code/{registrationId}
       client:
         registration:
           google:
             client-id: 833958086342-8qnk6sqc3vqhkbmnsnjpv67qslcnv7a9.apps.googleusercontent.com
             client-secret: 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
+            redirect-uri: http://localhost:8080/api/login/oauth2/code/{registrationId}
             scope: profile,email
-            #                        scope: openid,profile,email
-
+            #                        scope: openid,profile,emailJwtTokenProvider
   sql:
     init:
-      mode: never
+      mode: always
       schema-locations: classpath:schema.sql
 
   redis:
@@ -45,4 +46,8 @@ spring:
 
 logging:
   level:
-    root: info
+    org:
+      springframework:
+        security: trace
+#    security: trace
+#    root: debug

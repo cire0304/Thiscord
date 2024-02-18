@@ -1,11 +1,11 @@
 package com.example.thiscode;
 
 import com.example.thiscode.config.SecurityConfig;
-import com.example.thiscode.domain.user.entity.User;
-import com.example.thiscode.domain.user.repository.FriendRepository;
-import com.example.thiscode.domain.user.repository.UserRepository;
-import com.example.thiscode.domain.user.service.FriendService;
-import com.example.thiscode.domain.user.service.UserService;
+import com.example.thiscode.user.entity.User;
+import com.example.thiscode.user.repository.FriendRepository;
+import com.example.thiscode.user.repository.UserRepository;
+import com.example.thiscode.user.service.FriendService;
+import com.example.thiscode.user.service.UserService;
 import com.example.thiscode.security.ajax.AjaxAuthenticationFailureHandler;
 import com.example.thiscode.security.ajax.AjaxAuthenticationProvider;
 import com.example.thiscode.security.ajax.AjaxAuthenticationSuccessHandler;
@@ -25,7 +25,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
-import org.springframework.data.redis.connection.RedisServer;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 

@@ -1,8 +1,8 @@
 package com.example.thiscode.security.oauth;
 
-import com.example.thiscode.domain.user.repository.UserRepository;
-import com.example.thiscode.domain.user.entity.User;
-import com.example.thiscode.domain.user.service.UserService;
+import com.example.thiscode.user.repository.UserRepository;
+import com.example.thiscode.user.entity.User;
+import com.example.thiscode.user.service.UserService;
 import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.model.ProviderUser;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
