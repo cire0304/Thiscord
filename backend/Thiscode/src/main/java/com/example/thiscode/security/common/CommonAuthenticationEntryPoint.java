@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -14,8 +15,8 @@ import java.io.IOException;
 @Component
 public class CommonAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    // TODO: 나중에 환경 변수값으로 빼내기
-    private final String REDIRECT_URL = "http://localhost:80/login";
+    @Value("${spring.security.login-page-uri}")
+    private String REDIRECT_URL;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
