@@ -42,7 +42,7 @@ public class Room extends BaseEntity {
         return new Room("DM", RoomType.DM, initialUserCount);
     }
 
-    public static Room createGroupRoom(String groupName , int initialUserCount) {
+    public static Room createGroupRoom(String groupName, int initialUserCount) {
         return new Room(groupName, RoomType.GROUP, initialUserCount);
     }
 
