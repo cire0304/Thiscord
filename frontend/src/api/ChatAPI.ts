@@ -1,10 +1,4 @@
-import axios from "axios";
-import { CHAT_SERVER_URL } from "../constants/constants";
-
-const axiosInstance = axios.create({
-  baseURL: CHAT_SERVER_URL,
-  withCredentials: true,
-});
+import axiosInstance from "./axios";
 
 axiosInstance.interceptors.response.use(
   (response) => {
@@ -41,7 +35,7 @@ export interface ChatMessageHitory {
 }
 
 const getChatHistories = async (roomId: number) => {
-  return await axiosInstance.get<ChatMessageHitory[]>(`/rooms/${roomId}`);
+  return await axiosInstance.get<ChatMessageHitory[]>(`/chat/rooms/${roomId}`);
 };
 
 const ChatAPI = { getChatHistories };

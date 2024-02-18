@@ -27,7 +27,7 @@ export function useChatRoom() {
         res.data && setChatHistory(res.data);
       });
 
-      client.current?.subscribe(`/chat/sub/chat/rooms/${roomId}`, (message) => {
+      client.current?.subscribe(`/chat/sub/rooms/${roomId}`, (message) => {
         message.body &&
           setChatHistory((prev) => [...prev, JSON.parse(message.body)]);
       });
@@ -41,7 +41,7 @@ export function useChatRoom() {
   const sendHandler = (message: string) => {
     if (client.current && client.current.connected) {
       client.current.send(
-        `/chat/pub/chat/rooms`,
+        `/chat/pub/rooms`,
         {},
         JSON.stringify({
           roomId: roomId,
