@@ -27,3 +27,11 @@ backend/Thiscode/src/main/resources/application.yml
 frontend/src/pages/test/*
 frontend/src/pages/test
 frontend/src/pages/test
+.idea
+.DS_Store
+dump.rdb
+frontend/.vscode/launch.json
+backend/Thiscode/src/main/resources/application-local.yml
+backend/Thiscode/src/main/java/com/example/thiscode/local.java
+frontend/README.md
+logs
