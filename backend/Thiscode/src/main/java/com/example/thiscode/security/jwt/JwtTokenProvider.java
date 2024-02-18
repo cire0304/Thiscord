@@ -23,8 +23,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final String TOKEN = "TOKEN";
     private final String SUBJECT = "SUBJECT";
 

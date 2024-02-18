@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 
 public class PrincipalUser implements UserDetails, OAuth2User {
-    private ProviderUser providerUser;
+    private final ProviderUser providerUser;
 
     public PrincipalUser(ProviderUser providerUser) {
         this.providerUser = providerUser;

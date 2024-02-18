@@ -19,8 +19,7 @@ import java.io.IOException;
 @Slf4j
 public class AjaxAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
+    private final ObjectMapper objectMapper = new ObjectMapper();
     public AjaxAuthenticationProcessingFilter() {
         super(new AntPathRequestMatcher("/api/login"));
     }

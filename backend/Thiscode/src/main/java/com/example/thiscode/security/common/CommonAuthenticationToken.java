@@ -12,7 +12,7 @@ public class CommonAuthenticationToken extends AbstractAuthenticationToken {
 
     private final Object principal;
 
-    private Object credentials;
+    private final Object credentials;
 
     public CommonAuthenticationToken(String email, String password) {
         super(null);
