@@ -4,10 +4,13 @@ spring:
     url: jdbc:mysql://localhost:3306/thiscode_db?characterEncoding=UTF-8&serverTimezone=UTC
     username: cire
     password: 1234
+  data:
+    mongodb:
+      uri: mongodb+srv://cire:QrW97rORugCJ6snc@cluster0.b2k8fhk.mongodb.net/chat?retryWrites=true&w=majority
 
   security:
     oauth2:
-      redirect-uri: http://localhost:80/workspace/me
+      redirect-uri: http://localhost:80/api/login/oauth2/code/{registrationId}
       client:
         registration:
           google:
@@ -15,7 +18,7 @@ spring:
             client-secret: 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
             redirect-uri: http://localhost:80/api/login/oauth2/code/{registrationId}
             scope: profile,email
-
+            #                        scope: openid,profile,emailJwtTokenProvider
   sql:
     init:
       mode: always
@@ -44,6 +47,16 @@ spring:
           starttls:
             enable: true
 
+# for UserClient class
+user:
+  uri: http://localhost:80/api
+  cookie:
+    jwt: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKV1QgVG9rZW4iLCJTVUJKRUNUIjp7ImlkIjpudWxsLCJ1c2VyQ29kZSI6IjM4MDg2NSIsIm5pY2tuYW1lIjoibmlja25hbWUiLCJlbWFpbCI6ImVtYWlsIiwiaW50cm9kdWN0aW9uIjoiaW50cm9kdWN0aW9uIn0sImlhdCI6MTcwNTI4Nzc3MywiZXhwIjoxODI2MjQ3NzczfQ.WDgy7Ln167W3b-g1G1G5ut7QkrHwCl58Gxn7VBtNrxV2pMheoNfLTSGKS1Aljx0YvUBitHdaaaG5lyUcohqZkA
+
 logging:
   level:
+    org:
+#      springframework:
+#        security: trace
+    security: trace
     root: info
