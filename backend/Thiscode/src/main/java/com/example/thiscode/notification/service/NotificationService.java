@@ -25,8 +25,6 @@ public class NotificationService {
     private final RoomUserRepository roomUserRepository;
     private final ProfileRepository profileRepository;
 
-    // TODO: Write test code (How can i test firebaseMessaging.send(message)?)
-
     // TODO: If receiver is offline, save notification to database and send notification when receiver is online
     @Transactional
     public void sendNotification(NotificationInfoDTO notificationInfoDTO) {

@@ -6,8 +6,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 import static com.example.thiscode.config.chat.ChatRedisConfig.CHAT_CHANNEL_TOPIC;
 
 @RequiredArgsConstructor
@@ -23,4 +21,5 @@ public class ChatMessagePublisher {
     public void sendMessage(ChatMessageDTO message) {
         redisTemplate.convertAndSend(channelTopic.getTopic(), message);
     }
+
 }

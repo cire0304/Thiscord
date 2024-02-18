@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 @Data
 public class RoomEvent {
 
-    // TODO This property will be used after persistence is available.
-//    private Long eventId;
     private RoomEventType eventType;
     private Long roomId;
     private Long userId;

@@ -19,8 +19,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
     private final JwtTokenProvider jwtTokenProvider;
-    private final String TOKEN = "TOKEN";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

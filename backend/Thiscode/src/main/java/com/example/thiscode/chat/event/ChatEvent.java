@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 @Builder
 public class ChatEvent {
 
-    // TODO This property will be used after persistence is available.
-//    private Long eventId;
     private String eventType;
     private Long roomId;
     private Long senderId;

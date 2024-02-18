@@ -23,6 +23,5 @@ public class ChatMessage {
     private String content;
     private MessageType messageType;
     private LocalDateTime sentDateTime;
-//    private String sentDateTime;
 
 }

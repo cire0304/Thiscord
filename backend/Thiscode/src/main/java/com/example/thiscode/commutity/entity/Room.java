@@ -9,7 +9,6 @@ import org.hibernate.annotations.BatchSize;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @EqualsAndHashCode(callSuper = false)
 @ToString
 @Getter

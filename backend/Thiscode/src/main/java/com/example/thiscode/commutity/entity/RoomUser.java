@@ -70,10 +70,6 @@ public class RoomUser extends BaseEntity {
         return this.state == RoomUserState.JOIN;
     }
 
-    public boolean isInivte() {
-        return this.state == RoomUserState.INVITE;
-    }
-
     public void exit() {
         this.state = RoomUserState.EXIT;
     }
