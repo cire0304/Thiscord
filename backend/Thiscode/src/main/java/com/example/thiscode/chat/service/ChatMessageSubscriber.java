@@ -2,6 +2,7 @@ package com.example.thiscode.chat.service;
 
 import com.example.thiscode.chat.dto.ChatMessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -20,7 +21,7 @@ public class ChatMessageSubscriber implements MessageListener {
     private final SimpMessageSendingOperations messagingTemplate;
 
     @Override
-    public void onMessage(Message message, byte[] pattern) {
+    public void onMessage(@NonNull Message message, byte[] pattern) {
         try {
             String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
             ChatMessageDTO chatMessageDTO = objectMapper.readValue(publishMessage, ChatMessageDTO.class);

@@ -4,6 +4,7 @@ import com.example.thiscode.notification.dto.NotificationInfoDTO;
 import com.example.thiscode.notification.service.NotificationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -22,7 +23,7 @@ public class ChatEventSubscriber implements MessageListener {
 
     // TODO: Write test code (How can i test firebaseMessaging.send(message)?)
     @Override
-    public void onMessage(Message message, byte[] pattern) {
+    public void onMessage(@NonNull Message message, byte[] pattern) {
         try {
             String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
             ChatEvent chatEvent = objectMapper.readValue(publishMessage, ChatEvent.class);

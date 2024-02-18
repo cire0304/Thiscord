@@ -5,6 +5,7 @@ import com.example.thiscode.chat.entity.ChatMessage;
 import com.example.thiscode.chat.entity.type.MessageType;
 import com.example.thiscode.chat.service.ChatService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -25,7 +26,7 @@ public class RoomEventSubscriber implements MessageListener {
      * event come from CommunityEventPublisher
      */
     @Override
-    public void onMessage(Message message, byte[] pattern) {
+    public void onMessage(@NonNull Message message, byte[] pattern) {
         try {
             String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
             RoomEvent roomEvent = objectMapper.readValue(publishMessage, RoomEvent.class);
