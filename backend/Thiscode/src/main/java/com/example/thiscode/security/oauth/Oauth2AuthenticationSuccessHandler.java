@@ -26,7 +26,11 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
     private String REDIRECT_URL;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication
+    ) throws IOException {
         log.debug("User login successes : {}", authentication.getPrincipal());
 
         String token = jwtTokenProvider.createJwtToken((PrincipalUser) authentication.getPrincipal());

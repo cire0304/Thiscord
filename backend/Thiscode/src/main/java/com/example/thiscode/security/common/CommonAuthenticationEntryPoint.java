@@ -19,7 +19,11 @@ public class CommonAuthenticationEntryPoint implements AuthenticationEntryPoint 
     private String REDIRECT_URL;
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException
+    ) throws IOException {
         log.debug("error message : {}", authException.getMessage());
         response.sendRedirect(REDIRECT_URL);
     }
