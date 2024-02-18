@@ -1,13 +1,14 @@
 # Discord Clone - Thiscord
 
-## 🔈데모
+## 데모
 
 ### 데모 실행
 
-데모를 실행하기 위해서 아래의 명령어를 입력해주세요!
-
 ```shell
+# 데모를 실행하기 위해서 아래의 명령어를 입력해주세요.
 $ sudo ./demo.sh
+
+# 명령어 실행 후, 브라우저를 통해 localhost:80 도메인으로 접속해주세요.
 ```
 
 데모용 아이디 및 페스워드는 아래와 같아요.  
@@ -37,3 +38,7 @@ password : demo
 | ![1:1 채팅](docs/assets/chat-DM.gif) |
 | ----------------------------------------------------- |
 | 채팅방 입장          |
+
+## 프젝트 구조
+
+![architecture](docs/architecture/architecture.png)

@@ -1,9 +1,6 @@
 #! /bin/bash
 
-cd ./backend/chat
-./gradlew build -x test
-
-cd ../Thiscode
+cd ./backend/Thiscode
 ./gradlew build -x test
 
 cd ../../frontend
