@@ -35,13 +35,6 @@ public class UserController {
         return ResponseEntity.ok(subject);
     }
 
-    // TODO: Write test code
-    @PostMapping("/api/users")
-    public ResponseEntity<UserInfosResponse> getUserInfos(@RequestBody List<Long> userId) {
-        UserInfosResponse response = new UserInfosResponse(userService.getUserInfos(userId));
-        return ResponseEntity.ok(response);
-    }
-
     @PutMapping("/api/users/me")
     public ResponseEntity<JwtSubject> updateUser(@AuthenticationPrincipal JwtSubject subject,
                                              @RequestBody @Valid UpdateUserRequest request,
@@ -56,5 +49,4 @@ public class UserController {
         response.addCookie(jwtCookie);
         return ResponseEntity.ok(new JwtSubject(principalUser));
     }
-
 }

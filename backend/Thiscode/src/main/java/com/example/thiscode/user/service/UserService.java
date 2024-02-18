@@ -38,13 +38,4 @@ public class UserService {
         user.updateNicknameAndIntroduction(nickname, introduction);
         return user;
     }
-
-    @Transactional
-    public List<UserDTO> getUserInfos(List<Long> userIds) {
-         return userRepository.findAllById(userIds)
-                .stream()
-                .map(user -> new UserDTO(user.getId(), user.getEmail(), user.getNickname(), user.getUserCode(), user.getIntroduction(), user.getCreatedAt()))
-                .toList();
-    }
-
 }
