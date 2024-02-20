@@ -9,6 +9,7 @@ spring:
       uri: mongodb+srv://cire:QrW97rORugCJ6snc@cluster0.b2k8fhk.mongodb.net/chat?retryWrites=true&w=majority
 
   security:
+    login-page-uri: http://localhost:8080/login
     oauth2:
       redirect-uri: http://localhost:8080/api/login/oauth2/code/{registrationId}
       client:
