@@ -15,24 +15,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@Controller
+@RequestMapping("/api/rooms")
+@RestController
 public class RoomController {
 
     private final RoomService roomService;
 
-    @GetMapping("/api/rooms")
+    @GetMapping
     public ResponseEntity<FindRoomsResponse> findRooms(@AuthenticationPrincipal JwtSubject jwtSubject) {
         FindRoomsResponse response = new FindRoomsResponse(roomService.getRoomListByUserId(jwtSubject.getId()));
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/api/rooms/dm-room")
+    @PostMapping("/dm-room")
     public ResponseEntity<DmRoomDTO> createDmRoom(@AuthenticationPrincipal JwtSubject jwtSubject,
                                                   @RequestBody CreateDmRoomRequest request) {
         return ResponseEntity.ok(roomService.createDmRoom(jwtSubject.getId(), request.getOtherUserId()));
     }
 
-    @PostMapping("/api/rooms/group-room")
+    @PostMapping("/group-room")
     public ResponseEntity<GroupRoomDTO> createGroupRoom(@AuthenticationPrincipal JwtSubject jwtSubject,
                                                         @RequestBody CreateGroupRoomRequest request) {
         GroupRoomDTO groupRoom = roomService.createGroupRoom(
@@ -42,20 +43,20 @@ public class RoomController {
         return ResponseEntity.ok(groupRoom);
     }
 
-    @GetMapping("/api/rooms/{roomId}/users/{userId}")
+    @GetMapping("/{roomId}/users/{userId}")
     public ResponseEntity<RoomUserDTO> findRoomUser(@PathVariable("roomId") Long roomId,
                                                     @PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roomService.findRoomUser(userId, roomId));
     }
 
-    @DeleteMapping("/api/rooms/{roomId}/users/me")
+    @DeleteMapping("/{roomId}/users/me")
     public ResponseEntity<String> exitRoom(@AuthenticationPrincipal JwtSubject jwtSubject,
                                              @PathVariable("roomId") Long roomId) {
         roomService.exitRoom(jwtSubject.getId(), roomId);
         return ResponseEntity.ok("방을 나갔습니다.");
     }
 
-    @PostMapping("/api/rooms/{roomId}/users/{userId}")
+    @PostMapping("/{roomId}/users/{userId}")
     public ResponseEntity<String> inviteUser(@AuthenticationPrincipal JwtSubject jwtSubject,
                                              @PathVariable("roomId") Long roomId,
                                              @PathVariable("userId") Long userId) {

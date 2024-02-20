@@ -4,7 +4,6 @@ import com.example.thiscode.user.controller.request.AddFriendRequest;
 import com.example.thiscode.user.controller.request.UpdateFriendStateRequest;
 import com.example.thiscode.user.controller.request.UpdateUserRequest;
 import com.example.thiscode.user.controller.response.FriendsResponse;
-import com.example.thiscode.user.controller.response.UserInfosResponse;
 import com.example.thiscode.user.entity.User;
 import com.example.thiscode.user.service.FriendService;
 import com.example.thiscode.user.service.UserService;
@@ -22,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,19 +28,20 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Controller
+@RequestMapping("/api/users")
+@RestController
 public class UserController {
 
     private final UserService userService;
     private final FriendService friendService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @GetMapping("/api/users/me")
+    @GetMapping("/me")
     public ResponseEntity<JwtSubject> getUserInfos(@AuthenticationPrincipal JwtSubject subject) {
         return ResponseEntity.ok(subject);
     }
 
-    @PutMapping("/api/users/me")
+    @PutMapping("/me")
     public ResponseEntity<JwtSubject> updateUser(
             @AuthenticationPrincipal JwtSubject subject,
             @RequestBody @Valid UpdateUserRequest request,
@@ -59,26 +58,26 @@ public class UserController {
         return ResponseEntity.ok(new JwtSubject(principalUser));
     }
 
-    @GetMapping("/api/users/me/friends")
+    @GetMapping("/me/friends")
     public ResponseEntity<FriendsResponse> getFriends(@AuthenticationPrincipal JwtSubject subject) {
         List<FriendDTO> friends = friendService.getFriends(subject.getId());
         return ResponseEntity.ok(new FriendsResponse(friends));
     }
 
-    @GetMapping("/api/users/me/friend-requests")
+    @GetMapping("/me/friend-requests")
     public ResponseEntity<FriendRequestsDTO> getFriendRequests(@AuthenticationPrincipal JwtSubject subject) {
         FriendRequestsDTO friendRequests = friendService.getFriendRequests(subject.getId());
         return ResponseEntity.ok(friendRequests);
     }
 
-    @PostMapping("/api/users/me/friends")
+    @PostMapping("/me/friends")
     public ResponseEntity<String> requestFriend(@RequestBody @Valid AddFriendRequest request,
                                                 @AuthenticationPrincipal JwtSubject subject) {
         friendService.requestFriend(subject.getId(), request.getNickname(), request.getUserCode());
         return ResponseEntity.ok("친구 요청을 보냈습니다.");
     }
 
-    @PutMapping("/api/users/me/friends")
+    @PutMapping("/me/friends")
     public ResponseEntity<String> updateFriendState(@RequestBody UpdateFriendStateRequest request,
                                                     @AuthenticationPrincipal JwtSubject subject) {
         friendService.updateFriendState(subject.getId(), request.getId(), request.getState());
