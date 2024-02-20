@@ -20,6 +20,9 @@ spring:
             redirect-uri: http://localhost:8080/api/login/oauth2/code/{registrationId}
             scope: profile,email
             #                        scope: openid,profile,emailJwtTokenProvider
+  jwt:
+    secret-key: secretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKey
+
   sql:
     init:
       mode: always

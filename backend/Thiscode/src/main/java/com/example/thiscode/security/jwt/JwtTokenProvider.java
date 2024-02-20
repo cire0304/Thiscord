@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,8 @@ public class JwtTokenProvider {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String TOKEN = "TOKEN";
     private final String SUBJECT = "SUBJECT";
+    @Value("${spring.jwt.secret-key}")
+    private String SECRET_KEY;
 
 
     // 2주 * 100
@@ -34,7 +37,7 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        byte[] keyBytes = Decoders.BASE64.decode("secretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKeysecretdasdasdasdasdaKey");
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
