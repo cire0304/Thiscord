@@ -7,19 +7,21 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
-@Controller
+@RequestMapping("/api/notifications")
+@RestController
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @PutMapping("/api/notifications/profiles/me")
+    @PutMapping("/profiles/me")
     public ResponseEntity<String> updateNotification(
             @AuthenticationPrincipal JwtSubject subject,
             @RequestBody @Valid ProfileInfoDTO request) {
