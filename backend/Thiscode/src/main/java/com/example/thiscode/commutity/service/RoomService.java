@@ -85,7 +85,10 @@ public class RoomService {
      * return RoomUser of sender Entity if exist room between sender and receiver.
      * if not exist, return Optional.empty()
      */
-    private Optional<RoomUser> getSenderRoomUserInRoomWithReceiver(List<RoomUser> roomUsersOfSender, List<RoomUser> roomUsersOfReceiver) {
+    private Optional<RoomUser> getSenderRoomUserInRoomWithReceiver(
+            List<RoomUser> roomUsersOfSender,
+            List<RoomUser> roomUsersOfReceiver
+    ) {
         Map<Long, RoomUser> roomUserMapOfSender = roomUsersOfSender.stream()
                 .map(roomUser -> Map.entry(roomUser.getRoom().getId(), roomUser))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

@@ -47,7 +47,12 @@ public class ChatService {
                 .findById(message.getSenderId())
                 .map(user -> new UserInfoDTO(user.getId(), user.getNickname(), user.getUserCode()))
                 .orElseThrow();
-        MessageInfoDTO messageInfo = new MessageInfoDTO(message.getRoomId(), message.getContent(), message.getMessageType(), message.getSentDateTime());
+        MessageInfoDTO messageInfo = new MessageInfoDTO(
+                message.getRoomId(),
+                message.getContent(),
+                message.getMessageType(),
+                message.getSentDateTime()
+        );
         return new ChatMessageDTO(messageInfo, userInfoDTO);
     }
 
