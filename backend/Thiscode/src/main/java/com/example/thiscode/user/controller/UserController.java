@@ -37,7 +37,7 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/me")
-    public ResponseEntity<JwtSubject> getUserInfos(@AuthenticationPrincipal JwtSubject subject) {
+    public ResponseEntity<JwtSubject> getUser(@AuthenticationPrincipal JwtSubject subject) {
         return ResponseEntity.ok(subject);
     }
 
