@@ -1,13 +1,19 @@
 package com.example.thiscode.user.controller;
 
+import com.example.thiscode.user.controller.request.AddFriendRequest;
+import com.example.thiscode.user.controller.request.UpdateFriendStateRequest;
 import com.example.thiscode.user.controller.request.UpdateUserRequest;
+import com.example.thiscode.user.controller.response.FriendsResponse;
 import com.example.thiscode.user.controller.response.UserInfosResponse;
 import com.example.thiscode.user.entity.User;
+import com.example.thiscode.user.service.FriendService;
 import com.example.thiscode.user.service.UserService;
 import com.example.thiscode.security.jwt.JwtSubject;
 import com.example.thiscode.security.jwt.JwtTokenProvider;
 import com.example.thiscode.security.model.PrincipalUser;
 import com.example.thiscode.security.model.ProviderUser;
+import com.example.thiscode.user.service.dto.FriendDTO;
+import com.example.thiscode.user.service.dto.FriendRequestsDTO;
 import com.example.thiscode.utils.CookieUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +34,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final FriendService friendService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/api/users/me")
@@ -36,9 +43,11 @@ public class UserController {
     }
 
     @PutMapping("/api/users/me")
-    public ResponseEntity<JwtSubject> updateUser(@AuthenticationPrincipal JwtSubject subject,
-                                             @RequestBody @Valid UpdateUserRequest request,
-                                             HttpServletResponse response) {
+    public ResponseEntity<JwtSubject> updateUser(
+            @AuthenticationPrincipal JwtSubject subject,
+            @RequestBody @Valid UpdateUserRequest request,
+            HttpServletResponse response
+    ) {
         User user = userService.updateUser(subject.getId(), request.getNickname(), request.getIntroduction());
 
         ProviderUser providerUser = new ProviderUser(user);
@@ -48,6 +57,32 @@ public class UserController {
         Cookie jwtCookie = CookieUtils.createJwtCookie(jwtToken);
         response.addCookie(jwtCookie);
         return ResponseEntity.ok(new JwtSubject(principalUser));
+    }
+
+    @GetMapping("/api/users/me/friends")
+    public ResponseEntity<FriendsResponse> getFriends(@AuthenticationPrincipal JwtSubject subject) {
+        List<FriendDTO> friends = friendService.getFriends(subject.getId());
+        return ResponseEntity.ok(new FriendsResponse(friends));
+    }
+
+    @GetMapping("/api/users/me/friend-requests")
+    public ResponseEntity<FriendRequestsDTO> getFriendRequests(@AuthenticationPrincipal JwtSubject subject) {
+        FriendRequestsDTO friendRequests = friendService.getFriendRequests(subject.getId());
+        return ResponseEntity.ok(friendRequests);
+    }
+
+    @PostMapping("/api/users/me/friends")
+    public ResponseEntity<String> requestFriend(@RequestBody @Valid AddFriendRequest request,
+                                                @AuthenticationPrincipal JwtSubject subject) {
+        friendService.requestFriend(subject.getId(), request.getNickname(), request.getUserCode());
+        return ResponseEntity.ok("친구 요청을 보냈습니다.");
+    }
+
+    @PutMapping("/api/users/me/friends")
+    public ResponseEntity<String> updateFriendState(@RequestBody UpdateFriendStateRequest request,
+                                                    @AuthenticationPrincipal JwtSubject subject) {
+        friendService.updateFriendState(subject.getId(), request.getId(), request.getState());
+        return ResponseEntity.ok("요청을 처리했습니다.");
     }
 
 }
